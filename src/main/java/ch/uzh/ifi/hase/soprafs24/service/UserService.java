@@ -52,28 +52,24 @@ public class UserService {
     return newUser;
   }
 
-  /**
-   * This is a helper method that will check the uniqueness criteria of the
-   * username and the name
-   * defined in the User entity. The method will do nothing if the input is unique
-   * and throw an error otherwise.
-   *
-   * @param userToBeCreated
-   * @throws org.springframework.web.server.ResponseStatusException
-   * @see User
-   */
   private void checkIfUserExists(User userToBeCreated) {
-    User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
-    User userByName = userRepository.findByName(userToBeCreated.getName());
+      User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
+      if (userByUsername != null) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the user could not be created!");
+      }
+  }
 
-    String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-    if (userByUsername != null && userByName != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          String.format(baseErrorMessage, "username and the name", "are"));
-    } else if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
-    } else if (userByName != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
+    //service call to check if password matches the username given returns the logged-in user if successful
+  public User loginUser(User checkUser) throws ResponseStatusException{
+    User userByUsername = userRepository.findByUsername(checkUser.getUsername());
+
+    String baseErrorMessage = "Wrong Username or Password";
+    if (userByUsername != null && userByUsername.getPassword().equals(checkUser.getPassword())) {
+        //login user and set him to be online
+        userByUsername.setStatus(UserStatus.ONLINE);
+        return userByUsername; // Password matches, return the user
+    } else {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong username or password");
     }
   }
 }
