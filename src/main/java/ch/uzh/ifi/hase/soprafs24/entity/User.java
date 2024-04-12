@@ -49,7 +49,7 @@ public class User implements Serializable {
     return password;
   }
 
-  public void setPassword(String name) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
