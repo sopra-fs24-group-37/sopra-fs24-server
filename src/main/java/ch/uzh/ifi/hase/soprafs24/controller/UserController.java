@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 /**
  * User Controller
@@ -44,6 +47,17 @@ public class UserController {
     }
     return userGetDTOs;
   }
+
+  @GetMapping("/users/{userId}")
+  public UserGetDTO getUserById(@PathVariable Long userId) {
+
+    User user = userService.findUserbyId(userId);
+
+    UserGetDTO userGetDTO =DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
+    return userGetDTO;
+  }
+  
 
   @PostMapping("/users")
   public ResponseEntity<?> createUser(@RequestBody UserPostDTO userPostDTO) {

@@ -39,9 +39,22 @@ public class UserService {
     return this.userRepository.findAll();
   }
 
+  public User findUserbyId(Long userId) {
+    User userById = this.userRepository.findById(userId).orElse(null);
+    if (userById == null) {
+      throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        "User with user id " + userId + " was not found!");
+    }
+    return userById;
+  }
+
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
+    newUser.setGamesPlayed(0);
+    newUser.setGamesWon(0);
+    newUser.setPointsScored(0);
     checkIfUserExists(newUser);
     // saves the given entity but data is only persisted in the database once
     // flush() is called

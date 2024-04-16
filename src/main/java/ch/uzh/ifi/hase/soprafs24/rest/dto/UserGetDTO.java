@@ -8,6 +8,9 @@ public class UserGetDTO {
   private String password;
   private String username;
   private UserStatus status;
+  private Integer gamesPlayed;
+  private Integer gamesWon;
+  private Integer pointsScored;
 
   public Long getId() {
     return id;
@@ -39,5 +42,29 @@ public class UserGetDTO {
 
   public void setStatus(UserStatus status) {
     this.status = status;
+  }
+
+  public void setGamesPlayed(Integer gamesPlayed) {
+    this.gamesPlayed = gamesPlayed;
+  }
+
+  public Integer getGamesPlayed() {
+    return gamesPlayed;
+  }
+
+  public void setGamesWon(Integer gamesWon) {
+    this.gamesWon = gamesWon;
+  }
+
+  public Integer getGamesWon() {
+    return gamesWon;
+  }
+
+  public void setPointsScored(Integer pointsScored) {
+    this.pointsScored = pointsScored;
+  }
+
+  public Integer getPointsScored() {
+    return pointsScored;
   }
 }
