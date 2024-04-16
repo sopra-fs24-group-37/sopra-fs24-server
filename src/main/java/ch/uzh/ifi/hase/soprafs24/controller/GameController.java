@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePutDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,9 +49,10 @@ public class GameController {
     // }
 
     @PostMapping
-    public ResponseEntity<Game> createGame(@RequestBody String gameMaster) {
-        Game newGame = gameService.createGame(gameMaster);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newGame);
+    public ResponseEntity<GameGetDTO> createGame(@RequestBody GamePostDTO gamePostDTO) {
+        Game newGame = gameService.createGame(gamePostDTO.getGameMaster());
+        GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(newGame);
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameGetDTO);
     }
 
     @PutMapping("/{gameId}/join")

@@ -18,14 +18,14 @@ public class Game implements Serializable {
   private UUID gameId;
 
   @Column(nullable = false)
-  private String gameMaster;  // Username of Game Creator
+  private String gameMaster;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "game_players", joinColumns = @JoinColumn(name = "game_id"))
   @Column(name = "player")
   private List<String> players;
 
-  @Enumerated(EnumType.STRING)
+//   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private GameStatus gameStatus;
 

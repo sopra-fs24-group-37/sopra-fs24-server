@@ -8,7 +8,6 @@ import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 
 import java.util.List;
 import java.util.Arrays;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
