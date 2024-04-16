@@ -37,6 +37,16 @@ public class User implements Serializable {
   @Column(nullable = false)
   private UserStatus status;
 
+  @Column(nullable = false)
+  private Integer gamesPlayed;
+
+  @Column(nullable = false)
+  private Integer gamesWon;
+
+  @Column(nullable = false)
+  private Integer pointsScored;
+
+
   public Long getId() {
     return id;
   }
@@ -75,5 +85,29 @@ public class User implements Serializable {
 
   public void setStatus(UserStatus status) {
     this.status = status;
+  }
+
+  public void setGamesPlayed(Integer gamesPlayed) {
+    this.gamesPlayed = gamesPlayed;
+  }
+
+  public Integer getGamesPlayed() {
+    return gamesPlayed;
+  }
+
+  public void setGamesWon(Integer gamesWon) {
+    this.gamesWon = gamesWon;
+  }
+
+  public Integer getGamesWon() {
+    return gamesWon;
+  }
+
+  public void setPointsScored(Integer pointsScored) {
+    this.pointsScored = pointsScored;
+  }
+
+  public Integer getPointsScored() {
+    return pointsScored;
   }
 }
