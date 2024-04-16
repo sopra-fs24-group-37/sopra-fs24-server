@@ -28,6 +28,27 @@ public class GameService {
         return newGame;
     }
 
+    public Game startGame(UUID gameId) {
+        Optional<Game> gameOpt = gameRepository.findById(gameId);
+        if (!gameOpt.isPresent()) {
+            throw new IllegalArgumentException("Game not found!");
+        }
+        Game game = gameOpt.get();
+        
+        if (game.getGameStatus() != GameStatus.WAITING) {
+            throw new IllegalStateException("Game is not in WAITING status!");
+        }
+    
+        int numberOfPlayers = game.getPlayers().size();
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) {
+            throw new IllegalArgumentException("Game must have between 2 and 4 players to start!");
+        }
+    
+        game.setGameStatus(GameStatus.STARTED);
+        gameRepository.save(game);
+        return game;
+    }
+    
     public Game joinGame(UUID gameId, String username) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
         if (!gameOpt.isPresent()) {
