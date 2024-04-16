@@ -5,7 +5,7 @@ import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
-import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Table(name = "GAME")
@@ -20,8 +20,10 @@ public class Game implements Serializable {
   @Column(nullable = false)
   private String gameMaster;  // Username of Game Creator
 
-  @Column(nullable = false)
-  private String players;  // Comma-separated list of usernames
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "game_players", joinColumns = @JoinColumn(name = "game_id"))
+  @Column(name = "player")
+  private List<String> players;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -44,11 +46,11 @@ public class Game implements Serializable {
     this.gameMaster = gameMaster;
   }
 
-  public String getPlayers() {
+  public List<String> getPlayers() {
     return players;
   }
 
-  public void setPlayers(String players) {
+  public void setPlayers(List<String> players) {
     this.players = players;
   }
 
@@ -60,20 +62,4 @@ public class Game implements Serializable {
     this.gameStatus = gameStatus;
   }
 
-  public void addPlayer(String username) {
-    if (players == null || players.isEmpty()) {
-      players = username;
-    } else {
-      players += "," + username;
-    }
-  }
-
-  public void removePlayer(String username) {
-    if (players != null && !players.isEmpty()) {
-      String[] playerArray = players.split(",");
-      players = String.join(",", Arrays.stream(playerArray)
-                                       .filter(name -> !name.equals(username))
-                                       .toArray(String[]::new));
-    }
-  }
 }

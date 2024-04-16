@@ -2,13 +2,14 @@ package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 public class GameGetDTO {
 
     private UUID gameId;
     private String gameMaster;
-    private String players;
+    private List<String> players;
     private GameStatus gameStatus;
 
     public UUID getGameId() {
@@ -27,11 +28,11 @@ public class GameGetDTO {
         this.gameMaster = gameMaster;
     }
 
-    public String getPlayers() {
+    public List<String> getPlayers() {
         return players;
     }
 
-    public void setPlayers(String players) {
+    public void setPlayers(List<String> players) {
         this.players = players;
     }
 
