@@ -55,6 +55,13 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CREATED).body(gameGetDTO);
     }
 
+    @PutMapping("/{gameId}/start")
+    public ResponseEntity<GameGetDTO> startGame(@PathVariable UUID gameId) {
+        Game game = gameService.startGame(gameId);
+        GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+        return ResponseEntity.ok().body(gameGetDTO);
+    }
+
     @PutMapping("/{gameId}/join")
     public ResponseEntity<Game> joinGame(@PathVariable UUID gameId, @RequestBody String username) {
         Game game = gameService.joinGame(gameId, username);
