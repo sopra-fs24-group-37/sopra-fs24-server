@@ -18,6 +18,9 @@ public class Game implements Serializable {
   private UUID gameId;
 
   @Column(nullable = false)
+  private String gameMaster;  // Username of Game Creator
+
+  @Column(nullable = false)
   private String players;  // Comma-separated list of usernames
 
   @Enumerated(EnumType.STRING)
@@ -31,6 +34,14 @@ public class Game implements Serializable {
 
   public void setGameId(UUID gameId) {
     this.gameId = gameId;
+  }
+
+  public String getGameMaster() {
+    return gameMaster;
+  }
+
+  public void setGameMaster(String gameMaster) {
+    this.gameMaster = gameMaster;
   }
 
   public String getPlayers() {
@@ -49,7 +60,6 @@ public class Game implements Serializable {
     this.gameStatus = gameStatus;
   }
 
-  // Helper methods to manipulate players list
   public void addPlayer(String username) {
     if (players == null || players.isEmpty()) {
       players = username;

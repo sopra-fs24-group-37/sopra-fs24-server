@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 
+import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,10 +18,12 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    public Game createGame() {
+    public Game createGame(String gameMaster) {
         Game newGame = new Game();
         newGame.setGameId(UUID.randomUUID());
         newGame.setGameStatus(GameStatus.WAITING);
+        newGame.setGameMaster(gameMaster);
+        newGame.setPlayers(gameMaster);
         gameRepository.save(newGame);
         return newGame;
     }
