@@ -55,11 +55,11 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CREATED).body(gameGetDTO);
     }
 
-    @PutMapping("/games/{gameId}/start")
+    @PutMapping("/{gameId}/start")
     public ResponseEntity<GameGetDTO> startGame(@PathVariable UUID gameId) {
         Game game = gameService.startGame(gameId);
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
-        return ResponseEntity.ok(gameGetDTO);
+        return ResponseEntity.ok().body(gameGetDTO);
     }
 
     @PutMapping("/{gameId}/join")
