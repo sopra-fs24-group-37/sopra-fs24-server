@@ -39,6 +39,16 @@ public class UserService {
     return this.userRepository.findAll();
   }
 
+  public User findUserbyId(Long userId) {
+    User userById = this.userRepository.findById(userId).orElse(null);
+    if (userById == null) {
+      throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        "User with user id " + userId + " was not found!");
+    }
+    return userById;
+  }
+
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
