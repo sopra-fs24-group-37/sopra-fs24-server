@@ -3,6 +3,12 @@ package ch.uzh.ifi.hase.soprafs24.rest.mapper;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
+
+import ch.uzh.ifi.hase.soprafs24.entity.Game;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePutDTO;
+
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -40,4 +46,20 @@ public interface DTOMapper {
   @Mapping(source = "gamesWon", target = "gamesWon")
   @Mapping(source = "pointsScored", target = "pointsScored")
   UserGetDTO convertEntityToUserGetDTO(User user);
+
+  @Mapping(target = "gameId", ignore = true)
+  @Mapping(source = "gameMaster", target = "gameMaster")
+  @Mapping(source = "players", target = "players")
+  @Mapping(source = "gameStatus", target = "gameStatus")
+  Game convertGamePostDTOtoEntity(GamePostDTO gamePostDTO);
+
+  @Mapping(source = "gameId", target = "gameId")
+  @Mapping(source = "gameMaster", target = "gameMaster")
+  @Mapping(source = "players", target = "players")
+  @Mapping(source = "gameStatus", target = "gameStatus")
+  GameGetDTO convertEntityToGameGetDTO(Game game);
+
+  @Mapping(target = "username", ignore = true)
+  GamePutDTO convertGameGetDTOToGamePutDTO(GameGetDTO gameGetDTO);
+
 }
