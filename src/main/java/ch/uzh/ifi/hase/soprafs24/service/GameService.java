@@ -32,12 +32,16 @@ public class GameService {
         return newGame;
     }
 
-    public Game startGame(UUID gameId) {        
+    public Game getGame(UUID gameId) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
         if (!gameOpt.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
-        Game game = gameOpt.get();
+        return gameOpt.get();
+    }
+
+    public Game startGame(UUID gameId) {
+        Game game = getGame(gameId);
 
         if (game.getGameStatus() == GameStatus.STARTED) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Game already started!");
