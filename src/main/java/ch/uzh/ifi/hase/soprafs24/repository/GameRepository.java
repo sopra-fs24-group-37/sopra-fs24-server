@@ -9,6 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, UUID> {
-    Game getGameById(UUID gameId);
-
 }
