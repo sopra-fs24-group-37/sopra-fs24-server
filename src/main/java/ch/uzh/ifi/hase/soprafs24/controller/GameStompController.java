@@ -32,13 +32,5 @@ public class GameStompController {
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
     }
-
-    /*
-    @MessageMapping("games/{gameId}/started")
-    public void startGame(@DestinationVariable("gameId") UUID gameId){
-        Game game = gameService.startGame(gameId, userService);
-        webSocketService.sendMessageToSubscribers(//UNKNOWN RIGHT NOW YOU SEND THE NEW GAME SUBSCRIPTION URL);
-    }
-    */
 }
 
