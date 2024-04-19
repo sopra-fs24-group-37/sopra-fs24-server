@@ -21,6 +21,18 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
+    public List<Game> getGames() {
+        return gameRepository.findAll();
+      }
+  
+      public Game getGame(UUID gameId) {
+          Optional<Game> gameOpt = gameRepository.findById(gameId);
+          if (!gameOpt.isPresent()) {
+              throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
+          }
+          return gameOpt.get();
+      }
+
     public Game createGame(String gameMaster) {
         Game newGame = new Game();
         newGame.setGameId(UUID.randomUUID());
@@ -30,14 +42,6 @@ public class GameService {
         newGame = gameRepository.save(newGame);
         gameRepository.flush();
         return newGame;
-    }
-
-    public Game getGame(UUID gameId) {
-        Optional<Game> gameOpt = gameRepository.findById(gameId);
-        if (!gameOpt.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
-        }
-        return gameOpt.get();
     }
 
     public Game startGame(UUID gameId) {

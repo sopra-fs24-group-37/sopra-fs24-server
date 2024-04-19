@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/games")
@@ -23,30 +24,25 @@ public class GameController {
 
     // Implement GET endpoints for Games here... Not a priority atm but will need it very soon lol
 
-    // @GetMapping
-    // @ResponseStatus(HttpStatus.OK)
-    // @ResponseBody
-    // public List<GameGetDTO> getAllUsers() {
-    //   // fetch all users in the internal representation
-    //   List<Game> users = gameService.getGames();
-    //   List<GameGetDTO> gameGetDTOs = new ArrayList<>();
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<GameGetDTO> getAllUsers() {
+      List<Game> games = gameService.getGames();
+      List<GameGetDTO> gameGetDTOs = new ArrayList<>();
+
+      for (Game game : games) {
+        gameGetDTOs.add(DTOMapper.INSTANCE.convertEntityToGameGetDTO(game));
+      }
+      return gameGetDTOs;
+    }
   
-    //   // convert each user to the API representation
-    //   for (Game game : games) {
-    //     gameGetDTOs.add(DTOMapper.INSTANCE.convertGameToGameGetDTO(game));
-    //   }
-    //   return gameGetDTOs;
-    // }
-  
-    // @GetMapping("/users/{userId}")
-    // public UserGetDTO getUserById(@PathVariable Long userId) {
-  
-    //   User user = userService.findUserbyId(userId);
-  
-    //   UserGetDTO userGetDTO =DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
-  
-    //   return userGetDTO;
-    // }
+    @GetMapping("/{gameId}")
+    public GameGetDTO getGameById(@PathVariable UUID gameId) {
+      Game game = gameService.getGame(gameId);
+      GameGetDTO gameGetDTO =DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+      return gameGetDTO;
+    }
 
     @PostMapping
     public ResponseEntity<GameGetDTO> createGame(@RequestBody GamePostDTO gamePostDTO) {
