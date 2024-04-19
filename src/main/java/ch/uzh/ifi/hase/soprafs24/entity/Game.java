@@ -18,12 +18,12 @@ public class Game implements Serializable {
   private UUID gameId;
 
   @Column(nullable = false)
-  private String gameMaster;
+  private Long gameMaster;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "game_players", joinColumns = @JoinColumn(name = "game_id"))
   @Column(name = "player")
-  private List<String> players;
+  private List<Long> players;
 
 //   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -38,19 +38,19 @@ public class Game implements Serializable {
     this.gameId = gameId;
   }
 
-  public String getGameMaster() {
+  public Long getGameMaster() {
     return gameMaster;
   }
 
-  public void setGameMaster(String gameMaster) {
+  public void setGameMaster(Long gameMaster) {
     this.gameMaster = gameMaster;
   }
 
-  public List<String> getPlayers() {
+  public List<Long> getPlayers() {
     return players;
   }
 
-  public void setPlayers(List<String> players) {
+  public void setPlayers(List<Long> players) {
     this.players = players;
   }
 
