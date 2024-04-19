@@ -33,7 +33,7 @@ public class GameService {
           return gameOpt.get();
       }
 
-    public Game createGame(String gameMaster) {
+    public Game createGame(Long gameMaster) { // userId of gameMaster
         Game newGame = new Game();
         newGame.setGameId(UUID.randomUUID());
         newGame.setGameStatus(GameStatus.WAITING);
@@ -71,44 +71,44 @@ public class GameService {
         return game;
     }
     
-    public Game joinGame(UUID gameId, String username) {
+    public Game joinGame(UUID gameId, Long userId) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
         if (!gameOpt.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
 
         Game game = gameOpt.get();
-        List<String> players = game.getPlayers();
+        List<Long> players = game.getPlayers();
 
         // Check if the user is already in the game
-        if (players != null && players.contains(username)) {
+        if (players != null && players.contains(userId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already in the game!");
         }
 
         // Add the player to the game
-        players.add(username);
+        players.add(userId);
         game.setPlayers(players);
         
         gameRepository.save(game);
         return game;
     }
 
-    public Game leaveGame(UUID gameId, String username) {
+    public Game leaveGame(UUID gameId, Long userId) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
         if (!gameOpt.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
 
         Game game = gameOpt.get();
-        List<String> players = game.getPlayers();
+        List<Long> players = game.getPlayers();
 
         // Check if the user is in the game
-        if (!players.contains(username)) {
+        if (!players.contains(userId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not in the game!");
         }
 
         // Remove the player from the game
-        players.remove(username);
+        players.remove(userId);
         game.setPlayers(players);
         
         gameRepository.save(game);

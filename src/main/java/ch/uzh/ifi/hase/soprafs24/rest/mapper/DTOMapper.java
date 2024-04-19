@@ -59,7 +59,7 @@ public interface DTOMapper {
   @Mapping(source = "gameStatus", target = "gameStatus")
   GameGetDTO convertEntityToGameGetDTO(Game game);
 
-  @Mapping(target = "username", ignore = true)
+  @Mapping(target = "userId", ignore = true)
   GamePutDTO convertGameGetDTOToGamePutDTO(GameGetDTO gameGetDTO);
 
 }

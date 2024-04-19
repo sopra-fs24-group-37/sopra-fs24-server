@@ -8,8 +8,8 @@ import java.util.UUID;
 public class GameGetDTO {
 
     private UUID gameId;
-    private String gameMaster;
-    private List<String> players;
+    private Long gameMaster;
+    private List<Long> players;
     private GameStatus gameStatus;
 
     public UUID getGameId() {
@@ -20,19 +20,19 @@ public class GameGetDTO {
         this.gameId = gameId;
     }
 
-    public String getGameMaster() {
+    public Long getGameMaster() {
         return gameMaster;
     }
 
-    public void setGameMaster(String gameMaster) {
+    public void setGameMaster(Long gameMaster) {  // userId of gameMaster
         this.gameMaster = gameMaster;
     }
 
-    public List<String> getPlayers() {
+    public List<Long> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<String> players) {
+    public void setPlayers(List<Long> players) {
         this.players = players;
     }
 

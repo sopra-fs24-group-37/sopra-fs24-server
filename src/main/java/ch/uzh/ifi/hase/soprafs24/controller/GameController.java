@@ -59,14 +59,14 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}/join")
-    public ResponseEntity<Game> joinGame(@PathVariable UUID gameId, @RequestBody String username) {
-        Game game = gameService.joinGame(gameId, username);
+    public ResponseEntity<Game> joinGame(@PathVariable UUID gameId, @RequestBody Long userId) {
+        Game game = gameService.joinGame(gameId, userId);
         return ResponseEntity.ok().body(game);
     }
 
     @PutMapping("/{gameId}/leave")
-    public ResponseEntity<Game> leaveGame(@PathVariable UUID gameId, @RequestBody String username) {
-        Game game = gameService.leaveGame(gameId, username);
+    public ResponseEntity<Game> leaveGame(@PathVariable UUID gameId, @RequestBody Long userId) {
+        Game game = gameService.leaveGame(gameId, userId);
         return ResponseEntity.ok().body(game);
     }
 }
