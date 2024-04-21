@@ -29,6 +29,8 @@ public class Game implements Serializable {
   @Column(nullable = false)
   private GameStatus gameStatus;
 
+  // private Integer score;
+
 
   public UUID getGameId() {
     return gameId;

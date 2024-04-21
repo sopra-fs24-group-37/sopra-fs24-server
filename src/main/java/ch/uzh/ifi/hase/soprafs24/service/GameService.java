@@ -25,13 +25,17 @@ public class GameService {
         return gameRepository.findAll();
       }
   
-      public Game getGame(UUID gameId) {
-          Optional<Game> gameOpt = gameRepository.findById(gameId);
-          if (!gameOpt.isPresent()) {
-              throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
-          }
-          return gameOpt.get();
-      }
+    public Game getGame(UUID gameId) {
+        Optional<Game> gameOpt = gameRepository.findById(gameId);
+        if (!gameOpt.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
+        }
+        return gameOpt.get();
+    }
+
+    public void updateUserScore(UUID gameId, Long userId, Integer pointsScored) {
+        
+    }
 
     public Game createGame(Long gameMaster) { // userId of gameMaster
         Game newGame = new Game();
