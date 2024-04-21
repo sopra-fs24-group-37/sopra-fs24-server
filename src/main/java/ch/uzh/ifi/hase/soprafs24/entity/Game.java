@@ -5,7 +5,9 @@ import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+
 
 @Entity
 @Table(name = "GAME")
@@ -20,17 +22,16 @@ public class Game implements Serializable {
   @Column(nullable = false)
   private Long gameMaster;
 
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = "game_players", joinColumns = @JoinColumn(name = "game_id"))
-  @Column(name = "player")
-  private List<Long> players;
+  // @ElementCollection(fetch = FetchType.LAZY)
+  // @CollectionTable(name = "game_players", joinColumns = @JoinColumn(name = "game_id"))
+  // @Column(name = "player")
+  // private List<Long> players;
 
-//   @Enumerated(EnumType.STRING)
+  @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private Set<GamePlayer> players = new HashSet<>();
+
   @Column(nullable = false)
   private GameStatus gameStatus;
-
-  // private Integer score;
-
 
   public UUID getGameId() {
     return gameId;
@@ -48,13 +49,26 @@ public class Game implements Serializable {
     this.gameMaster = gameMaster;
   }
 
-  public List<Long> getPlayers() {
+  public Set<GamePlayer> getPlayers() {
     return players;
   }
 
-  public void setPlayers(List<Long> players) {
+  public void setPlayers(Set<GamePlayer> players) {
     this.players = players;
   }
+
+  public void addNewPlayer(User user) {
+    GamePlayer gamePlayer = new GamePlayer(this, user, 0);
+    this.players.add(gamePlayer);
+  }
+
+  // public List<Long> getPlayers() {
+  //   return players;
+  // }
+
+  // public void setPlayers(List<Long> players) {
+  //   this.players = players;
+  // }
 
   public GameStatus getGameStatus() {
     return gameStatus;

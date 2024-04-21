@@ -1,16 +1,24 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs24.entity.User;
+import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs24.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs24.repository.GamePlayerRepository;
+import ch.uzh.ifi.hase.soprafs24.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,6 +28,17 @@ public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private GamePlayerRepository gamePlayerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+
 
     public List<Game> getGames() {
         return gameRepository.findAll();
@@ -33,16 +52,28 @@ public class GameService {
         return gameOpt.get();
     }
 
-    public void updateUserScore(UUID gameId, Long userId, Integer pointsScored) {
-        
-    }
+    @Transactional
+    public void updatePlayerScore(UUID gameId, Long userId, Integer score) {
+        GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
+            .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
 
-    public Game createGame(Long gameMaster) { // userId of gameMaster
+        gamePlayer.setScore(gamePlayer.getScore() + score);
+        gamePlayerRepository.save(gamePlayer);
+
+        User user = gamePlayer.getUser();
+        user.setTotalScores(user.getTotalScores() + score);
+        
+        userRepository.save(user);
+    }
+    
+    public Game createGame(Long userId) { // userId of gameMaster
+        User gameMaster = userService.findUserbyId(userId);
         Game newGame = new Game();
         newGame.setGameId(UUID.randomUUID());
         newGame.setGameStatus(GameStatus.WAITING);
-        newGame.setGameMaster(gameMaster);
-        newGame.setPlayers(new ArrayList<>(Arrays.asList(gameMaster)));
+        newGame.setGameMaster(userId);
+        newGame.addNewPlayer(gameMaster);
+        // newGame.setPlayers(new ArrayList<>(Arrays.asList(gameMaster)));
         newGame = gameRepository.save(newGame);
         gameRepository.flush();
         return newGame;
@@ -77,43 +108,50 @@ public class GameService {
     
     public Game joinGame(UUID gameId, Long userId) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
+        User user = userService.findUserbyId(userId);
+
         if (!gameOpt.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
 
         Game game = gameOpt.get();
-        List<Long> players = game.getPlayers();
 
-        // Check if the user is already in the game
-        if (players != null && players.contains(userId)) {
+        // Check if the user is already in the game using a more reliable method
+        boolean isAlreadyInGame = game.getPlayers().stream()
+            .anyMatch(gp -> gp.getUser().equals(user));
+        if (isAlreadyInGame) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already in the game!");
         }
 
         // Add the player to the game
-        players.add(userId);
-        game.setPlayers(players);
-        
+        game.addNewPlayer(user);
+
+        // Save the updated game
         gameRepository.save(game);
         return game;
     }
 
     public Game leaveGame(UUID gameId, Long userId) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
+        User user = userService.findUserbyId(userId);
+
         if (!gameOpt.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
 
         Game game = gameOpt.get();
-        List<Long> players = game.getPlayers();
 
-        // Check if the user is in the game
-        if (!players.contains(userId)) {
+        Optional<GamePlayer> gamePlayerOptional = game.getPlayers().stream()
+            .filter(gp -> gp.getUser().equals(user)).findFirst();
+
+        if (!gamePlayerOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not in the game!");
         }
 
         // Remove the player from the game
-        players.remove(userId);
-        game.setPlayers(players);
+        GamePlayer gamePlayer = gamePlayerOptional.get();
+        game.getPlayers().remove(gamePlayer);
+        gamePlayerRepository.delete(gamePlayer); 
         
         gameRepository.save(game);
         return game;

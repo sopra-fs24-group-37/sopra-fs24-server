@@ -1,15 +1,16 @@
 package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class GamePostDTO {
 
     private UUID gameId;
     private Long gameMaster;
-    private List<Long> players;
+    private Set<GamePlayer> players;
     private GameStatus gameStatus;
 
     public UUID getGameId() {
@@ -28,11 +29,11 @@ public class GamePostDTO {
         this.gameMaster = gameMaster;
     }
 
-    public List<Long> getPlayers() {
+    public Set<GamePlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Long> players) {
+    public void setPlayers(Set<GamePlayer> players) {
         this.players = players;
     }
 

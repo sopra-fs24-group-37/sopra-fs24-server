@@ -7,7 +7,9 @@ import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePutDTO;
+
+import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -30,21 +32,21 @@ public interface DTOMapper {
 
   @Mapping(source = "password", target = "password")
   @Mapping(source = "username", target = "username")
-  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "userId", ignore = true)
   @Mapping(target = "status", ignore = true)
   @Mapping(target = "token", ignore = true)
   @Mapping(target = "gamesPlayed", ignore = true)
   @Mapping(target = "gamesWon", ignore = true)
-  @Mapping(target = "pointsScored", ignore = true)
+  @Mapping(target = "totalScores", ignore = true)
   User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
 
-  @Mapping(source = "id", target = "id")
+  @Mapping(source = "userId", target = "userId")
   @Mapping(source = "password", target = "password")
   @Mapping(source = "username", target = "username")
   @Mapping(source = "status", target = "status")
   @Mapping(source = "gamesPlayed", target = "gamesPlayed")
   @Mapping(source = "gamesWon", target = "gamesWon")
-  @Mapping(source = "pointsScored", target = "pointsScored")
+  @Mapping(source = "totalScores", target = "totalScores")
   UserGetDTO convertEntityToUserGetDTO(User user);
 
   @Mapping(target = "gameId", ignore = true)
@@ -59,7 +61,8 @@ public interface DTOMapper {
   @Mapping(source = "gameStatus", target = "gameStatus")
   GameGetDTO convertEntityToGameGetDTO(Game game);
 
-  @Mapping(target = "userId", ignore = true)
-  GamePutDTO convertGameGetDTOToGamePutDTO(GameGetDTO gameGetDTO);
+  @Mapping(source = "playerId", target = "playerId")
+  @Mapping(source = "score", target = "score")
+  GamePlayerDTO convertEntityToGamePlayerDTO(GamePlayer gamePlayer);
 
 }

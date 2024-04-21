@@ -23,7 +23,7 @@ public class User implements Serializable {
 
   @Id
   @GeneratedValue
-  private Long id;
+  private Long userId;
 
   @Column(nullable = false)
   private String password;
@@ -44,15 +44,15 @@ public class User implements Serializable {
   private Integer gamesWon;
 
   @Column(nullable = false)
-  private Integer pointsScored;
+  private Integer totalScores;
 
 
-  public Long getId() {
-    return id;
+  public Long getUserId() {
+    return userId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setUserId(Long id) {
+    this.userId = userId;
   }
 
   public String getPassword() {
@@ -103,11 +103,11 @@ public class User implements Serializable {
     return gamesWon;
   }
 
-  public void setPointsScored(Integer pointsScored) {
-    this.pointsScored = pointsScored;
+  public void setTotalScores(Integer totalScores) {
+    this.totalScores = totalScores;
   }
 
-  public Integer getPointsScored() {
-    return pointsScored;
+  public Integer getTotalScores() {
+    return totalScores;
   }
 }

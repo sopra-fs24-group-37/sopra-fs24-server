@@ -1,15 +1,17 @@
 package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 
-import java.util.List;
+
+import java.util.Set;
 import java.util.UUID;
 
 public class GameGetDTO {
 
     private UUID gameId;
     private Long gameMaster;
-    private List<Long> players;
+    private Set<GamePlayerDTO> players;
     private GameStatus gameStatus;
 
     public UUID getGameId() {
@@ -24,15 +26,15 @@ public class GameGetDTO {
         return gameMaster;
     }
 
-    public void setGameMaster(Long gameMaster) {  // userId of gameMaster
+    public void setGameMaster(Long gameMaster) {
         this.gameMaster = gameMaster;
     }
 
-    public List<Long> getPlayers() {
+    public Set<GamePlayerDTO> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Long> players) {
+    public void setPlayers(Set<GamePlayerDTO> players) {
         this.players = players;
     }
 
