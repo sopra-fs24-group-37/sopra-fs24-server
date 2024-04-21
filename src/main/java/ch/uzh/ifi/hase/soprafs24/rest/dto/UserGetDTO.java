@@ -4,20 +4,20 @@ import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 
 public class UserGetDTO {
 
-  private Long id;
+  private Long userId;
   private String password;
   private String username;
   private UserStatus status;
   private Integer gamesPlayed;
   private Integer gamesWon;
-  private Integer pointsScored;
+  private Integer totalScores;
 
-  public Long getId() {
-    return id;
+  public Long getUserId() {
+    return userId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setUserId(Long userId) {
+    this.userId = userId;
   }
 
   public String getPassword() {
@@ -60,11 +60,11 @@ public class UserGetDTO {
     return gamesWon;
   }
 
-  public void setPointsScored(Integer pointsScored) {
-    this.pointsScored = pointsScored;
+  public void setTotalScores(Integer totalScores) {
+    this.totalScores = totalScores;
   }
 
-  public Integer getPointsScored() {
-    return pointsScored;
+  public Integer getTotalScores() {
+    return totalScores;
   }
 }
