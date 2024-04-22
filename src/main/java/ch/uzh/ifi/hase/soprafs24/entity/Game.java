@@ -2,6 +2,9 @@ package ch.uzh.ifi.hase.soprafs24.entity;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
@@ -11,6 +14,7 @@ import java.util.HashSet;
 
 @Entity
 @Table(name = "GAME")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "gameId")
 public class Game implements Serializable {
 
   private static final long serialVersionUID = 1L;

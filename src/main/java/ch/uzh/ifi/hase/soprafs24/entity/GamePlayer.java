@@ -1,10 +1,15 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.UUID;
 
+
 @Entity
 @Table(name = "game_players")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "playerId")
 public class GamePlayer {
 
     @Id
