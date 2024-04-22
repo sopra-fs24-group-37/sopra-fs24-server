@@ -35,5 +35,9 @@ public class GameStompController {
         System.out.println("iwasfurther");
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
     }
-}
+    @MessageMapping("/games/{gameId}/started")
+    public void gameStartedInfo(@DestinationVariable("gameId") UUID gameId){
+        webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/started", "Game has started");
+    }
 
+}
