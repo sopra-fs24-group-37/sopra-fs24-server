@@ -31,7 +31,7 @@ public class Game implements Serializable {
   // @Column(name = "player")
   // private List<Long> players;
 
-  @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<GamePlayer> players = new HashSet<>();
 
   @Column(nullable = false)
