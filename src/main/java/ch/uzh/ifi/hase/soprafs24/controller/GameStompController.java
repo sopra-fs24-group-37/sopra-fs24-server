@@ -28,11 +28,8 @@ public class GameStompController {
 
     @MessageMapping("/games/{gameId}/joined")
     public void getLobbyInformation(@DestinationVariable("gameId") UUID gameId){
-        System.out.println("iwashere");
         Game game = gameService.getGame(gameId);
-        System.out.println("iwasalittlelessfurther");
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
-        System.out.println("iwasfurther");
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
     }
     @MessageMapping("/games/{gameId}/started")
