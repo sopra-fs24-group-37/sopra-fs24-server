@@ -26,6 +26,18 @@ public class Round implements Serializable {
 
     private int checkIn;
 
+    private double latitude;
+
+    private double longitude;
+
+    private String pictureId;
+
+    private int roundsPlayed;
+
+    public String getPictureId() {return pictureId;}
+
+    public void setPictureId(String pictureId) {this.pictureId = pictureId;}
+
     public UUID getGameId() {
         return gameId;
     }
@@ -45,5 +57,25 @@ public class Round implements Serializable {
     public void incCheckIn(){this.checkIn= this.checkIn+1;}
 
     public void clearCheckIn(){this.checkIn= 0;}
+
+    public double getLatitude() {return latitude;}
+
+    public void setLatitude(double latitude) {this.latitude = latitude;}
+
+    public double getLongitude() {return longitude;}
+
+    public void setLongitude(double longitude) {this.longitude = longitude;}
+
+    public int getRoundsPlayed() {
+        return roundsPlayed;
+    }
+
+    public void setRoundsPlayed(int i) {
+        this.roundsPlayed = i;
+    }
+
+    public void incRoundsPlayed(){this.roundsPlayed= this.roundsPlayed+1;}
+
+    public void clearRoundsPlayed(){this.roundsPlayed= 0;}
 
 }
