@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.rest.mapper;
 
 import ch.uzh.ifi.hase.soprafs24.entity.User;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.UserDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
 
@@ -49,6 +50,20 @@ public interface DTOMapper {
   @Mapping(source = "totalScores", target = "totalScores")
   UserGetDTO convertEntityToUserGetDTO(User user);
 
+  @Mapping(source = "userId", target = "userId")
+  @Mapping(source = "username", target = "username")
+  @Mapping(target = "password", ignore = true)
+  @Mapping(target = "status", ignore = true)
+  @Mapping(target = "token", ignore = true)
+  @Mapping(target = "gamesPlayed", ignore = true)
+  @Mapping(target = "gamesWon", ignore = true)
+  @Mapping(target = "totalScores", ignore = true)
+  User convertEntityToUserDTO(UserDTO userDTO);
+
+  @Mapping(source = "userId", target = "userId")
+  @Mapping(source = "username", target = "username")
+  UserDTO convertUserDTOtoEntity(User user);
+
   @Mapping(target = "gameId", ignore = true)
   @Mapping(source = "gameMaster", target = "gameMaster")
   @Mapping(source = "players", target = "players")
@@ -63,12 +78,13 @@ public interface DTOMapper {
 
   @Mapping(source = "playerId", target = "playerId")
   @Mapping(source = "score", target = "score")
+  @Mapping(source = "user", target = "user")
   GamePlayerDTO convertEntityToGamePlayerDTO(GamePlayer gamePlayer);
 
   @Mapping(source = "playerId", target = "playerId")
   @Mapping(source = "score", target = "score")
-  @Mapping(target = "game", ignore = true)
   @Mapping(target = "user", ignore = true)
+  @Mapping(target = "game", ignore = true)
   GamePlayer convertGamePlayerDTOtoEntity(GamePlayerDTO gamePlayerDTO);
 
 }
