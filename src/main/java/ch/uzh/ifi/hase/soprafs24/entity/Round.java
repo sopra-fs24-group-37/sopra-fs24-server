@@ -2,10 +2,10 @@ package ch.uzh.ifi.hase.soprafs24.entity;
 
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.UUID;
 
 //give it
 //{"roundId":"1b5bb058-b7ca-4d3a-88b1-2e05501a03d9","roundNr": 1,"gameId":1b5bb058-b7ca-4d3a-88b1-2e05501a03d9,"guesses":[],"URL":"unsplash.org", "Endtime":"02:48:03"}
@@ -22,15 +22,28 @@ public class Round implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
-    private Long roundId;
+    private UUID gameId;
 
-    public Long getRoundId() {
-        return roundId;
+    private int checkIn;
+
+    public UUID getGameId() {
+        return gameId;
     }
 
-    public void setRoundId(Long id) {
-        this.roundId = roundId;
+    public void setGameId(UUID id) {
+        this.gameId = id;
     }
+
+    public int getCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(int i) {
+        this.checkIn = i;
+    }
+
+    public void incCheckIn(){this.checkIn= this.checkIn+1;}
+
+    public void clearCheckIn(){this.checkIn= 0;}
 
 }

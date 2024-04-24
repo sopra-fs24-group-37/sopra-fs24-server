@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import ch.uzh.ifi.hase.soprafs24.service.UserService;
 import ch.uzh.ifi.hase.soprafs24.service.WebSocketService;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,12 @@ import java.util.UUID;
 @Controller
 public class GameStompController {
     private final GameService gameService;
-    private final UserService userService;
+    private final RoundService roundService;
     private final WebSocketService webSocketService;
 
-    GameStompController(GameService gameService, UserService userService, WebSocketService webSocketService) {
+    GameStompController(GameService gameService, RoundService roundService, WebSocketService webSocketService) {
         this.gameService = gameService;
-        this.userService = userService;
+        this.roundService = roundService;
         this.webSocketService = webSocketService;
     }
 
@@ -34,6 +35,7 @@ public class GameStompController {
     }
     @MessageMapping("/games/{gameId}/started")
     public void gameStartedInfo(@DestinationVariable("gameId") UUID gameId){
+        roundService.createRound(gameId);
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/started", "Game has started");
     }
 
