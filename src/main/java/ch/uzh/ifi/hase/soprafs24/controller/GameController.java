@@ -27,7 +27,7 @@ public class GameController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<GameGetDTO> getAllUsers() {
+    public List<GameGetDTO> getAllGames() {
       List<Game> games = gameService.getGames();
       List<GameGetDTO> gameGetDTOs = new ArrayList<>();
 
