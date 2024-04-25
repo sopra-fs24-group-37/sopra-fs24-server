@@ -51,10 +51,10 @@ public class RoundStompController {
 
     @MessageMapping("/games/{gameId}/guess")
     public void sendGuesses(GuessPostDTO guess, @DestinationVariable("gameId") UUID gameId){
-        System.out.println("iwashere");
         double lat = guess.getLat();
         double lng = guess.getLng();
         Long userId = guess.getUserId();
+        System.out.println("UserId Nr" + userId + "has guessed in game" + gameId);
         Round round = roundService.getRound(gameId);
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();

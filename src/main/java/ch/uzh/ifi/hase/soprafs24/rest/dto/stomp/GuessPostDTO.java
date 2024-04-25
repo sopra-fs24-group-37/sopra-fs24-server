@@ -5,7 +5,6 @@ public class GuessPostDTO {
     private double longitude;
     private long userId;
 
-
     public GuessPostDTO() {}
 
     public GuessPostDTO(double latitude, double longitude, long userId) {
@@ -24,8 +23,6 @@ public class GuessPostDTO {
 
     public Long getUserId() {return userId;}
 
-    public void setUserId(int id) {this.userId = id;}
-
-
+    public void setUserId(long id) {this.userId = id;}
 
 }
