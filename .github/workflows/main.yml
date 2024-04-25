@@ -43,7 +43,9 @@ jobs:
         uses: google-github-actions/deploy-appengine@v0.2.0
         with:
           deliverables: app.yaml
-          version: v1
+          version: v3
+          promote: true
+          project_id: sopra-fs24-group-37-server
           credentials: ${{ secrets.GCP_SERVICE_CREDENTIALS }}
 
       - name: Test

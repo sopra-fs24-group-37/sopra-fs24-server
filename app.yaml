@@ -1,8 +1,25 @@
 # https://cloud.google.com/appengine/docs/the-appengine-environments#comparing_high-level_features
 # https://cloud.google.com/appengine/docs/standard
 
-runtime: java17
-instance_class: F2
+runtime: java
+instance_class: F1
+env: flex
+
+automatic_scaling:
+  max_num_instances: 1
+
+runtime_config:
+  operating_system: "ubuntu22"
+  runtime_version: "17"
 
 network:
   session_affinity: true
+
+env_variables:
+  SPRING_PROFILES_ACTIVE: 'prod'
+  APP_ENV: production
+  GCP_DB_USERNAME: $GCP_DB_USERNAME
+  GCP_DB_PASSWORD: $GCP_DB_PASSWORD
+
+readiness_check:
+  app_start_timeout_sec: 1800
