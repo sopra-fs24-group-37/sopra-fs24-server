@@ -45,7 +45,7 @@ public class RoundService {
             // Construct URL
             String apiUrl = "https://api.unsplash.com/photos/random";
             String query = "Switzerland+landscape+cityscape";
-            String clientId = "Ri4Er_Nr9GAMk_QTpErZvHuVESEVmM7RNKnymwEcNZM"; // Replace with your Unsplash access key
+            String clientId = System.getenv("CLIENT_ID"); // Replace with your Unsplash access key
 
             String urlString = apiUrl + "?query=" + query;
 
