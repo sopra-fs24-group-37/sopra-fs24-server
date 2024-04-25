@@ -9,16 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.UUID;
 
 
 @Controller
 public class RoundStompController {
-    private final Logger logger = LoggerFactory.getLogger(GameStompController.class);
     private final RoundService roundService;
     private final WebSocketService webSocketService;
     private final GameService gameService;
@@ -51,14 +47,22 @@ public class RoundStompController {
 
     @MessageMapping("/games/{gameId}/guess")
     public void sendGuesses(GuessPostDTO guess, @DestinationVariable("gameId") UUID gameId){
+        System.out.println(guess);
+        System.out.println(guess.getLat());
         double lat = guess.getLat();
         double lng = guess.getLng();
         Long userId = guess.getUserId();
-        System.out.println("UserId Nr" + userId + "has guessed in game" + gameId);
+        System.out.println("UserId Nr " + userId + " has guessed in game " + gameId + " with guess lat " + lat + " and lng " + lng);
         Round round = roundService.getRound(gameId);
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();
         int distance = (int) roundService.calculateDistance(correctLat,correctLng,lat,lng);
-        gameService.updatePlayerScore(gameId, userId, distance);
+        System.out.println("UserId Nr " + userId + " has guessed in game " + gameId + " the distance is" + distance);
+        if(distance<=100) {
+            gameService.updatePlayerScore(gameId, userId, 100 - distance);
+        }
+        else{
+            System.out.println("Too bad too far away");
+        }
     }
 }
