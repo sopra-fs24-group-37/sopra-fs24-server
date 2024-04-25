@@ -44,7 +44,10 @@ jobs:
         with:
           deliverables: app.yaml
           version: v1
+          promote: true
+          project_id: sopra-fs24-group-37-client
           credentials: ${{ secrets.GCP_SERVICE_CREDENTIALS }}
+          runtime: java17
 
       - name: Test
         run: curl "${{ steps.deploy.outputs.url }}"
