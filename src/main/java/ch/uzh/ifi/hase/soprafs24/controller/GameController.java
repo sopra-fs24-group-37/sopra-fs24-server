@@ -28,8 +28,6 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
-    // Implement GET endpoints for Games here... Not a priority atm but will need it very soon lol
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
