@@ -8,7 +8,7 @@ import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
-
+import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardDTO;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 
@@ -86,5 +86,12 @@ public interface DTOMapper {
   @Mapping(target = "user", ignore = true)
   @Mapping(target = "game", ignore = true)
   GamePlayer convertGamePlayerDTOtoEntity(GamePlayerDTO gamePlayerDTO);
+
+  @Mapping(source = "gameId", target = "gameId")
+  @Mapping(source = "gameMaster", target = "gameMaster")
+  @Mapping(source = "players", target = "players")
+  @Mapping(source = "gameStatus", target = "gameStatus")
+  @Mapping(target = "winners", ignore = true)
+  LeaderboardDTO convertEntityToLeaderboardDTO(Game game);
 
 }
