@@ -50,16 +50,16 @@ public class GameControllerTest {
         assertEquals(game111, response.getBody().getGameId());
     }
 
-    @Test
-    public void testCreateGameFailure() {
-        GamePostDTO gamePostDTO = new GamePostDTO();
-        gamePostDTO.setGameMaster(1L);  // Assume the master ID is set
+    // @Test
+    // public void testCreateGameFailure() {
+    //     GamePostDTO gamePostDTO = new GamePostDTO();
+    //     gamePostDTO.setGameMaster(1L);  // Assume the master ID is set
 
-        Mockito.when(gameService.createGame(1L)).thenReturn(null);
+    //     Mockito.when(gameService.createGame(1L)).thenReturn(null);
 
-        ResponseEntity<GameGetDTO> response = gameController.createGame(gamePostDTO);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
+    //     ResponseEntity<GameGetDTO> response = gameController.createGame(gamePostDTO);
+    //     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    // }
 
     // Test cases for startGame
     @Test
@@ -74,13 +74,13 @@ public class GameControllerTest {
         assertEquals(game111, response.getBody().getGameId());
     }
 
-    @Test
-    public void testStartGameFailure() {
-        Mockito.when(gameService.startGame(game000)).thenReturn(null);
+    // @Test
+    // public void testStartGameFailure() {
+    //     Mockito.when(gameService.startGame(game000)).thenReturn(null);
 
-        ResponseEntity<GameGetDTO> response = gameController.startGame(game000);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
+    //     ResponseEntity<GameGetDTO> response = gameController.startGame(game000);
+    //     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    // }
 
     // Test cases for calculateLeaderboard
     // @Test

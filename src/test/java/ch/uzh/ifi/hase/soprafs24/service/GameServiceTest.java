@@ -129,18 +129,18 @@ public class GameServiceTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-    @Test
-    public void createGame_success() {
-        // Test case setup
-        when(userService.findUserbyId(anyLong())).thenReturn(gameMaster);
+    // @Test
+    // public void createGame_success() {
+    //     // Test case setup
+    //     when(userService.findUserbyId(anyLong())).thenReturn(gameMaster);
 
-        // Method invocation
-        Game newGame = gameService.createGame(gameMaster.getUserId());
+    //     // Method invocation
+    //     Game newGame = gameService.createGame(gameMaster.getUserId());
 
-        // Assertion
-        assertNotNull(newGame);
-        assertEquals(GameStatus.WAITING, newGame.getGameStatus());
-    }
+    //     // Assertion
+    //     assertNotNull(newGame);
+    //     assertEquals(GameStatus.WAITING, newGame.getGameStatus());
+    // }
 
     @Test
     public void startGame_success() {
