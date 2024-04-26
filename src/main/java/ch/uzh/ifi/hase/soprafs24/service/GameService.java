@@ -74,6 +74,39 @@ public class GameService {
     }
 
     @Transactional
+    public void updateUserStatistics(UUID gameId) {
+        Game game = getGame(gameId);
+        Set<GamePlayer> players = game.getPlayers();
+
+        if (game != null && players != null) {
+            for(GamePlayer player : players) {
+                User user = player.getUser();
+
+                // Update User's Total Scores after last game round finished
+                user.setTotalScores(player.getScore());
+
+                // Update User's Total Wins after last game round finished
+                Game gameLeaderboard = calculateLeaderboard(gameId);
+                Set<GamePlayer> playersLeaderboard = gameLeaderboard.getPlayers();
+                GamePlayer winnerPlayer = playersLeaderboard.stream().findFirst().orElse(null);
+
+                if (winnerPlayer != null) {
+                    User winner = winnerPlayer.getUser();
+
+                    if (user == winner) {
+                        user.setGamesWon(user.getGamesWon() + 1);
+                    }
+                }
+
+                // Update User's Total Games Played after last round finished
+                user.setGamesPlayed(user.getGamesPlayed() + 1);
+
+                userRepository.save(user);
+            }
+        }
+    }
+
+    @Transactional
     public void updatePlayerScore(UUID gameId, Long userId, Integer score) {
         GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
             .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
@@ -81,10 +114,12 @@ public class GameService {
         gamePlayer.setScore(gamePlayer.getScore() + score);
         gamePlayerRepository.save(gamePlayer);
 
-        User user = gamePlayer.getUser();
-        user.setTotalScores(user.getTotalScores() + score);
-        
-        userRepository.save(user);
+        // Shouldn't need the below lines anymore since Total Scores get
+        // updated in updateUserStatistics after last game round finished
+
+        // User user = gamePlayer.getUser();
+        // user.setTotalScores(user.getTotalScores() + score);
+        // userRepository.save(user);
     }
     
     public Game createGame(Long userId) { // userId of gameMaster
