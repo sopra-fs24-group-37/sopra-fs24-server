@@ -4,7 +4,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Round;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
-import ch.uzh.ifi.hase.soprafs24.service.RoundService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -35,6 +35,13 @@ public class RoundStompController {
         roundRepository.save(round);
         if (round.getRoundsPlayed()>=3){
             webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game has ended");
+
+            // Update User Statistics on User Profiles
+            gameService.updateUserStatistics(gameId);
+
+            // Mark Game Status as Ended
+            gameService.endGame(gameId);
+
         }
         else if(round.getCheckIn()>=2){
             String id = roundService.getRandomPicture(round);
