@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 

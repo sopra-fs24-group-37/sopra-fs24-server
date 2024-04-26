@@ -87,7 +87,7 @@ public class GameController {
     public ResponseEntity<LeaderboardDTO> getLeaderboard(@PathVariable UUID gameId) {
       Game game = gameService.calculateLeaderboard(gameId);
 
-      // Convert to GameGetDTO using DTO Mapper, this presumes such a method exists
+      // Convert to GameGetDTO using DTO Mapper
       LeaderboardDTO leaderboardDTO = DTOMapper.INSTANCE.convertEntityToLeaderboardDTO(game);
 
       // Since LeaderboardDTO extends GameGetDTO, we need to set winners separately
