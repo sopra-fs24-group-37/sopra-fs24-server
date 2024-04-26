@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
@@ -47,6 +48,13 @@ public class GameServiceTest {
         gameId = UUID.randomUUID();
         gameMaster = new User();
         gameMaster.setUserId(1L);
+        gameMaster.setUsername("testUser");
+        gameMaster.setToken("token123");
+        gameMaster.setPassword("password");
+        gameMaster.setStatus(UserStatus.ONLINE);
+        gameMaster.setGamesPlayed(0);
+        gameMaster.setGamesWon(0);
+        gameMaster.setTotalScores(0);
 
         game = new Game();
         game.setGameId(gameId);

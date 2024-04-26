@@ -68,6 +68,13 @@ public class UserServiceIntegrationTest {
         // Given
         User newUser = new User();
         newUser.setUsername("findUser");
+        newUser.setUserId(1L);
+        newUser.setToken("token123");
+        newUser.setPassword("password");
+        newUser.setStatus(UserStatus.ONLINE);
+        newUser.setGamesPlayed(0);
+        newUser.setGamesWon(0);
+        newUser.setTotalScores(0);
         newUser = userRepository.save(newUser);
 
         // When

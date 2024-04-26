@@ -24,9 +24,13 @@ public class UserRepositoryIntegrationTest {
     public void findByUsername_success() {
         // given
         User user = new User();
-        user.setUsername("username");
-        user.setStatus(UserStatus.OFFLINE);
-        user.setToken("token123");
+        user.setUsername("usernameById");
+        user.setPassword("password");
+        user.setStatus(UserStatus.ONLINE);
+        user.setGamesPlayed(0);
+        user.setGamesWon(0);
+        user.setTotalScores(0);
+        user.setToken("token");
 
         entityManager.persist(user);
         entityManager.flush();
@@ -55,7 +59,13 @@ public class UserRepositoryIntegrationTest {
         // given
         User user = new User();
         user.setUsername("usernameById");
+        user.setPassword("password");
         user.setStatus(UserStatus.ONLINE);
+        user.setGamesPlayed(0);
+        user.setGamesWon(0);
+        user.setTotalScores(0);
+        user.setToken("token");
+
 
         entityManager.persist(user);
         entityManager.flush();
