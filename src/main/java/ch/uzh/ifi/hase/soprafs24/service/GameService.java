@@ -105,6 +105,18 @@ public class GameService {
         gameRepository.save(game);
         return game;
     }
+
+    public Game endGame(UUID gameId) {
+        Game game = getGame(gameId);
+
+        if (game.getGameStatus() == GameStatus.ENDED) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Game already ended!");
+        }
+    
+        game.setGameStatus(GameStatus.ENDED);
+        gameRepository.save(game);
+        return game;
+    }
     
     public Game joinGame(UUID gameId, Long userId) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);

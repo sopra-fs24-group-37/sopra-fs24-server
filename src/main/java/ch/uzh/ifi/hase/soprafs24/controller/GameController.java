@@ -58,6 +58,13 @@ public class GameController {
         return ResponseEntity.ok().body(gameGetDTO);
     }
 
+    @PutMapping("/{gameId}/end")
+    public ResponseEntity<GameGetDTO> endGame(@PathVariable UUID gameId) {
+        Game game = gameService.endGame(gameId);
+        GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+        return ResponseEntity.ok().body(gameGetDTO);
+    }
+
     @PutMapping("/{gameId}/join")
     public ResponseEntity<Game> joinGame(@PathVariable UUID gameId, @RequestBody Long userId) {
         Game game = gameService.joinGame(gameId, userId);
