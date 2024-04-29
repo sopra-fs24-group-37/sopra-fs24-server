@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 /**
@@ -53,6 +52,14 @@ public class UserController {
     UserGetDTO userGetDTO =DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
 
     return userGetDTO;
+  }
+
+  @DeleteMapping("users/{userId}")
+  public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+
+    userService.deleteUserById(userId);
+
+    return ResponseEntity.status(HttpStatus.OK).body("User Deleted");
   }
   
 

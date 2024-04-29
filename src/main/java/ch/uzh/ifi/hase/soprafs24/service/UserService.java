@@ -49,6 +49,11 @@ public class UserService {
     return userById;
   }
 
+  public void deleteUserById(Long userId) {
+    findUserbyId(userId); // To throw exception if user does not exist
+    this.userRepository.deleteById(userId);
+  }
+
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
