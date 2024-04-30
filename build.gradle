@@ -72,13 +72,6 @@ jacocoTestReport {
     }
 }
 
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
-
 test {
     useJUnitPlatform()
     testLogging.showStandardStreams = true

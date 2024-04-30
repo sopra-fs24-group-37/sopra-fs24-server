@@ -43,6 +43,13 @@ public class RoundStompController {
             round.clearCheckIn();
             round.incRoundsPlayed();
             roundRepository.save(round);
+            if(round.getRoundsPlayed()>=3){
+                // Update User Statistics on User Profiles
+                gameService.updateUserStatistics(gameId);
+
+                // Mark Game Status as Ended
+                gameService.endGame(gameId);
+            }
         }
     }
 
@@ -67,3 +74,4 @@ public class RoundStompController {
         }
     }
 }
+
