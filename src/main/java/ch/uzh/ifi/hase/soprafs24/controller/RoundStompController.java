@@ -32,11 +32,12 @@ public class RoundStompController {
     public void getNewRound(@DestinationVariable("gameId") UUID gameId){
         Round round = roundService.getRound(gameId);
         round.incCheckIn();
+        System.out.println(round.getCheckIn());
         roundRepository.save(round);
-        if (round.getRoundsPlayed()>=3){
-            webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game has ended");
+        if (round.getRoundsPlayed()>=2){
+            webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
         }
-        else if(round.getCheckIn()>=2){
+        if(round.getCheckIn()>=2){
             String id = roundService.getRandomPicture(round);
             webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/round", id);
             round.clearCheckIn();
