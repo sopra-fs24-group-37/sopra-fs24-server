@@ -1,14 +1,19 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
+import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
@@ -54,7 +59,7 @@ public class RoundStompController {
     }
 
     @MessageMapping("/games/{gameId}/guess")
-    public void sendGuesses(GuessPostDTO guess, @DestinationVariable("gameId") UUID gameId){
+    public void getGuesses(GuessPostDTO guess, @DestinationVariable("gameId") UUID gameId){
         System.out.println(guess);
         System.out.println(guess.getLat());
         double lat = guess.getLat();
