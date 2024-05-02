@@ -60,8 +60,6 @@ public class RoundStompController {
 
     @MessageMapping("/games/{gameId}/guess")
     public void getGuesses(GuessPostDTO guess, @DestinationVariable("gameId") UUID gameId){
-        System.out.println(guess);
-        System.out.println(guess.getLat());
         double lat = guess.getLat();
         double lng = guess.getLng();
         Long userId = guess.getUserId();
@@ -70,7 +68,7 @@ public class RoundStompController {
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();
         int distance = (int) roundService.calculateDistance(correctLat,correctLng,lat,lng);
-        System.out.println("UserId Nr " + userId + " has guessed in game " + gameId + " the distance is" + distance);
+        System.out.println("UserId Nr " + userId + " has guessed in game " + gameId + " the distance is " + distance);
         if(distance<=100) {
             gameService.updatePlayerScore(gameId, userId, 100 - distance);
         }

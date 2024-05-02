@@ -2,11 +2,13 @@ package ch.uzh.ifi.hase.soprafs24.controller;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.LeaveGamePostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import ch.uzh.ifi.hase.soprafs24.service.WebSocketService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -36,7 +38,8 @@ public class GameStompController {
     }
 
     @MessageMapping("/games/{gameId}/leaving")
-    public void leaveGame(@PathVariable UUID gameId, @DestinationVariable("gameId") Long userId) {
+    public void leaveGame(@PathVariable UUID gameId, @Payload LeaveGamePostDTO message) {
+        Long userId = message.getUserId();
         Game game = gameService.leaveGame(gameId, userId);
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
