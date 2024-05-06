@@ -34,15 +34,6 @@ public class GameStompController {
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
     }
 
-    @MessageMapping("/games/{gameId}/leaving")
-    public void leaveGame(@DestinationVariable("gameId") UUID gameId, LeaveGamePostDTO message) {
-        Long userId = message.getUserId();
-        System.out.println(userId);
-        Game game = gameService.leaveGame(gameId, userId);
-        GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
-        webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
-    }
-
     @MessageMapping("/games/{gameId}/started")
     public void gameStartedInfo(@DestinationVariable("gameId") UUID gameId){
         roundService.createRound(gameId);
