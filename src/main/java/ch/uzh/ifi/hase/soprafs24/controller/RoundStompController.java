@@ -1,19 +1,15 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
-import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.UUID;
 
@@ -43,8 +39,8 @@ public class RoundStompController {
             webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
         }
         if(round.getCheckIn()>=2){
-            String id = roundService.getRandomPicture(round);
-            webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/round", id);
+            String RoundData = roundService.getRandomPicture(round);
+            webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/round", RoundData);
             round.clearCheckIn();
             round.incRoundsPlayed();
             roundRepository.save(round);
