@@ -104,6 +104,18 @@ public class GameServiceTest {
         assertEquals(2, numPlayers);
     }
 
+    @Test
+    public void calculateNumPlayers_returnsNoPlayer() {
+        // Setup
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+
+        // Invocation
+        int numPlayers = gameService.getNumPlayers(gameId);
+
+        // Assertion
+        assertEquals(0, numPlayers);
+    }
+
 
     @Test
     public void calculateLeaderboard_withPlayers() {
