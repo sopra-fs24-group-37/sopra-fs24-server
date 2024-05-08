@@ -57,6 +57,12 @@ public class GameService {
         return gameOpt.get();
     }
 
+    public int getNumPlayers(UUID gameId) {
+        Game game = getGame(gameId);
+        Set<GamePlayer> players = game.getPlayers();
+        return players.size();
+    }
+
     @Transactional(readOnly = true)
     public Game calculateLeaderboard(UUID gameId) {
         Game game = getGame(gameId);

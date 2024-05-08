@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,6 +86,24 @@ public class GameServiceTest {
         when(gameRepository.findById(randomId)).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class, () -> gameService.getGame(randomId));
     }
+
+    @Test
+    public void calculateNumPlayers_returnsCorrectCount() {
+        // Setup
+        GamePlayer player1 = new GamePlayer(game, gameMaster, 10);
+        GamePlayer player2 = new GamePlayer(game, new User(), 20);
+        Set<GamePlayer> players = new HashSet<>(Arrays.asList(player1, player2));
+        game.setPlayers(players);
+
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+
+        // Invocation
+        int numPlayers = gameService.getNumPlayers(gameId);
+
+        // Assertion
+        assertEquals(2, numPlayers);
+    }
+
 
     @Test
     public void calculateLeaderboard_withPlayers() {
