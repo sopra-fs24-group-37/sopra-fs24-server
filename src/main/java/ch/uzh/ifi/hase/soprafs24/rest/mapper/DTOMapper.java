@@ -31,6 +31,7 @@ public interface DTOMapper {
 
   DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
+  /* USER */
   @Mapping(source = "password", target = "password")
   @Mapping(source = "username", target = "username")
   @Mapping(target = "userId", ignore = true)
@@ -64,18 +65,24 @@ public interface DTOMapper {
   @Mapping(source = "username", target = "username")
   UserDTO convertUserDTOtoEntity(User user);
 
+  /* GAME */
   @Mapping(target = "gameId", ignore = true)
   @Mapping(source = "gameMaster", target = "gameMaster")
   @Mapping(source = "players", target = "players")
   @Mapping(source = "gameStatus", target = "gameStatus")
+  @Mapping(source = "password", target = "password")
+  @Mapping(source = "guessTime", target = "guessTime")
   Game convertGamePostDTOtoEntity(GamePostDTO gamePostDTO);
 
   @Mapping(source = "gameId", target = "gameId")
   @Mapping(source = "gameMaster", target = "gameMaster")
   @Mapping(source = "players", target = "players")
   @Mapping(source = "gameStatus", target = "gameStatus")
+  @Mapping(source = "password", target = "password")
+  @Mapping(source = "guessTime", target = "guessTime")
   GameGetDTO convertEntityToGameGetDTO(Game game);
 
+  /* GAME PLAYER */
   @Mapping(source = "playerId", target = "playerId")
   @Mapping(source = "score", target = "score")
   @Mapping(source = "user", target = "user")
@@ -87,11 +94,14 @@ public interface DTOMapper {
   @Mapping(target = "game", ignore = true)
   GamePlayer convertGamePlayerDTOtoEntity(GamePlayerDTO gamePlayerDTO);
 
+  /* LEADERBOARD */
   @Mapping(source = "gameId", target = "gameId")
   @Mapping(source = "gameMaster", target = "gameMaster")
   @Mapping(source = "players", target = "players")
   @Mapping(source = "gameStatus", target = "gameStatus")
   @Mapping(target = "winners", ignore = true)
+  @Mapping(target = "password", ignore = true)
+  @Mapping(target = "guessTime", ignore = true)
   LeaderboardDTO convertEntityToLeaderboardDTO(Game game);
 
 }

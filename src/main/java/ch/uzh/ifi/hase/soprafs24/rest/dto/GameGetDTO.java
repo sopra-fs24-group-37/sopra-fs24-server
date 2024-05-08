@@ -12,6 +12,8 @@ public class GameGetDTO {
     private Long gameMaster;
     private Set<GamePlayerDTO> players;
     private GameStatus gameStatus;
+    private Integer guessTime;
+    private Integer password;
 
     public UUID getGameId() {
         return gameId;
@@ -43,5 +45,21 @@ public class GameGetDTO {
 
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    public Integer getGuessTime() {
+        return guessTime;
+    }
+
+    public void setGuessTime(Integer guessTime) {
+        this.guessTime = guessTime;
+    }
+
+    public Integer getPassword() {
+        return password;
+    }
+
+    public void setPassword(Integer password) {
+        this.password = password;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -38,6 +39,39 @@ public class GameStompController {
     public void gameStartedInfo(@DestinationVariable("gameId") UUID gameId){
         roundService.createRound(gameId);
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/started", "Game has started");
+    }
+
+    @MessageMapping("/games/{gameId}/settings")
+    public void setLobbyInformation(@DestinationVariable("gameId") UUID gameId,
+                                    @RequestParam(required = false) Integer guessTime,
+                                    @RequestParam(required = false) Boolean setGamePassword) {
+                                        
+        Game game = gameService.getGame(gameId);
+        Boolean doUpdate = false;
+
+        // Set guessTime if provided and within the valid range
+        if (guessTime != null && guessTime >= 10 && guessTime <= 30) {
+            game.setGuessTime(guessTime);
+            doUpdate = true;
+        }
+
+        // Set gamePassword if required, and make it a a 6-digit integer
+        if (setGamePassword == true) {
+            int gamePassword = (int) (Math.random() * 900000) + 100000;
+            game.setPassword(gamePassword);
+            doUpdate = true;
+        }
+
+        // Update the changes in the database
+        if (doUpdate) {
+            gameService.updateGame(game);
+        }
+
+        // Convert Game to DTO
+        GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+
+        // Send lobby information via WebSocket
+        webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);
     }
 
 }
