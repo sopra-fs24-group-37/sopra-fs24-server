@@ -57,6 +57,10 @@ public class GameService {
         return gameOpt.get();
     }
 
+    public void updateGame(Game game) {
+        gameRepository.saveAndFlush(game);
+    }
+
     public int getNumPlayers(UUID gameId) {
         Game game = getGame(gameId);
         Set<GamePlayer> players = game.getPlayers();

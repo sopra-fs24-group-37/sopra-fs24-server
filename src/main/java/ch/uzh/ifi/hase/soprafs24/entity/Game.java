@@ -26,16 +26,17 @@ public class Game implements Serializable {
   @Column(nullable = false)
   private Long gameMaster;
 
-  // @ElementCollection(fetch = FetchType.LAZY)
-  // @CollectionTable(name = "game_players", joinColumns = @JoinColumn(name = "game_id"))
-  // @Column(name = "player")
-  // private List<Long> players;
-
   @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<GamePlayer> players = new HashSet<>();
 
   @Column(nullable = false)
   private GameStatus gameStatus;
+
+  @Column(nullable = true) // Nullable since it's optional
+  private Integer guessTime;
+
+  @Column(nullable = true) // Nullable since it's optional
+  private Integer password;
 
   public UUID getGameId() {
     return gameId;
@@ -66,20 +67,28 @@ public class Game implements Serializable {
     this.players.add(gamePlayer);
   }
 
-  // public List<Long> getPlayers() {
-  //   return players;
-  // }
-
-  // public void setPlayers(List<Long> players) {
-  //   this.players = players;
-  // }
-
   public GameStatus getGameStatus() {
     return gameStatus;
   }
 
   public void setGameStatus(GameStatus gameStatus) {
     this.gameStatus = gameStatus;
+  }
+
+  public Integer getGuessTime() {
+    return guessTime;
+  }
+
+  public void setGuessTime(Integer guessTime) {
+    this.guessTime = guessTime;
+  }
+
+  public Integer getPassword() {
+    return password;
+  }
+
+  public void setPassword(Integer password) {
+    this.password = password;
   }
 
 }
