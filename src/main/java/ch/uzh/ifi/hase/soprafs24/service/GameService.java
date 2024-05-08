@@ -15,6 +15,7 @@ import ch.uzh.ifi.hase.soprafs24.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -183,27 +184,40 @@ public class GameService {
         gameRepository.save(game);
         return game;
     }
-    
-    public Game joinGame(UUID gameId, Long userId) {
+
+    public Game joinGame(UUID gameId, Long userId, Integer gamePassword) {
         Optional<Game> gameOpt = gameRepository.findById(gameId);
         User user = userService.findUserbyId(userId);
-
+    
         if (!gameOpt.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
 
         Game game = gameOpt.get();
-
+    
+        // Check if the game has a password set
+        if (game.getPassword() != null) {
+            // If a password is provided but the game does not have one set, or the provided password is incorrect, return an error
+            if (gamePassword == null || !game.getPassword().equals(gamePassword)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password!");
+            }
+        } else {
+            // If a password is provided but the game does not have one set, return an error
+            if (gamePassword != null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This game has no password!");
+            }
+        }
+    
         // Check if the user is already in the game using a more reliable method
         boolean isAlreadyInGame = game.getPlayers().stream()
             .anyMatch(gp -> gp.getUser().equals(user));
         if (isAlreadyInGame) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already in the game!");
         }
-
+    
         // Add the player to the game
         game.addNewPlayer(user);
-
+    
         // Save the updated game
         gameRepository.save(game);
         return game;
