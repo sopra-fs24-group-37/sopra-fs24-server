@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,6 +85,50 @@ public class GameServiceTest {
         UUID randomId = UUID.randomUUID();
         when(gameRepository.findById(randomId)).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class, () -> gameService.getGame(randomId));
+    }
+
+    @Test
+    public void calculateNumPlayers_returnsCorrectCount() {
+        // Setup
+        GamePlayer player1 = new GamePlayer(game, gameMaster, 10);
+        GamePlayer player2 = new GamePlayer(game, new User(), 20);
+        Set<GamePlayer> players = new HashSet<>(Arrays.asList(player1, player2));
+        game.setPlayers(players);
+
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+
+        // Invocation
+        int numPlayers = gameService.getNumPlayers(gameId);
+
+        // Assertion
+        assertEquals(2, numPlayers);
+    }
+
+    @Test
+    public void calculateNumPlayers_returnsNoPlayer() {
+        // Setup
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+
+        // Invocation
+        int numPlayers = gameService.getNumPlayers(gameId);
+
+        // Assertion
+        assertEquals(0, numPlayers);
+    }
+
+    @Test
+    public void calculateNumPlayers_gameNotFound() {
+        // Setup
+        UUID nonExistentGameId = UUID.randomUUID();
+        when(gameRepository.findById(nonExistentGameId)).thenReturn(Optional.empty());
+    
+        // Invocation and Assertion
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+            () -> gameService.getNumPlayers(nonExistentGameId));
+    
+        // Assertion on the exception details
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        assertEquals("Game not found!", exception.getReason());
     }
 
     @Test
