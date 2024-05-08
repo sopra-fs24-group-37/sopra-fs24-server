@@ -73,7 +73,7 @@ public class GameServiceIntegrationTest {
         Game game = gameService.createGame(user1.getUserId());
     
         // Have the second user join the game
-        game = gameService.joinGame(game.getGameId(), user2.getUserId());
+        game = gameService.joinGame(game.getGameId(), user2.getUserId(), null);
     
         // Attempt to start the game now that there are two players
         game = gameService.startGame(game.getGameId());
@@ -98,7 +98,7 @@ public class GameServiceIntegrationTest {
         userService.createUser(user2);
     
         // User2 joins the game created by User1
-        game = gameService.joinGame(game.getGameId(), user2.getUserId());
+        game = gameService.joinGame(game.getGameId(), user2.getUserId(), null);
     
         assertTrue(game.getPlayers().stream().anyMatch(player -> player.getUser().getUserId().equals(user2.getUserId())));
     }

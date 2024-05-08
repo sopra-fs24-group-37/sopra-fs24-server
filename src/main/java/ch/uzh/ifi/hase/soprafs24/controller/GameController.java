@@ -70,11 +70,11 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}/join")
-    public ResponseEntity<Game> joinGame(@PathVariable UUID gameId, @RequestBody Long userId) {
-      Game game = gameService.joinGame(gameId, userId);
-      return ResponseEntity.ok().body(game);
-    }
-
+    public ResponseEntity<Game> joinGame(@PathVariable UUID gameId, @RequestBody Long userId, @RequestParam(required = false) Integer gamePassword) {
+        Game game = gameService.joinGame(gameId, userId, gamePassword);
+        return ResponseEntity.ok().body(game);
+    }    
+  
     @PutMapping("/{gameId}/leave")
     public ResponseEntity<Game> leaveGame(@PathVariable UUID gameId, @RequestBody Long userId) {
       Game game = gameService.leaveGame(gameId, userId);
