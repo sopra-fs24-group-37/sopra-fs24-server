@@ -116,6 +116,20 @@ public class GameServiceTest {
         assertEquals(0, numPlayers);
     }
 
+    @Test
+    public void calculateNumPlayers_gameNotFound() {
+        // Setup
+        UUID nonExistentGameId = UUID.randomUUID();
+        when(gameRepository.findById(nonExistentGameId)).thenReturn(Optional.empty());
+    
+        // Invocation and Assertion
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+            () -> gameService.getNumPlayers(nonExistentGameId));
+    
+        // Assertion on the exception details
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        assertEquals("Game not found!", exception.getReason());
+    }
 
     @Test
     public void calculateLeaderboard_withPlayers() {
