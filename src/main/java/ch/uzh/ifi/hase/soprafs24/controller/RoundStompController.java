@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs24.controller;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
+import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
@@ -39,12 +40,12 @@ public class RoundStompController {
         round.incCheckIn();
         System.out.println(round.getCheckIn());
         roundRepository.save(round);
-        if (round.getRoundsPlayed()>=2){
-            webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
-        }
         if(round.getCheckIn()>=gameService.getNumPlayers(gameId)){
+            if (round.getRoundsPlayed()>=2){
+                webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
+            }
             String RoundData = roundService.getRandomPicture(round);
-            webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/round", RoundData);
+            webSocketService.sendMessageToSubscriberswithoutLog("/topic/games/" + gameId +"/round", RoundData);
             round.clearCheckIn();
             round.incRoundsPlayed();
             roundRepository.save(round);
@@ -71,10 +72,13 @@ public class RoundStompController {
         GamePlayer gamePlayer = gamePlayerService.getGameplayer(gameId,userId);
         Long gamePlayerId = gamePlayer.getPlayerId();
         Round round = roundService.getRound(gameId);
+        User user = gamePlayer.getUser();
 
         //Extract data out of the objects
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();
+        int currentScore = gamePlayer.getScore();
+        String username = user.getUsername();
 
         //Calculate score
         int distance = (int) roundService.calculateDistance(correctLat,correctLng,lat,lng);
@@ -84,14 +88,15 @@ public class RoundStompController {
         System.out.println("UserId Nr " + userId + " has guessed in game " + gameId + " the distance is " + distance);
 
         //Updating objects
-        round.setGuess(gamePlayerId,lat,lng);
-        round.setPointsScored(gamePlayerId,distance);
-        roundRepository.save(round);
         if(distance<=100) {
-            gameService.updatePlayerScore(gameId, userId, 100 - distance);
+            int points = 100 - distance;
+            gameService.updatePlayerScore(gameId, userId, points);
+            round.updateRoundStats(gamePlayerId, points, currentScore + points, lat, lng);
+            roundRepository.save(round);
         }
         else{
-            System.out.println("Too bad too far away");
+            round.updateRoundStats(gamePlayerId,0, currentScore, lat, lng);
+            roundRepository.save(round);
         }
     }
 }

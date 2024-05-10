@@ -1,19 +1,19 @@
 package ch.uzh.ifi.hase.soprafs24.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs24.entity.Round;
+import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.UserDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.*;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardDTO;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * DTOMapper
@@ -103,5 +103,21 @@ public interface DTOMapper {
   @Mapping(target = "password", ignore = true)
   @Mapping(target = "guessTime", ignore = true)
   LeaderboardDTO convertEntityToLeaderboardDTO(Game game);
+
+  /* ROUND */
+  @Mapping(source = "gameId", target = "gameId")
+  @Mapping(source = "latitude", target = "latitude")
+  @Mapping(source = "longitude", target = "longitude")
+  @Mapping(source = "roundsPlayed", target = "roundsPlayed")
+  @Mapping(source = "roundStats", target = "roundStats")
+  RoundDTO convertEntityToRoundDTO(Round round);
+
+  /* ROUNDSTATS */
+  @Mapping(source = "gamePlayerId", target = "gamePlayerId")
+  @Mapping(source = "username", target = "username")
+  @Mapping(source = "pointsInc", target = "pointsInc")
+  @Mapping(source = "pointsTotal", target = "pointsTotal")
+  @Mapping(source = "guess", target = "guess")
+  RoundStatsDTO convertEntityToRoundStatsDTO(RoundStats roundStats);
 
 }

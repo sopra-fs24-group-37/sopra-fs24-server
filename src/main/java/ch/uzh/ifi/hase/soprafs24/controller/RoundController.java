@@ -4,6 +4,8 @@ import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.RoundDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GamePlayerService;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
@@ -11,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+@RestController
 public class RoundController {
     private final GameService gameService;
     private final GamePlayerService gamePlayerService;
@@ -28,22 +32,28 @@ public class RoundController {
         this.roundService = roundService;
     }
 
-    @GetMapping("round/{gameId}/leaderboard")
-    public ResponseEntity<List<Map<String, Object>>> getLeaderboard(@PathVariable UUID gameId) {
+    @GetMapping("/round/{gameId}/leaderboard")
+    public ResponseEntity<RoundDTO> getLeaderboard(@PathVariable UUID gameId) {
         //Get all the relevant objects
-        Game game = gameService.getGame(gameId);
         Round round = roundService.getRound(gameId);
 
-        System.out.println(game.getPlayers());
-        System.out.println(round.getGuesses());
+        RoundDTO roundDTO = DTOMapper.INSTANCE.convertEntityToRoundDTO(round);
 
-        //produces this "players":[{"playerId":2,"user":{"userId":1,"username":"andri"},"score":0}]
-        //now join it with this {"playerId":2"pointsScored":0, "lat": 46.8787,"long": 48.5850}
+        return ResponseEntity.ok(roundDTO);
+    }
 
-        // To produce this "players":[{"playerId":2,"user":{"userId":1,"username":"andri"},"score":0, "incscore":0, "lat": 46.8787,"long": 48.5850}]
-        // So it can be returned
+}
 
-        // Combine player information from the game with their guesses from the round
+
+
+//produces this "players":[{"playerId":2,"user":{"userId":1,"username":"andri"},"score":0}]
+//now join it with this {"playerId":2"pointsScored":0, "lat": 46.8787,"long": 48.5850}
+
+// To produce this "players":[{"playerId":2,"user":{"userId":1,"username":"andri"},"score":0, "incscore":0, "lat": 46.8787,"long": 48.5850}]
+// So it can be returned
+
+// Combine player information from the game with their guesses from the round
+        /*
         List<Map<String, Object>> leaderboard = new ArrayList<>();
         for (GamePlayer gamePlayer : game.getPlayers()) {
             long playerId = gamePlayer.getPlayerId();
@@ -66,8 +76,5 @@ public class RoundController {
             }
 
             leaderboard.add(playerInfo);
-        }
-
-        return ResponseEntity.ok(leaderboard);
-    }
-}
+           }
+         */

@@ -20,4 +20,7 @@ public class WebSocketService {
         log.info("Sending {} to {}", o, mapping);
         this.simpMessagingTemplate.convertAndSend(mapping, o);
     }
+    public void sendMessageToSubscriberswithoutLog(String mapping, Object o) {
+        this.simpMessagingTemplate.convertAndSend(mapping, o);
+    }
 }
