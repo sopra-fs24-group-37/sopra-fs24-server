@@ -1,19 +1,11 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-
-//give it
-//{"roundId":"1b5bb058-b7ca-4d3a-88b1-2e05501a03d9","roundNr": 1,"gameId":1b5bb058-b7ca-4d3a-88b1-2e05501a03d9,"guesses":[],"URL":"unsplash.org", "Endtime":"02:48:03"}
-
-
-//i get back
-////{"roundId":"1b5bb058-b7ca-4d3a-88b1-2e05501a03d9","roundNr": 1,"gameId":1b5bb058-b7ca-4d3a-88b1-2e05501a03d9,"guesses":[{"playerId":1,"lat":4.888, "long":94.687 }],"URL":"ignore", "SendTime":"02:48:13"}
-
 
 @Entity
 @Table(name = "ROUND")
@@ -33,6 +25,23 @@ public class Round implements Serializable {
     private String pictureId;
 
     private int roundsPlayed;
+
+    @ElementCollection
+    @CollectionTable(name = "round_guesses", joinColumns = @JoinColumn(name = "round_id"))
+    @MapKeyColumn(name = "player_id")
+    @Column(name = "guess_coordinates")
+    private Map<Long, Double[]> guesses = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "round_points_scored", joinColumns = @JoinColumn(name = "round_id"))
+    @MapKeyColumn(name = "player_id")
+    @Column(name = "points_scored")
+    private Map<Long, Integer> pointsScored = new HashMap<>();
+
+    public Round() {
+        this.guesses = new HashMap<>();
+        this.pointsScored = new HashMap<>();
+    }
 
     public String getPictureId() {return pictureId;}
 
@@ -78,4 +87,21 @@ public class Round implements Serializable {
 
     public void clearRoundsPlayed(){this.roundsPlayed= 0;}
 
+    public void setGuess(long gamePlayer, double latitude, double longitude) {
+        Double[] coordinates = {latitude, longitude};
+        this.guesses.put(gamePlayer, coordinates);
+    }
+
+    public Map<Long, Double[]> getGuesses() {
+        return guesses;
+    }
+
+    public void setPointsScored(long gamePlayer, int points) {
+        this.pointsScored.put(gamePlayer, points);
+    }
+
+    public Map<Long, Integer> getPointsScored() {
+        return pointsScored;
+    }
 }
+
