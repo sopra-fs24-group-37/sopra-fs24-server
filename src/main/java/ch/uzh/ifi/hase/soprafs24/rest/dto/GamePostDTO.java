@@ -12,6 +12,7 @@ public class GamePostDTO {
     private Long gameMaster;
     private Set<GamePlayerDTO> players;
     private GameStatus gameStatus;
+    private Integer numRounds;
     private Integer guessTime;
     private Integer password;
 
@@ -45,6 +46,14 @@ public class GamePostDTO {
 
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    public Integer getNumRounds() {
+        return numRounds;
+    }
+
+    public void setNumRounds(Integer numRounds) {
+        this.numRounds = numRounds;
     }
 
     public Integer getGuessTime() {

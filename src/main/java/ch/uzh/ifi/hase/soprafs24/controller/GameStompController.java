@@ -43,11 +43,18 @@ public class GameStompController {
 
     @MessageMapping("/games/{gameId}/settings")
     public void setLobbyInformation(@DestinationVariable("gameId") UUID gameId,
+                                    @RequestParam(required = false) Integer numRounds,
                                     @RequestParam(required = false) Integer guessTime,
                                     @RequestParam(required = false) Boolean setGamePassword) {
                                         
         Game game = gameService.getGame(gameId);
         Boolean doUpdate = false;
+
+        // Set numRounds if provided and within the valid range
+        if (numRounds != null && game.getNumRounds() != numRounds && numRounds >= 2 && guessTime <= 10) {
+            game.setNumRounds(numRounds);
+            doUpdate = true;
+        }
 
         // Set guessTime if provided and within the valid range
         if (guessTime != null && guessTime >= 10 && guessTime <= 30) {
