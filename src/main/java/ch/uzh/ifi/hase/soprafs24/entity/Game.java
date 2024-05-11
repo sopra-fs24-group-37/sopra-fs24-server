@@ -38,6 +38,9 @@ public class Game implements Serializable {
   @Column(nullable = true) // Nullable since it's optional
   private Integer password;
 
+  @Column(nullable = false)
+  private Integer numRounds;
+
   public UUID getGameId() {
     return gameId;
   }
@@ -89,6 +92,14 @@ public class Game implements Serializable {
 
   public void setPassword(Integer password) {
     this.password = password;
+  }
+
+  public Integer getNumRounds() {
+    return numRounds;
+  }
+
+  public void setNumRounds(Integer numRounds) {
+    this.numRounds = numRounds;
   }
 
 }

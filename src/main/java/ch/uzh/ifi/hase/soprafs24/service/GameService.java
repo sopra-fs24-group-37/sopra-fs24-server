@@ -140,6 +140,7 @@ public class GameService {
         newGame.setGameStatus(GameStatus.WAITING);
         newGame.setGameMaster(userId);
         newGame.addNewPlayer(gameMaster);
+        newGame.setNumRounds(3);  // By default set Number of Rounds to 3
         // newGame.setPlayers(new ArrayList<>(Arrays.asList(gameMaster)));
         newGame = gameRepository.save(newGame);
         gameRepository.flush();
