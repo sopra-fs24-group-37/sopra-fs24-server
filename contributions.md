@@ -25,9 +25,9 @@ Note: Due to my inexperience with git at the time, commits are not properly link
 
 # Week 3 (Apr 10 – Apr 16)
 ## Diana Hidvegi
-- Implement back-end API endpoint for creating a game [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/86/commits)
-- Create a back-end API endpoint for fetching user statistics [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/85/commits)
-- Implement back-end logic to start game with all signed-up users [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/87/commits)
+- [Implement back-end API endpoint for creating a game](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/86/commits)
+- [Create a back-end API endpoint for fetching user statistics](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/85/commits)
+- [Implement back-end logic to start game with all signed-up users](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/87/commits)
 - Implement back-end logic for GameMaster role
 
 ## Manuel Widmer
@@ -40,9 +40,9 @@ Note: Due to my inexperience with git at the time, commits are not properly link
 
 # Week 4 (Apr 17 – Apr 23)
 ## Diana Hidvegi
-- Implement back-end logic to keep track of scores for players [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/93/commits)
-- Create backend GamePlayer role with added User Information [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/98/commits) (+ part of Commit above as well)
-- Create GET endpoints for Games (All and by gameId) [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/90/commits)
+- [Implement back-end logic to keep track of scores for players](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/93/commits)
+- [Create backend GamePlayer role with added User Information](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/98/commits) (+ part of Commit above as well)
+- [Create GET endpoints for Games (All and by gameId)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/90/commits)
 
 ## Manuel Widmer
 - [implemented location selection functionality]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/33
@@ -54,9 +54,9 @@ Note: Due to my inexperience with git at the time, commits are not properly link
 
 # Week 5 (Apr 24 – Apr 30)
 ## Diana Hidvegi
-- Implement back-end logic for DB update triggers [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/103/commits)
-- Create back-end GameService function to end the game [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/101/commits)
-- Implement back-end logic to provide leaderboard data [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/102/commits)
+- [Implement back-end logic for DB update triggers](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/103/commits)
+- [Create back-end GameService function to end the game](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/101/commits)
+- [Implement back-end logic to provide leaderboard data](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/102/commits)
 
 ## Manuel Widmer
 Note: In this week, I invested a lot of time in coming up with a more robust implementation of our timer. Unfortunately, I failed to push my results, which were not satisfying and hence ended up being discarded, to the remote repository.
@@ -64,8 +64,8 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 
 # Week 6 (May 01 – May 07)
 ## Diana Hidvegi
-- Implement back-end logic to handle changes in game parameters [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
-- Implement back-end logic for setting a password [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits) (Same link as above, as they are related issues so I made 1 commit for both)
+- [Implement back-end logic to handle changes in game parameters](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
+- [Implement back-end logic for setting a password](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits) (Same link as above, as they are related issues so I made 1 commit for both)
 
 ## Manuel Widmer
 - [implemented websockets in lobby view]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/62
@@ -75,11 +75,13 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 
 # Week 7 (May 08 – May 14)
 ## Diana Hidvegi
-- Implement back-end logic for conditional game join [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/123/commits)
-- Implement back-end logic to store 3 Game Power Ups for each GamePlayer [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/130/commits)
-- Implement GameService method for "Double Score" Powerup [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/131/commits)
-- Create new Game Setting for Number of Rounds [Commit Link](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/126/commits)
-- Create Unit Tests for Websocket Messages (GameStompController) [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/128/commits) [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/129/commits)
+- [Implement back-end logic for conditional game join](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/123/commits)
+- [Implement back-end logic to store 3 Game Power Ups for each GamePlayer](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/130/commits)
+- [Implement GameService method for "Double Score" Powerup](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/131/commits)
+- [Create new Game Setting for Number of Rounds](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/126/commits)
+- Create Unit Tests for Websocket Messages (GameStompController)
+    - [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/128/commits)
+    - [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/129/commits)
 - Implement GameService support for "Canton Hint" Power Up (In Progress)
 - Add Missing Test Cases for GameService and GameController (To Do)
 
