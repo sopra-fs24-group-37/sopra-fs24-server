@@ -25,6 +25,9 @@ public class GamePlayer {
     private User user;
 
     private Integer score; // Score for a specific game, updated per round
+    private Boolean doubleScore = true;
+    private Boolean cantonHint = true;
+    private Boolean multipleCantonHint = true;
 
     // Constructors
     public GamePlayer() {
@@ -34,6 +37,7 @@ public class GamePlayer {
         this.game = game;
         this.user = user;
         this.score = score;
+        
     }
 
     // Getters and setters
@@ -68,4 +72,29 @@ public class GamePlayer {
     public void setScore(Integer score) {
         this.score = score;
     }
+
+    public Boolean getDoubleScore() {
+        return doubleScore;
+    }
+
+    public void setDoubleScore(Boolean doubleScore) {
+        this.doubleScore = doubleScore;
+    }
+
+    public Boolean getCantonHint() {
+        return cantonHint;
+    }
+
+    public void setCantonHint(Boolean cantonHint) {
+        this.cantonHint = cantonHint;
+    }
+
+    public Boolean getMultipleCantonHint() {
+        return multipleCantonHint;
+    }
+
+    public void setMultipleCantonHint(Boolean multipleCantonHint) {
+        this.multipleCantonHint = multipleCantonHint;
+    }
+    
 }
