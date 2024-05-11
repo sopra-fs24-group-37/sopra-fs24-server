@@ -88,10 +88,16 @@ public interface DTOMapper {
   @Mapping(source = "playerId", target = "playerId")
   @Mapping(source = "score", target = "score")
   @Mapping(source = "user", target = "user")
+  @Mapping(source = "doubleScore", target = "doubleScore")
+  @Mapping(source = "cantonHint", target = "cantonHint")
+  @Mapping(source = "multipleCantonHint", target = "multipleCantonHint")
   GamePlayerDTO convertEntityToGamePlayerDTO(GamePlayer gamePlayer);
 
   @Mapping(source = "playerId", target = "playerId")
   @Mapping(source = "score", target = "score")
+  @Mapping(source = "doubleScore", target = "doubleScore")
+  @Mapping(source = "cantonHint", target = "cantonHint")
+  @Mapping(source = "multipleCantonHint", target = "multipleCantonHint")
   @Mapping(target = "user", ignore = true)
   @Mapping(target = "game", ignore = true)
   GamePlayer convertGamePlayerDTOtoEntity(GamePlayerDTO gamePlayerDTO);
