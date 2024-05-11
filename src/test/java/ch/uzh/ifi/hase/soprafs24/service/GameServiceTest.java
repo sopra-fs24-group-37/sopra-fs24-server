@@ -227,5 +227,41 @@ public class GameServiceTest {
         assertThrows(ResponseStatusException.class, () -> gameService.startGame(gameId));
     }
 
-    // Other tests for remaining endpoints
+    @Test
+    public void useDoubleScorePowerUp_available_success() {
+        // Test case setup
+        UUID gameId = UUID.randomUUID();
+        Long userId = 1L;
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setDoubleScore(true);
+
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
+
+        // Method invocation
+        boolean result = gameService.useDoubleScorePowerUp(gameId, userId, 50);
+
+        // Assertion
+        assertTrue(result);
+        assertFalse(gamePlayer.getDoubleScore()); // Ensure the power-up is used
+        verify(gamePlayerRepository, times(1)).save(any(GamePlayer.class));
+    }
+
+    @Test
+    public void useDoubleScorePowerUp_notAvailable_failure() {
+        // Test case setup
+        UUID gameId = UUID.randomUUID();
+        Long userId = 1L;
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setDoubleScore(false); // Power-up not available
+
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
+
+        // Method invocation
+        boolean result = gameService.useDoubleScorePowerUp(gameId, userId, 50);
+
+        // Assertion
+        assertFalse(result);
+        assertFalse(gamePlayer.getDoubleScore()); // Ensure the power-up remains unused
+        verify(gamePlayerRepository, never()).save(any(GamePlayer.class)); // Verify that save method was not called
+    }
 }
