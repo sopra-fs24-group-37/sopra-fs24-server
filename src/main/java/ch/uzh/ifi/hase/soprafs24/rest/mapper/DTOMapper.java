@@ -70,6 +70,7 @@ public interface DTOMapper {
   @Mapping(source = "gameMaster", target = "gameMaster")
   @Mapping(source = "players", target = "players")
   @Mapping(source = "gameStatus", target = "gameStatus")
+  @Mapping(source = "numRounds", target = "numRounds")
   @Mapping(source = "password", target = "password")
   @Mapping(source = "guessTime", target = "guessTime")
   Game convertGamePostDTOtoEntity(GamePostDTO gamePostDTO);
@@ -78,6 +79,7 @@ public interface DTOMapper {
   @Mapping(source = "gameMaster", target = "gameMaster")
   @Mapping(source = "players", target = "players")
   @Mapping(source = "gameStatus", target = "gameStatus")
+  @Mapping(source = "numRounds", target = "numRounds")
   @Mapping(source = "password", target = "password")
   @Mapping(source = "guessTime", target = "guessTime")
   GameGetDTO convertEntityToGameGetDTO(Game game);
@@ -100,6 +102,7 @@ public interface DTOMapper {
   @Mapping(source = "players", target = "players")
   @Mapping(source = "gameStatus", target = "gameStatus")
   @Mapping(target = "winners", ignore = true)
+  @Mapping(target = "numRounds", ignore = true)
   @Mapping(target = "password", ignore = true)
   @Mapping(target = "guessTime", ignore = true)
   LeaderboardDTO convertEntityToLeaderboardDTO(Game game);
