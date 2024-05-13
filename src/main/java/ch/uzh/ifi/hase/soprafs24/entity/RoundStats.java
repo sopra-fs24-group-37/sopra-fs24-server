@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import javax.persistence.Table;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -17,44 +17,52 @@ public class RoundStats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roundStatsId;
 
-    private UUID gameId;
-    private long gamePlayerId;
+    @ManyToMany(fetch = FetchType.EAGER)  // I set this to Many to Many since game_id will repeat
+    @JoinColumn(name="game_id")
+    private Game game;
 
-    private String username;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="player_id")
+    private GamePlayer gamePlayer;
 
     private int pointsInc;
-
-    private int pointsTotal;
 
     private double[] guess;
 
     public RoundStats() {
     }
-    public RoundStats(UUID gameId, long gamePlayerId, String username, int pointsInc, int pointsTotal, double latitude, double longitude) {
+    
+    public RoundStats(Game game, GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
+        this.game = game;
+        this.gamePlayer = gamePlayer;
         double[] coordinates = {latitude, longitude};
-        this.gameId = gameId;
-        this.gamePlayerId = gamePlayerId;
-        this.username = username;
         this.pointsInc = pointsInc;
-        this.pointsTotal = pointsTotal;
         this.guess = coordinates;
     }
 
-    public long getGamePlayerId() {
-        return gamePlayerId;
+    public Long getRoundStatsId() {
+        return roundStatsId;
     }
 
-    public void setGamePlayerId(long gamePlayerId) {
-        this.gamePlayerId = gamePlayerId;
+    public void setRoundStatsId(Long roundStatsId) {
+        this.roundStatsId = roundStatsId;
     }
 
-    public String getUsername() {
-        return username;
+    public Game getGame() {
+        return game;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setGame(Game game) {
+        this.game = game;
     }
+
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
+    }
+
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }    
 
     public int getPointsInc() {
         return pointsInc;
@@ -62,14 +70,6 @@ public class RoundStats {
 
     public void setPointsInc(int pointsInc) {
         this.pointsInc = pointsInc;
-    }
-
-    public int getPointsTotal() {
-        return pointsTotal;
-    }
-
-    public void setPointsTotal(int pointsTotal) {
-        this.pointsTotal = pointsTotal;
     }
 
     public double[] getGuess() {
