@@ -1,5 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.persistence.Table;
 import java.util.HashSet;
@@ -8,8 +11,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "ROUNDSTATS")
-@IdClass(Round.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roundStatsId")
 public class RoundStats {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long roundStatsId;
+
     private UUID gameId;
     private long gamePlayerId;
 
@@ -21,8 +28,8 @@ public class RoundStats {
 
     private double[] guess;
 
-
-
+    public RoundStats() {
+    }
     public RoundStats(UUID gameId, long gamePlayerId, String username, int pointsInc, int pointsTotal, double latitude, double longitude) {
         double[] coordinates = {latitude, longitude};
         this.gameId = gameId;

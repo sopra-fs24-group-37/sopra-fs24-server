@@ -1,9 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
-import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
-import ch.uzh.ifi.hase.soprafs24.entity.Round;
-import ch.uzh.ifi.hase.soprafs24.entity.User;
+import ch.uzh.ifi.hase.soprafs24.entity.*;
 import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import org.json.JSONObject;
@@ -31,22 +28,26 @@ public class RoundService {
     private static final double EARTH_RADIUS = 6371; // in kilometers
 
     public Round createRound(UUID gameId) {
-        //Fetch game
+        // Fetch game
         Game game = gameService.getGame(gameId);
 
-        //Set default values
+        // Set default values and save the Round instance
         Round newRound = new Round();
         newRound.setGameId(gameId);
         newRound.setCheckIn(0);
+        newRound = roundRepository.save(newRound);
+        roundRepository.flush();
 
-        //Iterate trough gamePlayer set
+        // Iterate through gamePlayer set and create RoundStats instances
         for (GamePlayer gamePlayer : game.getPlayers()) {
             User user = gamePlayer.getUser();
             String username = user.getUsername();
-            newRound.addNewRoundStats(gameId,gamePlayer.getPlayerId(),username,0,0,0,0);
+            newRound.addNewRoundStats(gameId, gamePlayer.getPlayerId(), username, 0, 0, 0, 0);
         }
-        newRound = roundRepository.save(newRound);
-        roundRepository.flush();
+
+        // Save the Round instance again to persist the RoundStats instances
+        roundRepository.save(newRound);
+
         return newRound;
     }
 
