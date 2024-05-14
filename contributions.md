@@ -139,7 +139,11 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   Create Unit Tests for Websocket Messages (GameStompController)
     -   [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/128/commits)
     -   [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/129/commits)
--   Implement GameService support for "Canton Hint" Power Up (In Progress)
--   Add Missing Test Cases for GameService and GameController (To Do)
+-   [Implement GameService support for "Canton Hint" Power Up](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/132/commits)
+
+-   Add Missing Test Cases for GameService and GameController (Partially done but moved to Week 8 due to higher priority tasks for the newly added feature after M3 Feedback)
 
 # Week 8 (May 15 – May 21)
+
+## Diana Hidvegi
+-   Add Missing Test Cases for GameService and GameController
