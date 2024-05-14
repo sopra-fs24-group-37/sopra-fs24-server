@@ -144,14 +144,27 @@ public class GameService {
             .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
 
         if (gamePlayer.getCantonHint() == true) {
-            // TODO: Add point in polygon search here if front-end needs it (if they can't identify canton index)
-            // In that case: Also edit return value / return logic
-
             gamePlayer.setCantonHint(false);
             gamePlayerRepository.save(gamePlayer);
             return true;
         }
+        return false;
+    }
 
+    @Transactional
+    public Boolean useMultipleCantonHintPowerUp(UUID gameId, Long userId, Integer score) {
+        /*
+         * Returns True if GamePlayer is able to use their Multiple Canton Hint Power up and sets it to used in the DB.
+         * Otherwise it returns false.
+         */
+        GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
+            .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
+
+        if (gamePlayer.getMultipleCantonHint() == true) {
+            gamePlayer.setMultipleCantonHint(false);
+            gamePlayerRepository.save(gamePlayer);
+            return true;
+        }
         return false;
     }
 
