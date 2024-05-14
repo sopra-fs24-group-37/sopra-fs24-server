@@ -70,15 +70,11 @@ public class RoundStompController {
 
         //Fetch relevant objects
         GamePlayer gamePlayer = gamePlayerService.getGameplayer(gameId,userId);
-        Long gamePlayerId = gamePlayer.getPlayerId();
         Round round = roundService.getRound(gameId);
-        User user = gamePlayer.getUser();
 
         //Extract data out of the objects
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();
-        int currentScore = gamePlayer.getScore();
-        String username = user.getUsername();
 
         //Calculate score
         int distance = (int) roundService.calculateDistance(correctLat,correctLng,lat,lng);
@@ -91,11 +87,11 @@ public class RoundStompController {
         if(distance<=100) {
             int points = 100 - distance;
             gameService.updatePlayerScore(gameId, userId, points);
-            round.updateRoundStats(gamePlayerId, points, currentScore + points, lat, lng);
+            round.updateRoundStats(gamePlayer, points, lat, lng);
             roundRepository.save(round);
         }
         else{
-            round.updateRoundStats(gamePlayerId,0, currentScore, lat, lng);
+            round.updateRoundStats(gamePlayer,0, lat, lng);
             roundRepository.save(round);
         }
     }

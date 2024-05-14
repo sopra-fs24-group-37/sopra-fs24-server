@@ -17,7 +17,7 @@ public class RoundStats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roundStatsId;
 
-    @ManyToMany(fetch = FetchType.EAGER)  // I set this to Many to Many since game_id will repeat
+    @ManyToOne(fetch = FetchType.EAGER)  // I set this to Many to Many since game_id will repeat
     @JoinColumn(name="game_id")
     private Game game;
 

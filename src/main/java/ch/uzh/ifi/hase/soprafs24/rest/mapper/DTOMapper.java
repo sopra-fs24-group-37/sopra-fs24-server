@@ -113,10 +113,8 @@ public interface DTOMapper {
   RoundDTO convertEntityToRoundDTO(Round round);
 
   /* ROUNDSTATS */
-  @Mapping(source = "gamePlayerId", target = "gamePlayerId")
-  @Mapping(source = "username", target = "username")
+  @Mapping(source = "gamePlayer", target = "gamePlayer")
   @Mapping(source = "pointsInc", target = "pointsInc")
-  @Mapping(source = "pointsTotal", target = "pointsTotal")
   @Mapping(source = "guess", target = "guess")
   RoundStatsDTO convertEntityToRoundStatsDTO(RoundStats roundStats);
 

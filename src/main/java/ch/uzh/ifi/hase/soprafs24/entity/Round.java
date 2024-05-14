@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
 
+import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -60,30 +62,30 @@ public class Round implements Serializable {
 
     public void clearRoundsPlayed(){this.roundsPlayed= 0;}
 
-    public void addNewRoundStats(UUID gameId, long gamePlayerId, String username, int pointsInc, int pointsTotal, double latitude, double longitude) {
-        RoundStats roundStats = new RoundStats(gameId, gamePlayerId, username, pointsInc, pointsTotal, latitude, longitude);
+    public void addExistingRoundStats(RoundStats roundStats) {this.roundStats.add(roundStats);}
+
+    public void addNewRoundStats(Game game, GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
+        RoundStats roundStats = new RoundStats(game, gamePlayer, pointsInc, latitude, longitude);
         this.roundStats.add(roundStats);
     }
 
-    public void updateRoundStats(long gamePlayerId, int pointsInc, int pointsTotal, double latitude, double longitude) {
+    public void updateRoundStats(GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
         // Iterate over the set of RoundStats
         for (RoundStats roundStats : this.roundStats) {
             // Check if the current RoundStats object matches the gamePlayerId
-            if (roundStats.getGamePlayerId() == gamePlayerId) {
+            if (roundStats.getGamePlayer() == gamePlayer) {
                 roundStats.setPointsInc(pointsInc);
-                roundStats.setPointsTotal(pointsTotal);
                 roundStats.setGuess(latitude,longitude);
             }
         }
     }
 
-    public void clearRoundStats(long gamePlayerId) {
+    public void clearRoundStats(GamePlayer gamePlayer) {
         // Iterate over the set of RoundStats
         for (RoundStats roundStats : this.roundStats) {
             // Check if the current RoundStats object matches the gamePlayerId
-            if (roundStats.getGamePlayerId() == gamePlayerId) {
+            if (roundStats.getGamePlayer() == gamePlayer) {
                 roundStats.setPointsInc(0);
-                roundStats.setPointsTotal(0);
                 roundStats.setGuess(0,0);
             }
         }

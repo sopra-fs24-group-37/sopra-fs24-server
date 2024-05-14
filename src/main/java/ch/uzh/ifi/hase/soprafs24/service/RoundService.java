@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs24.service;
 import ch.uzh.ifi.hase.soprafs24.entity.*;
 import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
+import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class RoundService {
     @Autowired
     private RoundRepository roundRepository;
     @Autowired
+    private RoundStatsRepository roundStatsRepository;
+    @Autowired
     private GameService gameService;
     private static final double EARTH_RADIUS = 6371; // in kilometers
 
@@ -35,18 +38,18 @@ public class RoundService {
         Round newRound = new Round();
         newRound.setGameId(gameId);
         newRound.setCheckIn(0);
-        newRound = roundRepository.save(newRound);
-        roundRepository.flush();
+        int i = 0;
 
         // Iterate through gamePlayer set and create RoundStats instances
         for (GamePlayer gamePlayer : game.getPlayers()) {
-            User user = gamePlayer.getUser();
-            String username = user.getUsername();
-            newRound.addNewRoundStats(gameId, gamePlayer.getPlayerId(), username, 0, 0, 0, 0);
+            RoundStats roundStats = new RoundStats(game, gamePlayer, 0, 0, 0);
+            roundStatsRepository.save(roundStats);
+            newRound.addExistingRoundStats(roundStats);
         }
 
         // Save the Round instance again to persist the RoundStats instances
         roundRepository.save(newRound);
+        roundRepository.flush();
 
         return newRound;
     }
