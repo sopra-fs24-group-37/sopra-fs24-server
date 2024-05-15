@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs24.controller;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -102,4 +101,17 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
+  @PutMapping("/users/{userId}")
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public UserGetDTO updateUser(@PathVariable Long userId, @RequestBody UserPutDTO userPutDTO) {
+
+    User user = userService.findUserbyId(userId);
+
+    DTOMapper.INSTANCE.updateUserFromDto(userPutDTO, user);
+
+    User updatedUser = userService.updateUser(user);
+
+    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(updatedUser);
+  }
 }
