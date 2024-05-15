@@ -3,14 +3,15 @@ package ch.uzh.ifi.hase.soprafs24.rest.dto.stomp;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GameSettingsPostDTO {
-    @JsonProperty("latitude")
+    @JsonProperty("numRounds")
     private Integer numRounds;
-    @JsonProperty("longitude")
+    @JsonProperty("guessTime")
     private Integer guessTime;
-    @JsonProperty("userId")
+    @JsonProperty("setGamePassword")
     private Boolean setGamePassword;
 
-    public GameSettingsPostDTO() {}
+    public GameSettingsPostDTO() {
+    }
 
     public GameSettingsPostDTO(Integer numRounds, Integer guessTime, Boolean setGamePassword) {
         this.numRounds = numRounds;
