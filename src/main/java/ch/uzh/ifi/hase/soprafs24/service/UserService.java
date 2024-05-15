@@ -97,6 +97,13 @@ public class UserService {
         user.setStatus(UserStatus.OFFLINE);
         userRepository.save(user);
     }
-}
+  }
+
+  public User updateUser(User user) {
+    Long userIdOpt = user.getUserId();
+    findUserbyId(userIdOpt);
+    userRepository.save(user);
+    return user;
+  }
 
 }
