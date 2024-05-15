@@ -61,6 +61,21 @@ public class GameService {
         gameRepository.saveAndFlush(game);
     }
 
+    public Game findGamebyId(UUID gameId) {
+        Game gameById = this.gameRepository.findById(gameId).orElse(null);
+        if (gameById == null) {
+          throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Game with user ID " + gameId + " was not found!");
+        }
+        return gameById;
+      }
+
+    public void deleteGameById(UUID gameId) {
+        findGamebyId(gameId); // To throw exception if user does not exist
+        this.gameRepository.deleteById(gameId);
+      }
+
     public int getNumPlayers(UUID gameId) {
         Game game = getGame(gameId);
         Set<GamePlayer> players = game.getPlayers();
