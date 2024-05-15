@@ -1,8 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
+import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.LeaveGamePostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GameSettingsPostDTO;
 
 
+import java.util.Set;
 import java.util.UUID;
 
 

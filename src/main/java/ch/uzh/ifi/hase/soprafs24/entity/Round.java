@@ -1,19 +1,11 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
-
-//give it
-//{"roundId":"1b5bb058-b7ca-4d3a-88b1-2e05501a03d9","roundNr": 1,"gameId":1b5bb058-b7ca-4d3a-88b1-2e05501a03d9,"guesses":[],"URL":"unsplash.org", "Endtime":"02:48:03"}
-
-
-//i get back
-////{"roundId":"1b5bb058-b7ca-4d3a-88b1-2e05501a03d9","roundNr": 1,"gameId":1b5bb058-b7ca-4d3a-88b1-2e05501a03d9,"guesses":[{"playerId":1,"lat":4.888, "long":94.687 }],"URL":"ignore", "SendTime":"02:48:13"}
-
+import java.util.*;
 
 @Entity
 @Table(name = "ROUND")
@@ -30,29 +22,25 @@ public class Round implements Serializable {
 
     private double longitude;
 
-    private String pictureId;
-
     private int roundsPlayed;
 
-    public String getPictureId() {return pictureId;}
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<RoundStats> roundStats = new HashSet<>();
 
-    public void setPictureId(String pictureId) {this.pictureId = pictureId;}
+    /*
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Map<Long, Double[]> guesses = new HashMap<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Map<Long, Integer> pointsScored = new HashMap<>();
+     */
 
-    public UUID getGameId() {
-        return gameId;
-    }
+    public UUID getGameId() {return gameId;}
 
-    public void setGameId(UUID id) {
-        this.gameId = id;
-    }
+    public void setGameId(UUID id) {this.gameId = id;}
 
-    public int getCheckIn() {
-        return checkIn;
-    }
+    public int getCheckIn() {return checkIn;}
 
-    public void setCheckIn(int i) {
-        this.checkIn = i;
-    }
+    public void setCheckIn(int i) {this.checkIn = i;}
 
     public void incCheckIn(){this.checkIn= this.checkIn+1;}
 
@@ -66,16 +54,74 @@ public class Round implements Serializable {
 
     public void setLongitude(double longitude) {this.longitude = longitude;}
 
-    public int getRoundsPlayed() {
-        return roundsPlayed;
-    }
+    public int getRoundsPlayed() {return roundsPlayed;}
 
-    public void setRoundsPlayed(int i) {
-        this.roundsPlayed = i;
-    }
+    public void setRoundsPlayed(int i) {this.roundsPlayed = i;}
 
     public void incRoundsPlayed(){this.roundsPlayed= this.roundsPlayed+1;}
 
     public void clearRoundsPlayed(){this.roundsPlayed= 0;}
 
+    public void addExistingRoundStats(RoundStats roundStats) {this.roundStats.add(roundStats);}
+
+    public void addNewRoundStats(Game game, GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
+        RoundStats roundStats = new RoundStats(game, gamePlayer, pointsInc, latitude, longitude);
+        this.roundStats.add(roundStats);
+    }
+
+    public void updateRoundStats(GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
+        // Iterate over the set of RoundStats
+        for (RoundStats roundStats : this.roundStats) {
+            // Check if the current RoundStats object matches the gamePlayerId
+            if (roundStats.getGamePlayer() == gamePlayer) {
+                roundStats.setPointsInc(pointsInc);
+                roundStats.setGuess(latitude,longitude);
+            }
+        }
+    }
+
+    public void clearRoundStats(GamePlayer gamePlayer) {
+        // Iterate over the set of RoundStats
+        for (RoundStats roundStats : this.roundStats) {
+            // Check if the current RoundStats object matches the gamePlayerId
+            if (roundStats.getGamePlayer() == gamePlayer) {
+                roundStats.setPointsInc(0);
+                roundStats.setGuess(0,0);
+            }
+        }
+    }
+
+    public Set<RoundStats> getRoundStats() {
+        return roundStats;
+    }
+
+    /*
+    public void setGuess(long gamePlayer, double latitude, double longitude) {
+        Double[] coordinates = {latitude, longitude};
+        this.guesses.put(gamePlayer, coordinates);
+    }
+
+
+    public Map<Long, Double[]> getGuesses() {
+        return guesses;
+    }
+
+    public void setPointsScored(long gamePlayer, int pointsIncrease, int pointsTotal) {
+        this.pointsScored.put(gamePlayer, pointsIncrease, pointsTotal);
+    }
+
+    public Map<Long, Integer, Integer> getPointsScored() {
+        return pointsScored;
+    }
+
+    public Map<Long, String, Double[], Integer, Integer> getRoundStats() {
+        return RoundStats;
+    }
+
+    public void setRoundStats(long gamePlayerId, String username, int pointsInc, int pointsTotal, double latitude, double longitude) {
+        Double[] coordinates = {latitude, longitude};
+        this.RoundStats.put(gamePlayerId, username, pointsInc, pointsTotal, coordinates);
+    }
+    */
 }
+
