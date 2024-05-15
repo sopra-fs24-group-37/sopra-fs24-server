@@ -48,6 +48,12 @@ public class GameController {
       return gameGetDTO;
     }
 
+    @DeleteMapping("/{gameId}")
+    public ResponseEntity<?> deleteGame(@PathVariable UUID gameId) {
+      gameService.deleteGameById(gameId);
+      return ResponseEntity.status(HttpStatus.OK).body("Game Deleted");
+    }
+
     @PostMapping
     public ResponseEntity<GameGetDTO> createGame(@RequestBody GamePostDTO gamePostDTO) {
       Game newGame = gameService.createGame(gamePostDTO.getGameMaster());
