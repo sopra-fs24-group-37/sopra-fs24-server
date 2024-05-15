@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 /**
@@ -76,8 +80,7 @@ public class UserController {
     UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     
     return ResponseEntity.status(HttpStatus.CREATED).body(userGetDTO);
-
-}
+  }
 
   @PostMapping("/users/login")
   @ResponseStatus(HttpStatus.OK)
@@ -90,5 +93,13 @@ public class UserController {
     // convert internal representation of user back to API
     return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
+
+  @PutMapping("users/{userId}/logout")
+  public ResponseEntity<Void> logoutUser(@PathVariable Long userId) {
+
+    userService.setUserOffline(userId);
+      
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
 
 }
