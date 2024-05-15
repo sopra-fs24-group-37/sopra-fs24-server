@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GameSettingsPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
@@ -75,76 +76,64 @@ public class GameStompControllerTest {
         verify(webSocketService).sendMessageToSubscribers("/topic/games/" + gameId + "/started", "Game has started");
     }
 
-    // @Test
-    // public void testSetLobbyInformation() {
-    //     // Mocking
-    //     int guessTime = 20;
-    //     int numRounds = 3;
-    //     when(gameService.getGame(gameId)).thenReturn(new Game());
+    @Test
+    public void testSetLobbyInformation() {
+        GameSettingsPostDTO settings = new GameSettingsPostDTO();
+        settings.setNumRounds(3);
+        settings.setGuessTime(20);
+        settings.setSetGamePassword(true);
 
-    //     // Execution
-    //     gameStompController.setLobbyInformation(gameId, numRounds, guessTime, true);
+        when(gameService.getGame(gameId)).thenReturn(new Game());
 
-    //     // Verification
-    //     verify(gameService).updateGame(any(Game.class));
-    //     verify(webSocketService).sendMessageToSubscribers(anyString(), any(GameGetDTO.class));
-    // }
+        gameStompController.setLobbyInformation(settings, gameId);
 
-    // @Test
-    // public void testSetLobbyInformationWithoutPassword() {
-    //     // Mocking
-    //     int guessTime = 20;
-    //     int numRounds = 3;
-    //     when(gameService.getGame(gameId)).thenReturn(new Game());
+        verify(gameService).updateGame(any(Game.class));
+        verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
+    }
 
-    //     // Execution
-    //     gameStompController.setLobbyInformation(gameId, numRounds, guessTime, false);
+    @Test
+    public void testSetLobbyInformationWithoutPassword() {
+        GameSettingsPostDTO settings = new GameSettingsPostDTO();
+        settings.setNumRounds(3);
+        settings.setGuessTime(20);
+        settings.setSetGamePassword(false);
 
-    //     // Verification
-    //     verify(gameService).updateGame(any(Game.class));
-    //     verify(webSocketService).sendMessageToSubscribers(anyString(), any(GameGetDTO.class));
-    // }
+        when(gameService.getGame(gameId)).thenReturn(new Game());
 
-    // @Test
-    // public void testSetLobbyInformationWithoutguessTimeandPassword() {
-    //     // Mocking
-    //     int numRounds = 3;
-    //     when(gameService.getGame(gameId)).thenReturn(new Game());
+        gameStompController.setLobbyInformation(settings, gameId);
 
-    //     // Execution
-    //     gameStompController.setLobbyInformation(gameId, numRounds, 0, false);
+        verify(gameService).updateGame(any(Game.class));
+        verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
+    }
 
-    //     // Verification
-    //     verify(gameService).updateGame(any(Game.class));
-    //     verify(webSocketService).sendMessageToSubscribers(anyString(), any(GameGetDTO.class));
-    // }
+    @Test
+    public void testSetLobbyInformationInvalidValues() {
+        GameSettingsPostDTO settings = new GameSettingsPostDTO();
+        settings.setNumRounds(1);  // Invalid numRounds
+        settings.setGuessTime(40); // Invalid guessTime
+        settings.setSetGamePassword(false);
 
-    // @Test
-    // public void testSetLobbyInformationInvalidValues() {
-    //     // Mocking
-    //     when(gameService.getGame(gameId)).thenReturn(new Game());
-    
-    //     // Execution - Pass invalid values that do not satisfy the conditions
-    //     gameStompController.setLobbyInformation(gameId, 1, 40, false);
-    
-    //     // Verification - Ensure that updateGame() is not invoked
-    //     verify(gameService, never()).updateGame(any(Game.class));
-    //     verify(webSocketService).sendMessageToSubscribers(anyString(), any(GameGetDTO.class));
-    // }
-    
-    // @Test
-    // public void testSetLobbyInformationAllEmpty() {
-    //     // Mocking
-    //     when(gameService.getGame(gameId)).thenReturn(new Game());
-    
-    //     // Execution - Pass invalid values that do not satisfy the conditions
-    //     gameStompController.setLobbyInformation(gameId, 0, 0, false);
-    
-    //     // Verification - Ensure that updateGame() is not invoked
-    //     verify(gameService, never()).updateGame(any(Game.class));
-    //     verify(webSocketService).sendMessageToSubscribers(anyString(), any(GameGetDTO.class));
-    // }
-    
+        when(gameService.getGame(gameId)).thenReturn(new Game());
 
+        gameStompController.setLobbyInformation(settings, gameId);
+
+        verify(gameService, never()).updateGame(any(Game.class));
+        verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
+    }
+
+    @Test
+    public void testSetLobbyInformationAllEmpty() {
+        GameSettingsPostDTO settings = new GameSettingsPostDTO();
+        settings.setNumRounds(0);
+        settings.setGuessTime(0);
+        settings.setSetGamePassword(false);
+
+        when(gameService.getGame(gameId)).thenReturn(new Game());
+
+        gameStompController.setLobbyInformation(settings, gameId);
+
+        verify(gameService, never()).updateGame(any(Game.class));
+        verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
+    }
 }
 
