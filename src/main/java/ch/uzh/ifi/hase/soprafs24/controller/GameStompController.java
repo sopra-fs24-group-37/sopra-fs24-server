@@ -61,13 +61,13 @@ public class GameStompController {
         }
 
         // Set guessTime if provided and within the valid range
-        if (guessTime != null && guessTime >= 10 && guessTime <= 30) {
+        if (guessTime != null && game.getGuessTime() != guessTime && guessTime >= 10 && guessTime <= 30) {
             game.setGuessTime(guessTime);
             doUpdate = true;
         }
 
         // Set gamePassword if required, and make it a a 6-digit integer
-        if (setGamePassword == true) {
+        if (setGamePassword == true && game.getPassword() != null && game.getPassword() != 0) {
             int gamePassword = (int) (Math.random() * 900000) + 100000;
             game.setPassword(gamePassword);
             doUpdate = true;
