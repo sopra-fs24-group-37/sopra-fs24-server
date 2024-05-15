@@ -112,7 +112,9 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 
 ## Diana Hidvegi
 
--   [Implement back-end logic to handle changes in game parameters](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
+-   Implement back-end logic to handle changes in game parameters
+    - [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
+    - [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/134/commits)
 -   [Implement back-end logic for setting a password](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits) (Same link as above, as they are related issues so I made 1 commit for both)
 
 ## Manuel Widmer
