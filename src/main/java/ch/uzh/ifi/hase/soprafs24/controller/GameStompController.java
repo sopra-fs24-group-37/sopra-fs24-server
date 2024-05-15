@@ -51,7 +51,7 @@ public class GameStompController {
         Boolean doUpdate = false;
 
         // Set numRounds if provided and within the valid range
-        if (numRounds != null && game.getNumRounds() != numRounds && numRounds >= 2 && guessTime <= 10) {
+        if (numRounds != null && game.getNumRounds() != numRounds && numRounds >= 2 && numRounds <= 10) {
             game.setNumRounds(numRounds);
             doUpdate = true;
         }
