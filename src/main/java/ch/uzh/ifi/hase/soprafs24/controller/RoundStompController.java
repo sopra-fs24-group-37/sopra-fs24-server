@@ -64,6 +64,8 @@ public class RoundStompController {
         double lng = guess.getLng();
         Long userId = guess.getUserId();
         Boolean useDoubleScore = guess.getUseDoubleScore();
+        Boolean useCantonHint = guess.getUseCantonHint();
+        Boolean useMultipleCantonHint = guess.getUseMultipleCantonHint();
 
         //Fetch relevant objects
         GamePlayer gamePlayer = gamePlayerService.getGameplayer(gameId,userId);
@@ -85,6 +87,14 @@ public class RoundStompController {
         if (useDoubleScore) { // Front end says they want to use Double Score
             Boolean useDoubleScoreConditional = gameService.useDoubleScorePowerUp(gameId, userId);  // Backend ensures this is actually possible and updates the usage
             scoreMultiplier = useDoubleScoreConditional ? 2 : 1;  // If it is possible, then it increments the score multiplier
+        }
+
+        if (useCantonHint) {
+            gameService.useCantonHintPowerUp(gameId, userId);
+        }
+
+        if (useMultipleCantonHint) {
+            gameService.useMultipleCantonHintPowerUp(gameId, userId);
         }
 
         //Updating objects

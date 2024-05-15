@@ -15,13 +15,21 @@ public class GuessPostDTO {
     @JsonProperty("useDoubleScore")
     private Boolean useDoubleScore;
 
+    @JsonProperty("useCantonHint")
+    private Boolean useCantonHint;
+
+    @JsonProperty("useMultipleCantonHint")
+    private Boolean useMultipleCantonHint;
+
     public GuessPostDTO() {}
 
-    public GuessPostDTO(double latitude, double longitude, long userId, Boolean useDoubleScore) {
+    public GuessPostDTO(double latitude, double longitude, long userId, Boolean useDoubleScore, Boolean useCantonHint, Boolean useMultipleCantonHint) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.userId = userId;
         this.useDoubleScore = useDoubleScore;
+        this.useCantonHint = useCantonHint;
+        this.useMultipleCantonHint = useMultipleCantonHint;
     }
 
     public double getLat() {return latitude;}
@@ -39,5 +47,13 @@ public class GuessPostDTO {
     public Boolean getUseDoubleScore() {return useDoubleScore;}
 
     public void setUseDoubleScore(Boolean useDoubleScore) {this.useDoubleScore = useDoubleScore;}
+
+    public Boolean getUseCantonHint() {return useCantonHint;}
+
+    public void setUseCantonHint(Boolean useCantonHint) {this.useCantonHint = useCantonHint;}
+
+    public Boolean getUseMultipleCantonHint() {return useMultipleCantonHint;}
+
+    public void setUseMultipleCantonHint(Boolean useMultipleCantonHint) {this.useMultipleCantonHint = useMultipleCantonHint;}
 
 }
