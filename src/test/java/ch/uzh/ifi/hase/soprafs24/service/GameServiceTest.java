@@ -238,7 +238,7 @@ public class GameServiceTest {
         when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
 
         // Method invocation
-        boolean result = gameService.useDoubleScorePowerUp(gameId, userId, 50);
+        boolean result = gameService.useDoubleScorePowerUp(gameId, userId);
 
         // Assertion
         assertTrue(result);
@@ -257,7 +257,7 @@ public class GameServiceTest {
         when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
 
         // Method invocation
-        boolean result = gameService.useDoubleScorePowerUp(gameId, userId, 50);
+        boolean result = gameService.useDoubleScorePowerUp(gameId, userId);
 
         // Assertion
         assertFalse(result);

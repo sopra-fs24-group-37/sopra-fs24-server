@@ -117,7 +117,7 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean useDoubleScorePowerUp(UUID gameId, Long userId, Integer score) {
+    public Boolean useDoubleScorePowerUp(UUID gameId, Long userId) {
         /*
          * Returns True if GamePlayer is able to use their Double Score Power up and sets it to used in the DB.
          * Otherwise it returns false.
@@ -135,7 +135,7 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean useCantonHintPowerUp(UUID gameId, Long userId, Integer score) {
+    public Boolean useCantonHintPowerUp(UUID gameId, Long userId) {
         /*
          * Returns True if GamePlayer is able to use their Canton Hint Power up and sets it to used in the DB.
          * Otherwise it returns false.
@@ -152,7 +152,7 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean useMultipleCantonHintPowerUp(UUID gameId, Long userId, Integer score) {
+    public Boolean useMultipleCantonHintPowerUp(UUID gameId, Long userId) {
         /*
          * Returns True if GamePlayer is able to use their Multiple Canton Hint Power up and sets it to used in the DB.
          * Otherwise it returns false.
