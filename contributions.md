@@ -147,3 +147,11 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 
 ## Diana Hidvegi
 -   Add Missing Test Cases for GameService and GameController
+
+## Manuel Widmer
+
+-   [redesigned map]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/0479e18ede277c2f323c242cceb0d74ab043b901
+-   [implemented map zoom]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/72
+-   [added canton hint power-up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/74
+-   [added triple hint power-up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/75
+-   [added double score power-up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/76
