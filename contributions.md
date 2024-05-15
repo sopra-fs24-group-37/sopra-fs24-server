@@ -115,7 +115,9 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   Implement back-end logic to handle changes in game parameters
     - [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
     - [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/134/commits)
--   [Implement back-end logic for setting a password](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits) (Same link as above, as they are related issues so I made 1 commit for both)
+-   Implement back-end logic for setting a password
+    - [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
+    - [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/143/commits)
 
 ## Manuel Widmer
 
@@ -149,6 +151,11 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 
 ## Diana Hidvegi
 -   Add Missing Test Cases for GameService and GameController
+-   Integrate "Double Score" Power Up Functionality into RoundInfo
+-   Integrate "Canoton Hint" and "Triple Hint" Power up tracking into Rounds
+-   Add endpoint for "Deleting" Created Game from Game Lobby
+-   Implement Online/Offline Status Update for User
+-   Implement PUT Endpoint for editing username in User Profile
 
 ## Manuel Widmer
 
