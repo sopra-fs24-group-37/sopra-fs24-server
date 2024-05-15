@@ -45,7 +45,6 @@ public class GameService {
     @Autowired
     private UserService userService;
 
-
     public List<Game> getGames() {
         return gameRepository.findAll();
       }
@@ -118,19 +117,64 @@ public class GameService {
     }
 
     @Transactional
+    public Boolean useDoubleScorePowerUp(UUID gameId, Long userId, Integer score) {
+        /*
+         * Returns True if GamePlayer is able to use their Double Score Power up and sets it to used in the DB.
+         * Otherwise it returns false.
+         */
+        GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
+            .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
+
+        if (gamePlayer.getDoubleScore() == true) {
+            gamePlayer.setDoubleScore(false);
+            gamePlayerRepository.save(gamePlayer);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public Boolean useCantonHintPowerUp(UUID gameId, Long userId, Integer score) {
+        /*
+         * Returns True if GamePlayer is able to use their Canton Hint Power up and sets it to used in the DB.
+         * Otherwise it returns false.
+         */
+        GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
+            .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
+
+        if (gamePlayer.getCantonHint() == true) {
+            gamePlayer.setCantonHint(false);
+            gamePlayerRepository.save(gamePlayer);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public Boolean useMultipleCantonHintPowerUp(UUID gameId, Long userId, Integer score) {
+        /*
+         * Returns True if GamePlayer is able to use their Multiple Canton Hint Power up and sets it to used in the DB.
+         * Otherwise it returns false.
+         */
+        GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
+            .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
+
+        if (gamePlayer.getMultipleCantonHint() == true) {
+            gamePlayer.setMultipleCantonHint(false);
+            gamePlayerRepository.save(gamePlayer);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
     public void updatePlayerScore(UUID gameId, Long userId, Integer score) {
         GamePlayer gamePlayer = gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)
             .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
 
         gamePlayer.setScore(gamePlayer.getScore() + score);
         gamePlayerRepository.save(gamePlayer);
-
-        // Shouldn't need the below lines anymore since Total Scores get
-        // updated in updateUserStatistics after last game round finished
-
-        // User user = gamePlayer.getUser();
-        // user.setTotalScores(user.getTotalScores() + score);
-        // userRepository.save(user);
     }
     
     public Game createGame(Long userId) { // userId of gameMaster
@@ -140,6 +184,7 @@ public class GameService {
         newGame.setGameStatus(GameStatus.WAITING);
         newGame.setGameMaster(userId);
         newGame.addNewPlayer(gameMaster);
+        newGame.setNumRounds(3);  // By default set Number of Rounds to 3
         // newGame.setPlayers(new ArrayList<>(Arrays.asList(gameMaster)));
         newGame = gameRepository.save(newGame);
         gameRepository.flush();
