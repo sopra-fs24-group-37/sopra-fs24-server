@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -174,18 +175,26 @@ public class GameServiceTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-    // @Test
-    // public void createGame_success() {
-    //     // Test case setup
-    //     when(userService.findUserbyId(anyLong())).thenReturn(gameMaster);
+    @Test
+    public void createGame_Success() {
+        when(userService.findUserbyId(anyLong())).thenReturn(gameMaster);
 
-    //     // Method invocation
-    //     Game newGame = gameService.createGame(gameMaster.getUserId());
+        Game createdGame = new Game();
+        createdGame.setGameId(gameId);
+        createdGame.setGameMaster(gameMaster.getUserId());
+        createdGame.setGameStatus(GameStatus.WAITING);
+        createdGame.addNewPlayer(gameMaster);
 
-    //     // Assertion
-    //     assertNotNull(newGame);
-    //     assertEquals(GameStatus.WAITING, newGame.getGameStatus());
-    // }
+        when(gameRepository.save(any(Game.class))).thenReturn(createdGame);
+
+        Game newGame = gameService.createGame(gameMaster.getUserId());
+
+        assertNotNull(newGame);
+        assertEquals(gameId, newGame.getGameId());
+        assertEquals(GameStatus.WAITING, newGame.getGameStatus());
+        assertEquals(1, newGame.getPlayers().size());
+        verify(gameRepository).save(any(Game.class));
+    }
 
     @Test
     public void startGame_success() {
@@ -263,5 +272,49 @@ public class GameServiceTest {
         assertFalse(result);
         assertFalse(gamePlayer.getDoubleScore()); // Ensure the power-up remains unused
         verify(gamePlayerRepository, never()).save(any(GamePlayer.class)); // Verify that save method was not called
+    }
+
+    @Test
+    public void leaveGame_UserInGame_RemovesUserFromGame() {
+        Game game = new Game();
+        game.setGameId(gameId);
+
+        User user = new User();
+        user.setUserId(2L);
+
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setUser(user);
+        game.getPlayers().add(gamePlayer);
+
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+        when(userService.findUserbyId(2L)).thenReturn(user);
+
+        Game updatedGame = gameService.leaveGame(gameId, 2L);
+
+        assertNotNull(updatedGame);
+        assertTrue(updatedGame.getPlayers().isEmpty());
+        verify(gamePlayerRepository).delete(any(GamePlayer.class));
+        verify(gameRepository).save(game);
+    }
+
+    @Test
+    public void leaveGame_UserNotInGame_ThrowsException() {
+        Game game = new Game();
+        game.setGameId(gameId);
+
+        User user = new User();
+        user.setUserId(2L);
+
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+        when(userService.findUserbyId(2L)).thenReturn(user);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.leaveGame(gameId, 2L));
+        verify(gamePlayerRepository, never()).delete(any(GamePlayer.class));
+    }
+
+    @Test
+    public void leaveGame_GameNotFound_ThrowsException() {
+        when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+        assertThrows(ResponseStatusException.class, () -> gameService.leaveGame(gameId, 2L));
     }
 }
