@@ -6,26 +6,18 @@ import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardDTO;
 import ch.uzh.ifi.hase.soprafs24.repository.GamePlayerRepository;
-import ch.uzh.ifi.hase.soprafs24.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
-import java.util.stream.Collectors;
 import java.util.List;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
