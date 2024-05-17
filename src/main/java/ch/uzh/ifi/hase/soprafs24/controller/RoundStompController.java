@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
+import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
@@ -34,28 +36,40 @@ public class RoundStompController {
 
     @MessageMapping("/games/{gameId}/checkin")
     public void getNewRound(@DestinationVariable("gameId") UUID gameId){
+        //Get all relevant objects
         Round round = roundService.getRound(gameId);
-        round.incCheckIn();
-        System.out.println(round.getCheckIn());
-        roundRepository.save(round);
-        if(round.getCheckIn()>=gameService.getNumPlayers(gameId)){
-            if (round.getRoundsPlayed()>=2){
-                webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
-            }
-            String RoundData = roundService.getRandomPicture(round);
-            webSocketService.sendMessageToSubscriberswithoutLog("/topic/games/" + gameId +"/round", RoundData);
-            round.clearCheckIn();
-            round.incRoundsPlayed();
-            roundRepository.save(round);
+        Game game = gameService.getGame(gameId);
 
-            //THIS NEEDS TO GO SOMEWHERE ELSE
-            if(round.getRoundsPlayed()>=3){
+        if(round.getRoundsPlayed()>=game.getNumRounds()){
+            if(game.getGameStatus()== GameStatus.ENDED) {
+                webSocketService.sendMessageToSubscribers("/topic/games/" + gameId + "/ended", "Game has already ended");
+            }
+            else {
                 // Update User Statistics on User Profiles
                 gameService.updateUserStatistics(gameId);
 
                 // Mark Game Status as Ended
                 gameService.endGame(gameId);
             }
+        }
+
+        //Update checkIn count
+        round.incCheckIn();
+        roundRepository.save(round);
+
+        if(round.getCheckIn()>=gameService.getNumPlayers(gameId)){
+
+            //Check if game will end soon
+            if (round.getRoundsPlayed()>=(game.getNumRounds()-1)){
+                webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
+            }
+
+            //Create round send to subscribers
+            String RoundData = roundService.getRandomPicture(round);
+            webSocketService.sendMessageToSubscriberswithoutLog("/topic/games/" + gameId +"/round", RoundData);
+            round.clearCheckIn();
+            round.incRoundsPlayed();
+            roundRepository.save(round);
         }
     }
 
