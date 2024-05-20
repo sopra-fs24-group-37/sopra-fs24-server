@@ -82,7 +82,7 @@ public class UserServiceTest {
 
         User createdUser = userService.createUser(newUser);
         assertNotNull(createdUser.getToken(), "Token should not be null");
-        assertEquals(UserStatus.OFFLINE, createdUser.getStatus(), "User status should be OFFLINE");
+        assertEquals(UserStatus.ONLINE, createdUser.getStatus(), "User status should be OFFLINE");
     }
 
     @Test

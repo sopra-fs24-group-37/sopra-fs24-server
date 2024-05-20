@@ -56,7 +56,7 @@ public class UserService {
 
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
-    newUser.setStatus(UserStatus.OFFLINE);
+    newUser.setStatus(UserStatus.ONLINE);
     newUser.setGamesPlayed(0);
     newUser.setGamesWon(0);
     newUser.setTotalScores(0);
@@ -90,4 +90,20 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong username or password");
     }
   }
+
+  public void setUserOffline(Long userId) {
+    User user = findUserbyId(userId);
+    if (user != null) {
+        user.setStatus(UserStatus.OFFLINE);
+        userRepository.save(user);
+    }
+  }
+
+  public User updateUser(User user) {
+    Long userIdOpt = user.getUserId();
+    findUserbyId(userIdOpt);
+    userRepository.save(user);
+    return user;
+  }
+
 }

@@ -135,5 +135,6 @@ public class GameStompControllerTest {
         verify(gameService, never()).updateGame(any(Game.class));
         verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
     }
+
 }
 

@@ -39,7 +39,7 @@ public class UserServiceIntegrationTest {
         // Then
         assertNotNull(createdUser.getUserId());
         assertEquals("testUser", createdUser.getUsername());
-        assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
+        assertEquals(UserStatus.ONLINE, createdUser.getStatus());
         assertNotNull(createdUser.getToken());
         assertEquals(0, createdUser.getGamesPlayed());
         assertEquals(0, createdUser.getGamesWon());

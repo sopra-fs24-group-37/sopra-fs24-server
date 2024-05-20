@@ -46,7 +46,7 @@ public class GameStompController {
         Integer numRounds = gameSettings.getNumRounds();
         Integer guessTime = gameSettings.getGuessTime();
         Boolean setGamePassword = gameSettings.getSetGamePassword();
-        System.out.println("Game Settings for game with IS: " + gameId + " numRounds " + numRounds + ", guessTime " + guessTime + ", setGamePassword " + setGamePassword);
+        System.out.println("Game Settings for game with ID " + gameId + ": numRounds " + numRounds + ", guessTime " + guessTime + ", setGamePassword " + setGamePassword);
                                         
         Game game = gameService.getGame(gameId);
         Boolean doUpdate = false;
@@ -58,15 +58,21 @@ public class GameStompController {
         }
 
         // Set guessTime if provided and within the valid range
-        if (guessTime != null && guessTime >= 10 && guessTime <= 30) {
+        if (guessTime != null && game.getGuessTime() != guessTime && guessTime >= 10 && guessTime <= 30) {
             game.setGuessTime(guessTime);
             doUpdate = true;
         }
 
         // Set gamePassword if required, and make it a a 6-digit integer
-        if (setGamePassword == true) {
+        if (setGamePassword == true && (game.getPassword() == null || game.getPassword() == 0)) {
             int gamePassword = (int) (Math.random() * 900000) + 100000;
             game.setPassword(gamePassword);
+            doUpdate = true;
+        }
+
+        // Set gamePassword if required, and make it a a 6-digit integer
+        else if (setGamePassword == false && game.getPassword() != null && game.getPassword() != 0) {
+            game.setPassword(null);
             doUpdate = true;
         }
 
@@ -77,6 +83,8 @@ public class GameStompController {
 
         // Convert Game to DTO
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+
+        System.out.println("\nUpdated Game Password: " + game.getPassword() + " numRounds: " + game.getNumRounds() + " guessTime: " + game.getGuessTime());        
 
         // Send lobby information via WebSocket
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);

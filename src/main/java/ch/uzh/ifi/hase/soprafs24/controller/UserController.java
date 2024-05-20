@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs24.controller;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 
 
 /**
@@ -76,8 +79,7 @@ public class UserController {
     UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     
     return ResponseEntity.status(HttpStatus.CREATED).body(userGetDTO);
-
-}
+  }
 
   @PostMapping("/users/login")
   @ResponseStatus(HttpStatus.OK)
@@ -91,4 +93,25 @@ public class UserController {
     return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 
+  @PutMapping("users/{userId}/logout")
+  public ResponseEntity<Void> logoutUser(@PathVariable Long userId) {
+
+    userService.setUserOffline(userId);
+      
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PutMapping("/users/{userId}")
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public UserGetDTO updateUser(@PathVariable Long userId, @RequestBody UserPutDTO userPutDTO) {
+
+    User user = userService.findUserbyId(userId);
+
+    DTOMapper.INSTANCE.updateUserFromDto(userPutDTO, user);
+
+    User updatedUser = userService.updateUser(user);
+
+    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(updatedUser);
+  }
 }
