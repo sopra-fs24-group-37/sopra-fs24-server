@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.*;
@@ -20,6 +22,9 @@ public class GameControllerTest {
 
     @Mock
     private GameService gameService;
+
+    @Mock
+    private RoundService roundService;
 
     @InjectMocks
     private GameController gameController;

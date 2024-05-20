@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private RoundService roundService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -62,6 +66,7 @@ public class GameController {
     @PutMapping("/{gameId}/start")
     public ResponseEntity<GameGetDTO> startGame(@PathVariable UUID gameId) {
       Game game = gameService.startGame(gameId);
+      roundService.createRound(gameId);
       GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
       return ResponseEntity.ok().body(gameGetDTO);
     }

@@ -37,7 +37,6 @@ public class GameStompController {
 
     @MessageMapping("/games/{gameId}/started")
     public void gameStartedInfo(@DestinationVariable("gameId") UUID gameId){
-        roundService.createRound(gameId);
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/started", "Game has started");
     }
 

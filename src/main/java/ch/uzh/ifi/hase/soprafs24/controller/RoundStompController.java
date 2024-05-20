@@ -36,7 +36,7 @@ public class RoundStompController {
     }
 
     @MessageMapping("/games/{gameId}/checkin")
-    public void getNewRound(@DestinationVariable("gameId") UUID gameId){
+    public synchronized void getNewRound(@DestinationVariable("gameId") UUID gameId){
         //Get all relevant objects
         Round round = roundService.getRound(gameId);
         Game game = gameService.getGame(gameId);
@@ -62,9 +62,7 @@ public class RoundStompController {
             if (round.getRoundsPlayed()>=(game.getNumRounds()-1)){
                 webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
             }
-
-            //Create round send to subscribers
-            String RoundData = roundService.getRandomPicture(round);
+            String RoundData = roundService.getRandomPicture(round,game);
             webSocketService.sendMessageToSubscriberswithoutLog("/topic/games/" + gameId +"/round", RoundData);
             round.clearCheckIn();
             round.incRoundsPlayed();
