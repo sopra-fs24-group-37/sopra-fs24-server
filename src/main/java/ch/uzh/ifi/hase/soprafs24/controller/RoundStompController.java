@@ -4,7 +4,9 @@ import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
+import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
+import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
 import ch.uzh.ifi.hase.soprafs24.service.RoundService;
@@ -26,6 +28,9 @@ public class RoundStompController {
 
     @Autowired
     private RoundRepository roundRepository;
+
+    @Autowired
+    private RoundStatsRepository roundStatsRepository;
 
     RoundStompController(RoundService roundService, WebSocketService ws, GameService gameService, GamePlayerService gamePlayerService) {
         this.roundService = roundService;
@@ -87,6 +92,7 @@ public class RoundStompController {
         //Extract data out of the objects
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();
+        Long gamePlayerId = gamePlayer.getPlayerId();
 
         //Calculate score
         int distance = (int) roundService.calculateDistance(correctLat,correctLng,lat,lng);
@@ -99,12 +105,10 @@ public class RoundStompController {
         if(distance<=100) {
             int points = 100 - distance;
             gameService.updatePlayerScore(gameId, userId, points);
-            round.updateRoundStats(gamePlayer, points, lat, lng);
-            roundRepository.save(round);
+            roundService.updatePlayerGuess(gameId, gamePlayerId, points, lat, lng);
         }
         else{
-            round.updateRoundStats(gamePlayer,0, lat, lng);
-            roundRepository.save(round);
+            roundService.updatePlayerGuess(gameId, gamePlayerId, 0, lat, lng);
         }
     }
 }

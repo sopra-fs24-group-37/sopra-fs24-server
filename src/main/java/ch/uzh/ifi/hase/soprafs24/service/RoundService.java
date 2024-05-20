@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
@@ -57,6 +58,16 @@ public class RoundService {
         }
         return roundOpt.get();
     }
+
+    @Transactional
+    public void updatePlayerGuess(UUID gameId, Long userId, Integer pointsInc, double latitude, double longitude) {
+        RoundStats roundStats = roundStatsRepository.findByGame_GameIdAndGamePlayer_PlayerId(gameId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
+
+        roundStats.updateRoundStats(pointsInc, latitude, longitude);
+        roundStatsRepository.save(roundStats);
+    }
+
 
     public String getRandomPicture(Round round) {
         try {
