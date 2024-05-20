@@ -87,10 +87,10 @@ public class GameController {
     @PutMapping("/{gameId}/leave")
     public ResponseEntity<Game> leaveGame(@PathVariable UUID gameId, @RequestBody Long userId) {
       Game game = gameService.leaveGame(gameId, userId);
-      if (game.getPlayers().isEmpty()) {
-        gameService.deleteGameById(gameId);
-        return ResponseEntity.ok().build();
-      }
+      // if (game.getPlayers().isEmpty()) {
+      //   gameService.deleteGameById(gameId);
+      //   return ResponseEntity.ok().build();
+      // }
       return ResponseEntity.ok().body(game);
     }
 
