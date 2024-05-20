@@ -71,10 +71,10 @@ public class RoundService {
 
     public String getRandomPicture(Round round, Game game) {
         try {
-            //Do the random picture Api Call
+            // Do the random picture Api Call
             JSONObject jsonResponse = fetchPictureFromApi();
 
-            //Check location data of api call
+            // Check location data of api call
             JSONObject location = jsonResponse.optJSONObject("location");
             if (location == null) {
                 return getRandomPicture(round, game);
@@ -82,12 +82,12 @@ public class RoundService {
             double latitude = location.getJSONObject("position").getDouble("latitude");
             double longitude = location.getJSONObject("position").getDouble("longitude");
 
-            //Set objects with data
+            // Set objects with data
             round.setLatitude(latitude);
             round.setLongitude(longitude);
             roundRepository.save(round);
 
-            //Return trimmed object to the user
+            // Return trimmed object to the user
             LocalTime endTime = calculateEndTime(game);
             return generateResponse(jsonResponse, latitude, longitude, endTime).toString();
         } catch (Exception e) {
@@ -113,7 +113,7 @@ public class RoundService {
     }
 
     private LocalTime calculateEndTime(Game game) {
-        int guessTime = game.getGuessTime();
+        int guessTime = game.getGuessTime() + 1;
         LocalTime generationTime = LocalTime.now();
 
         return generationTime.plusSeconds(guessTime);
@@ -121,7 +121,8 @@ public class RoundService {
 
     private JSONObject generateFallbackResponse(LocalTime endTime) {
         JSONObject fallbackResponse = new JSONObject();
-        fallbackResponse.put("regular_url", "https://images.unsplash.com/photo-1594754654150-2ae221b25fe8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzE3ODd8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTYyMDcwMzl8&ixlib=rb-4.0.3&q=80&w=1080");
+        fallbackResponse.put("regular_url",
+                "https://images.unsplash.com/photo-1594754654150-2ae221b25fe8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzE3ODd8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTYyMDcwMzl8&ixlib=rb-4.0.3&q=80&w=1080");
         fallbackResponse.put("user_name", "Raphi See");
         fallbackResponse.put("user_username", "raphisee");
         fallbackResponse.put("latitude", 47.399591);

@@ -11,7 +11,6 @@ import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
 
-
 @Entity
 @Table(name = "GAME")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "gameId")
@@ -33,7 +32,7 @@ public class Game implements Serializable {
   private GameStatus gameStatus;
 
   @Column(nullable = false) // Nullable since it's optional
-  private Integer guessTime = 15;
+  private Integer guessTime = 30;
 
   @Column(nullable = true) // Nullable since it's optional
   private Integer password;
