@@ -32,8 +32,8 @@ public class Game implements Serializable {
   @Column(nullable = false)
   private GameStatus gameStatus;
 
-  @Column(nullable = true) // Nullable since it's optional
-  private Integer guessTime;
+  @Column(nullable = false) // Nullable since it's optional
+  private Integer guessTime = 15;
 
   @Column(nullable = true) // Nullable since it's optional
   private Integer password;
