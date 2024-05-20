@@ -1,9 +1,12 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
+import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
+import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
+import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
 
@@ -23,6 +26,7 @@ public class RoundStompController {
     private final GamePlayerService gamePlayerService;
     private final RoundRepository roundRepository;
 
+
     RoundStompController(RoundService roundService, WebSocketService ws, GameService gameService, GamePlayerService gamePlayerService, RoundRepository roundRepository) {
         this.roundService = roundService;
         this.webSocketService = ws;
@@ -33,13 +37,29 @@ public class RoundStompController {
 
     @MessageMapping("/games/{gameId}/checkin")
     public synchronized void getNewRound(@DestinationVariable("gameId") UUID gameId){
+        //Get all relevant objects
         Round round = roundService.getRound(gameId);
         Game game = gameService.getGame(gameId);
+
+        if(round.getRoundsPlayed()>=game.getNumRounds()){
+            if(game.getGameStatus()== GameStatus.ENDED) {
+                webSocketService.sendMessageToSubscribers("/topic/games/" + gameId + "/ended", "Game has already ended");
+            }
+            else {
+                // Update User Statistics on User Profiles
+                gameService.updateUserStatistics(gameId);
+
+                // Mark Game Status as Ended
+                gameService.endGame(gameId);
+            }
+        }
+
+        //Update checkIn count
         round.incCheckIn();
-        System.out.println(round.getCheckIn());
         roundRepository.save(round);
-        if(round.getCheckIn() >= gameService.getNumPlayers(gameId)){
-            if (round.getRoundsPlayed()>=2){
+        if(round.getCheckIn()>=gameService.getNumPlayers(gameId)){
+            //Check if game will end soon
+            if (round.getRoundsPlayed()>=(game.getNumRounds()-1)){
                 webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
             }
             String RoundData = roundService.getRandomPicture(round,game);
@@ -47,15 +67,6 @@ public class RoundStompController {
             round.clearCheckIn();
             round.incRoundsPlayed();
             roundRepository.save(round);
-
-            //THIS NEEDS TO GO SOMEWHERE ELSE
-            if(round.getRoundsPlayed() >= 3){
-                // Update User Statistics on User Profiles
-                gameService.updateUserStatistics(gameId);
-
-                // Mark Game Status as Ended
-                gameService.endGame(gameId);
-            }
         }
     }
 
@@ -76,6 +87,7 @@ public class RoundStompController {
         //Extract data out of the objects
         double correctLat = round.getLatitude();
         double correctLng = round.getLongitude();
+        Long gamePlayerId = gamePlayer.getPlayerId();
 
         //Calculate score
         int distance = (int) roundService.calculateDistance(correctLat,correctLng,lat,lng);
@@ -103,12 +115,10 @@ public class RoundStompController {
         if(distance<=100) {
             int points = (100 - distance) * scoreMultiplier;
             gameService.updatePlayerScore(gameId, userId, points);
-            round.updateRoundStats(gamePlayer, points, lat, lng);
-            roundRepository.save(round);
+            roundService.updatePlayerGuess(gameId, gamePlayerId, points, lat, lng);
         }
         else{
-            round.updateRoundStats(gamePlayer,0, lat, lng);
-            roundRepository.save(round);
+            roundService.updatePlayerGuess(gameId, gamePlayerId, 0, lat, lng);
         }
     }
 }

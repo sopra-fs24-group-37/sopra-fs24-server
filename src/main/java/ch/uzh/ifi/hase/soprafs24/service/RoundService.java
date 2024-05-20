@@ -1,13 +1,13 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.entity.*;
-import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
@@ -18,7 +18,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalTime;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -59,6 +58,15 @@ public class RoundService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Round not found!");
         }
         return roundOpt.get();
+    }
+
+    @Transactional
+    public void updatePlayerGuess(UUID gameId, Long userId, Integer pointsInc, double latitude, double longitude) {
+        RoundStats roundStats = roundStatsRepository.findByGame_GameIdAndGamePlayer_PlayerId(gameId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Player not found in the game"));
+
+        roundStats.updateRoundStats(pointsInc, latitude, longitude);
+        roundStatsRepository.save(roundStats);
     }
 
     public String getRandomPicture(Round round, Game game) {

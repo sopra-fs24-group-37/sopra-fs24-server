@@ -69,7 +69,6 @@ public class RoundStompControllerTest {
         roundStompController.getGuesses(guessDTO, gameId);
 
         // Verify interactions
-        verify(roundRepository).save(mockRound);
         verify(gameService).updatePlayerScore(eq(gameId), eq(userId), anyInt());
         verify(gameService).useCantonHintPowerUp(gameId, userId);
         verify(gameService, never()).useMultipleCantonHintPowerUp(gameId, userId);
@@ -97,7 +96,6 @@ public class RoundStompControllerTest {
 
         roundStompController.getGuesses(guessDTO, gameId);
 
-        verify(roundRepository).save(mockRound);
         verify(gameService).updatePlayerScore(eq(gameId), eq(userId), anyInt());
         verify(gameService, never()).useCantonHintPowerUp(gameId, userId);
         verify(gameService).useMultipleCantonHintPowerUp(gameId, userId);
