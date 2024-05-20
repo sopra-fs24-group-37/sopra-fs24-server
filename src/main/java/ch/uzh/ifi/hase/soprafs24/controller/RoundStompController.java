@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
+import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
@@ -31,8 +32,9 @@ public class RoundStompController {
     }
 
     @MessageMapping("/games/{gameId}/checkin")
-    public void getNewRound(@DestinationVariable("gameId") UUID gameId){
+    public synchronized void getNewRound(@DestinationVariable("gameId") UUID gameId){
         Round round = roundService.getRound(gameId);
+        Game game = gameService.getGame(gameId);
         round.incCheckIn();
         System.out.println(round.getCheckIn());
         roundRepository.save(round);
@@ -40,7 +42,7 @@ public class RoundStompController {
             if (round.getRoundsPlayed()>=2){
                 webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/ended", "Game will end after this turn");
             }
-            String RoundData = roundService.getRandomPicture(round);
+            String RoundData = roundService.getRandomPicture(round,game);
             webSocketService.sendMessageToSubscriberswithoutLog("/topic/games/" + gameId +"/round", RoundData);
             round.clearCheckIn();
             round.incRoundsPlayed();
