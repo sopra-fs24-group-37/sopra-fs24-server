@@ -4,10 +4,12 @@
 
 1. [Introduction](#introduction)
 2. [Technologies](#technologies)
-3. [Launch & Development](#launch--development)
-4. [Authors](#authors)
-5. [Acknowledgments](#acknowledgements)
-6. [License](#license)
+3. [High Level Components](#high-level-components)
+4. [Launch & Development](#launch--development)
+5. [Roadmap](#roadmap)
+6. [Authors](#authors)
+7. [Acknowledgments](#acknowledgements)
+8. [License](#license)
 
 ## Introduction <a name="introduction"></a>
 
@@ -21,6 +23,8 @@ The following technologies were used for backend development:
 * [Google Cloud Platform](https://cloud.google.com/) - Cloud Deployment and Data Storage
 * [Stomp](https://stomp-js.github.io/stomp-websocket/) - Messaging protocol used for websocket communication with the server
 * [Unsplash API](https://unsplash.com/documentation) - API used for importing pictures into the game
+
+## High Level Components <a id="high-level-components"></a>
 
 ## Launch & Development <a id="launch--development"></a>
 ### Getting started with Spring Boot
@@ -108,6 +112,8 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 
 ### Testing
 Have a look here: https://www.baeldung.com/spring-boot-testing
+
+## Roadmap <a id="roadmap"></a>
 
 ## Authors <a id="authors"></a>
 
