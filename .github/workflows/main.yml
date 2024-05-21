@@ -47,6 +47,8 @@ jobs:
           promote: true
           project_id: sopra-fs24-group-37-server
           credentials: ${{ secrets.GCP_SERVICE_CREDENTIALS }}
+        env:
+          API_KEY_ANDRI: ${{ secrets.API_KEY_ANDRI }}
 
       - name: Test
         run: curl "${{ steps.deploy.outputs.url }}"
