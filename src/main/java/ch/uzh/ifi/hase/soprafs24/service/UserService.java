@@ -81,13 +81,12 @@ public class UserService {
   public User loginUser(User checkUser) throws ResponseStatusException{
     User userByUsername = userRepository.findByUsername(checkUser.getUsername());
 
-    String baseErrorMessage = "Wrong Username or Password";
     if (userByUsername != null && userByUsername.getPassword().equals(checkUser.getPassword())) {
         //login user and set him to be online
         userByUsername.setStatus(UserStatus.ONLINE);
         return userByUsername; // Password matches, return the user
     } else {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong username or password");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong Username or Password!");
     }
   }
 
