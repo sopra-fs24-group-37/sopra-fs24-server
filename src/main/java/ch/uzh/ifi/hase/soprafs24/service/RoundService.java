@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
+import ch.uzh.ifi.hase.soprafs24.config.ApiKeyConfig;
 import ch.uzh.ifi.hase.soprafs24.entity.*;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
@@ -28,6 +29,9 @@ public class RoundService {
     private RoundStatsRepository roundStatsRepository;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private ApiKeyConfig apiKeyConfig;
+
     private static final double EARTH_RADIUS = 6371; // in kilometers
 
     public void createRound(UUID gameId) {
@@ -101,7 +105,7 @@ public class RoundService {
     private JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
         String apiUrl = "https://api.unsplash.com/photos/random";
         String query = "Switzerland+landscape+cityscape";
-        String clientId = "Ri4Er_Nr9GAMk_QTpErZvHuVESEVmM7RNKnymwEcNZM"; // Replace with your Unsplash access key
+        String clientId = apiKeyConfig.getKey(); // Replace with your Unsplash access key
         String urlString = apiUrl + "?query=" + query;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
