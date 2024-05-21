@@ -18,6 +18,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -118,7 +120,11 @@ public class RoundService {
 
     private LocalTime calculateEndTime(Game game) {
         int guessTime = game.getGuessTime() + 1;
-        LocalTime generationTime = LocalTime.now();
+
+        // Get the current time in Zurich
+        ZoneId zurichZone = ZoneId.of("Europe/Zurich");
+        ZonedDateTime zurichTime = ZonedDateTime.now(zurichZone);
+        LocalTime generationTime = zurichTime.toLocalTime();
 
         return generationTime.plusSeconds(guessTime);
     }
