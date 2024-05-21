@@ -82,15 +82,15 @@ public class UserController {
   }
 
   @PostMapping("/users/login")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-    public UserGetDTO checkUser(@RequestBody UserPostDTO userPostDTO) {
+    public ResponseEntity<?> checkUser(@RequestBody UserPostDTO userPostDTO) {
     // convert API user to internal representation
     User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
     //check if user exists
     User user = userService.loginUser(userInput);
     // convert internal representation of user back to API
-    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
+    return ResponseEntity.status(HttpStatus.OK).body(userGetDTO);
     }
 
   @PutMapping("users/{userId}/logout")
