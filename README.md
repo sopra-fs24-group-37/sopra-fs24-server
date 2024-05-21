@@ -4,7 +4,7 @@
 
 1. [Introduction](#introduction)
 2. [Technologies](#technologies)
-3. [Launch & Development](launch--development)
+3. [Launch & Development](#launch--development)
 4. [Authors](#authors)
 5. [Acknowledgments](#acknowledgements)
 6. [License](#license)
