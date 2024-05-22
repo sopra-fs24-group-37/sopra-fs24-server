@@ -95,6 +95,8 @@ public class RoundService {
             if (location == null || 
                 !location.has("position") || 
                 location.isNull("position") ||
+                !location.getJSONObject("position").has("latitude") || 
+                !location.getJSONObject("position").has("longitude")  || 
                 location.getJSONObject("position").isNull("latitude") || 
                 location.getJSONObject("position").isNull("longitude")) {
                 System.out.println("Image does not have valid location data. Retrying...");
