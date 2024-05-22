@@ -1,7 +1,10 @@
 package ch.uzh.ifi.hase.soprafs24.config;
 
+import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 
+@Component
 public class ApiKeyConfig {
 
     private final String[] apiKeys = {

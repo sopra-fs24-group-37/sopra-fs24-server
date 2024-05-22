@@ -31,7 +31,9 @@ public class RoundService {
     private RoundStatsRepository roundStatsRepository;
     @Autowired
     private GameService gameService;
+    @Autowired
     private ApiKeyConfig apiKeyConfig;
+
 
     private static final double EARTH_RADIUS = 6371; // in kilometers
 
@@ -99,7 +101,7 @@ public class RoundService {
             System.err.println("An error occurred. Returning fallback response.");
             System.err.println("Error details: " + e.getMessage());
             LocalTime endTime = calculateEndTime(game);
-            return generateFallbackResponse(endTime).toString();
+            return generateFallbackResponse(endTime,round).toString();
         }
     }
 
@@ -128,15 +130,23 @@ public class RoundService {
         return generationTime.plusSeconds(guessTime);
     }
 
-    private JSONObject generateFallbackResponse(LocalTime endTime) {
+    private JSONObject generateFallbackResponse(LocalTime endTime, Round round) {
+        double latitude = 47.399591;
+        double longitude = 8.514325;
+
         JSONObject fallbackResponse = new JSONObject();
         fallbackResponse.put("regular_url",
                 "https://images.unsplash.com/photo-1594754654150-2ae221b25fe8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzE3ODd8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTYyMDcwMzl8&ixlib=rb-4.0.3&q=80&w=1080");
         fallbackResponse.put("user_name", "Raphi See");
         fallbackResponse.put("user_username", "raphisee");
-        fallbackResponse.put("latitude", 47.399591);
-        fallbackResponse.put("longitude", 8.514325);
+        fallbackResponse.put("latitude", latitude);
+        fallbackResponse.put("longitude", longitude);
         fallbackResponse.put("end_time", endTime.toString());
+
+        round.setLatitude(latitude);
+        round.setLongitude(longitude);
+        roundRepository.save(round);
+
         return fallbackResponse;
     }
 
