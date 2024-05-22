@@ -107,7 +107,7 @@ public class RoundService {
     private JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
         String apiUrl = "https://api.unsplash.com/photos/random";
         String query = "Switzerland+landscape+cityscape";
-        String clientId = apiKeyConfig.getKey(); // Replace with your Unsplash access key
+        String clientId = apiKeyConfig.getCurrentApiKey(); // Replace with your Unsplash access key
         String urlString = apiUrl + "?query=" + query;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
