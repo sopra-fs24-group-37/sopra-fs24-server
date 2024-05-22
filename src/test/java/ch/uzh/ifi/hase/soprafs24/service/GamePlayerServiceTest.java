@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.GamePlayerRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.UserRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -42,7 +43,6 @@ public class GamePlayerServiceTest {
     private UUID gameId;
     private User gameMaster;
     private User otherUser;
-    private GamePlayer gamePlayer;
     private Game game;
 
     @BeforeEach
