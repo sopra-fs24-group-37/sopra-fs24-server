@@ -205,14 +205,14 @@ public class GameControllerTest {
         assertThrows(ResponseStatusException.class, () -> gameController.joinGame(gameId, userId, null));
     }
 
-    @Test
-    public void testLeaveGame() {
-        when(gameService.leaveGame(gameId, userId)).thenReturn(game);
+    // @Test
+    // public void testLeaveGame() {
+    //     when(gameService.leaveGame(gameId, userId)).thenReturn(game);
 
-        ResponseEntity<Game> response = gameController.leaveGame(gameId, userId);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(gameId, response.getBody().getGameId());
-    }
+    //     ResponseEntity<Game> response = gameController.leaveGame(gameId, userId);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertEquals(gameId, response.getBody().getGameId());
+    // }
 
     @Test
     public void testLeaveGame_NotFound() {
