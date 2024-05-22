@@ -1,8 +1,5 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
-
-import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -26,13 +23,6 @@ public class Round implements Serializable {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<RoundStats> roundStats = new HashSet<>();
-
-    /*
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Map<Long, Double[]> guesses = new HashMap<>();
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Map<Long, Integer> pointsScored = new HashMap<>();
-     */
 
     public UUID getGameId() {return gameId;}
 
@@ -94,34 +84,5 @@ public class Round implements Serializable {
     public Set<RoundStats> getRoundStats() {
         return roundStats;
     }
-
-    /*
-    public void setGuess(long gamePlayer, double latitude, double longitude) {
-        Double[] coordinates = {latitude, longitude};
-        this.guesses.put(gamePlayer, coordinates);
-    }
-
-
-    public Map<Long, Double[]> getGuesses() {
-        return guesses;
-    }
-
-    public void setPointsScored(long gamePlayer, int pointsIncrease, int pointsTotal) {
-        this.pointsScored.put(gamePlayer, pointsIncrease, pointsTotal);
-    }
-
-    public Map<Long, Integer, Integer> getPointsScored() {
-        return pointsScored;
-    }
-
-    public Map<Long, String, Double[], Integer, Integer> getRoundStats() {
-        return RoundStats;
-    }
-
-    public void setRoundStats(long gamePlayerId, String username, int pointsInc, int pointsTotal, double latitude, double longitude) {
-        Double[] coordinates = {latitude, longitude};
-        this.RoundStats.put(gamePlayerId, username, pointsInc, pointsTotal, coordinates);
-    }
-    */
 }
 

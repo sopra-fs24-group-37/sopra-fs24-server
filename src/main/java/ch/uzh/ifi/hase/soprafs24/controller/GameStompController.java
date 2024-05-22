@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
@@ -10,8 +9,6 @@ import ch.uzh.ifi.hase.soprafs24.service.WebSocketService;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GameSettingsPostDTO;
 
 
@@ -40,7 +37,6 @@ public class GameStompController {
 
     @MessageMapping("/games/{gameId}/started")
     public void gameStartedInfo(@DestinationVariable("gameId") UUID gameId){
-        roundService.createRound(gameId);
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId +"/started", "Game has started");
     }
 
@@ -49,7 +45,7 @@ public class GameStompController {
         Integer numRounds = gameSettings.getNumRounds();
         Integer guessTime = gameSettings.getGuessTime();
         Boolean setGamePassword = gameSettings.getSetGamePassword();
-        System.out.println("Game Settings for game with IS: " + gameId + " numRounds " + numRounds + ", guessTime " + guessTime + ", setGamePassword " + setGamePassword);
+        System.out.println("Game Settings for game with ID " + gameId + ": numRounds " + numRounds + ", guessTime " + guessTime + ", setGamePassword " + setGamePassword);
                                         
         Game game = gameService.getGame(gameId);
         Boolean doUpdate = false;
@@ -67,9 +63,15 @@ public class GameStompController {
         }
 
         // Set gamePassword if required, and make it a a 6-digit integer
-        if (setGamePassword == true && game.getPassword() != null && game.getPassword() != 0) {
+        if (setGamePassword == true && (game.getPassword() == null || game.getPassword() == 0)) {
             int gamePassword = (int) (Math.random() * 900000) + 100000;
             game.setPassword(gamePassword);
+            doUpdate = true;
+        }
+
+        // Set gamePassword if required, and make it a a 6-digit integer
+        else if (setGamePassword == false && game.getPassword() != null && game.getPassword() != 0) {
+            game.setPassword(null);
             doUpdate = true;
         }
 
@@ -80,6 +82,8 @@ public class GameStompController {
 
         // Convert Game to DTO
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
+
+        System.out.println("\nUpdated Game Password: " + game.getPassword() + " numRounds: " + game.getNumRounds() + " guessTime: " + game.getGuessTime());        
 
         // Send lobby information via WebSocket
         webSocketService.sendMessageToSubscribers("/topic/games/" + gameId, gameGetDTO);

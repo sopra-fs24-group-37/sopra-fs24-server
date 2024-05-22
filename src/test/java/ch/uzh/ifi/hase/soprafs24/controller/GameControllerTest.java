@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -34,6 +36,9 @@ public class GameControllerTest {
 
     @Mock
     private GameService gameService;
+
+    @Mock
+    private RoundService roundService;
 
     @Mock
     private GamePostDTO gamePostDTO;

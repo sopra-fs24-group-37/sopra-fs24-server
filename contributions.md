@@ -25,6 +25,12 @@ Please note that due to my inexperience with git in the first weeks of this proj
 -   [added profile view styling and features]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/76b0352d3c8b3bb56509c357cd97d1a7af4400df
 -   [game view set up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/d4ee98a6b724dacb88132c31f442c03d836e8dda
 
+## Andri Spescha
+
+- [Handle unsuccessful log-in (Err)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/32)
+- [Handle user authentication](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/27)
+- [Create a back-end API endpoint for user authentication](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/26)
+
 # Week 2 (Apr 03 – Apr 09)
 
 EASTER BREAK
@@ -64,6 +70,14 @@ Please note that due to my inexperience with git in the first weeks of this proj
 -   [game view set up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/55763d62e9aa346c5d77b542b03cc0b9f9268c46
 -   [added UI for gamesettings]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/0dbd8762fa8cc88466e21009cc005d5b71b1b41e
 
+## Andri Spescha
+
+-   [Implement back-end logic for leaving an existing game](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/50)
+-   [Implement back-end logic for joining an existing game with and without password validation](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/49)
+-   [Implement list of logged-in users](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/30)
+-   [Handle creation of a new game](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/39)
+
+
 # Week 4 (Apr 17 – Apr 23)
 
 ## Diana Hidvegi
@@ -87,6 +101,13 @@ Please note that due to my inexperience with git in the first weeks of this proj
 -   [leaving a lobby]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/20, https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/19
 -   [fetch and display games]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/a969dae2d1be39797aa0f137a960b4bcdae9dd55
 
+## Andri Spescha
+
+-   [Implement back-end logic to set roundinfo for all rounds to come](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/67)
+-   [Fetch roundinfo from back-end (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/b8f882deed09d279ccf0a454a91cc333a7b65eff)
+-   [Add WebSocket support and allow client to establish connection (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/ba1ad0f555cc5d5a9f353a6acc6311454dda0c50)
+
+
 # Week 5 (Apr 24 – Apr 30)
 
 ## Diana Hidvegi
@@ -107,6 +128,13 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [start game functionality]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/23
 -   [added loading component + small fixes]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/ee6a36c83f25fb0ae05371b2d2db26ca35a47df7
 -   [displaying players in a lobby (websockets)]https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/e8fd75eda0c9e17069da67252644ea522e429a5b
+
+## Andri Spescha
+
+-   [Implement back-end logic to handle final location guesses of all players (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/8f8387d9be321a6801e2c33c8e565b5be14287c4)
+-   [Verify guess from players with actual location from map API (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/8f8387d9be321a6801e2c33c8e565b5be14287c4)
+-   [Implement back-end logic for receiving guess from user (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/8f8387d9be321a6801e2c33c8e565b5be14287c4)
+
 
 # Week 6 (May 01 – May 07)
 
@@ -132,6 +160,13 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [added filter relevant data from json]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/59
 -   [added credit photographer & unsplash ref links]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/65
 
+## Andri Spescha
+
+-   [Add websocket support for fetching all users in the lobby (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/60117d8ac0a8058035e16fa762b337610920af66)
+-   [Add websocket support for fetching all games in the lobby (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/60117d8ac0a8058035e16fa762b337610920af66)
+-   [Change the packet being sent each round](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/110)
+
+
 # Week 7 (May 08 – May 14)
 
 ## Diana Hidvegi
@@ -146,6 +181,12 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [Implement GameService support for "Canton Hint" Power Up](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/132/commits)
 
 -   Add Missing Test Cases for GameService and GameController (Partially done but moved to Week 8 due to higher priority tasks for the newly added feature after M3 Feedback)
+
+## Andri Spescha
+
+-   [Return Intermediary leaderboard in between rounds](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/112)
+-   [Return all guesses after round](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/111)
+
 
 # Week 8 (May 15 – May 21)
 
@@ -164,3 +205,10 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [added canton hint power-up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/74
 -   [added triple hint power-up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/75
 -   [added double score power-up]https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/76
+
+## Andri Spescha
+
+-   [Add timer Information to Round Object](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/139)
+-   [Add checks for better Image generation](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/140)
+-   [Use parameters for the game when creating new round](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/141)
+

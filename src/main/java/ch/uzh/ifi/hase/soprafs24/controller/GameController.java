@@ -4,16 +4,15 @@ import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePutDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -27,6 +26,9 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private RoundService roundService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -64,6 +66,7 @@ public class GameController {
     @PutMapping("/{gameId}/start")
     public ResponseEntity<GameGetDTO> startGame(@PathVariable UUID gameId) {
       Game game = gameService.startGame(gameId);
+      roundService.createRound(gameId);
       GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertEntityToGameGetDTO(game);
       return ResponseEntity.ok().body(gameGetDTO);
     }
@@ -84,6 +87,10 @@ public class GameController {
     @PutMapping("/{gameId}/leave")
     public ResponseEntity<Game> leaveGame(@PathVariable UUID gameId, @RequestBody Long userId) {
       Game game = gameService.leaveGame(gameId, userId);
+      if (game.getPlayers().isEmpty()) {
+        gameService.deleteGameById(gameId);
+        return ResponseEntity.ok().build();
+      }
       return ResponseEntity.ok().body(game);
     }
 

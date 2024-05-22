@@ -72,7 +72,6 @@ public class GameStompControllerTest {
         gameStompController.gameStartedInfo(gameId);
 
         // Verification
-        verify(roundService).createRound(gameId);
         verify(webSocketService).sendMessageToSubscribers("/topic/games/" + gameId + "/started", "Game has started");
     }
 
@@ -135,5 +134,6 @@ public class GameStompControllerTest {
         verify(gameService, never()).updateGame(any(Game.class));
         verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
     }
+
 }
 

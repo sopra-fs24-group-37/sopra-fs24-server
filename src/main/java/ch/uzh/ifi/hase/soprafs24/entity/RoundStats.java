@@ -5,10 +5,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 @Entity
 @Table(name = "ROUNDSTATS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roundStatsId")
@@ -78,6 +74,18 @@ public class RoundStats {
 
     public void setGuess(double latitude, double longitude) {
         double[] coordinates = {latitude, longitude};
+        this.guess = coordinates;
+    }
+
+    public void updateRoundStats(int pointsInc, double latitude, double longitude) {
+        this.pointsInc = pointsInc;
+        double[] coordinates = {latitude, longitude};
+        this.guess = coordinates;
+    }
+
+    public void clearRoundStats() {
+        this.pointsInc = 0;
+        double[] coordinates = {0, 0};
         this.guess = coordinates;
     }
 }

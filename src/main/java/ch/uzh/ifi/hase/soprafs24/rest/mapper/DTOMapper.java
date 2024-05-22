@@ -11,10 +11,6 @@ import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 /**
  * DTOMapper
  * This class is responsible for generating classes that will automatically

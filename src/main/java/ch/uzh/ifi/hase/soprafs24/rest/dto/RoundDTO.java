@@ -1,15 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
-import ch.uzh.ifi.hase.soprafs24.entity.Round;
-import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RoundDTO {
     private UUID gameId;
