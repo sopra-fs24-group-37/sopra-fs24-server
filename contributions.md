@@ -191,7 +191,7 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 # Week 8 (May 15 – May 21)
 
 ## Diana Hidvegi
--   Add Missing Test Cases for GameService and GameController
+-   [Add Missing Test Cases for GameService and GameController](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/157/commits)
 -   [Integrate "Double Score" Power Up Functionality into RoundInfo](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/144/commits)
 -   [Integrate "Canoton Hint" and "Triple Hint" Power up tracking into Rounds](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/145/commits)
 -   [Add endpoint for "Deleting" Created Game from Game Lobby](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/148/commits)
