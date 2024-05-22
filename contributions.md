@@ -219,4 +219,6 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [Add timer Information to Round Object](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/139)
 -   [Add checks for better Image generation](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/140)
 -   [Use parameters for the game when creating new round](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/141)
+-   [Writing Tests](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/158)
+-   [Rotate the Api Keys (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/df4e34c7513e88c404f57c7697d4207f2b15cbea)
 
