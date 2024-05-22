@@ -1,20 +1,21 @@
 package ch.uzh.ifi.hase.soprafs24.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "api.key")
 public class ApiKeyConfig {
 
-    private String andri;
+    @Value("${API_KEY_ANDRI}")
+    private String apikey;
 
     public String getKey() {
-        return andri;
+        return apikey;
     }
 
     public void setAndri(String andri) {
-        this.andri = andri;
+        this.apikey = andri;
     }
 }
 
