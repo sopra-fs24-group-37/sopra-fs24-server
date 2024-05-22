@@ -83,12 +83,20 @@ public class RoundService {
 
             // Check location data of api call
             JSONObject location = jsonResponse.optJSONObject("location");
+
             
-            if (!jsonResponse.has("location") || 
-                !jsonResponse.getJSONObject("location").has("position") || 
-                jsonResponse.getJSONObject("location").isNull("position") ||
-                jsonResponse.getJSONObject("location").getJSONObject("position").isNull("latitude") || 
-                jsonResponse.getJSONObject("location").getJSONObject("position").isNull("longitude")) {
+            if (location == null || !location.has("position") || 
+                !location.getJSONObject("position").has("latitude") || 
+                !location.getJSONObject("position").has("longitude")) {
+                System.out.println("Image does not have location data. Retrying...");
+                return getRandomPicture(round, game);
+            }
+            
+            if (location == null || 
+                !location.has("position") || 
+                location.isNull("position") ||
+                location.getJSONObject("position").isNull("latitude") || 
+                location.getJSONObject("position").isNull("longitude")) {
                 System.out.println("Image does not have valid location data. Retrying...");
                 return getRandomPicture(round, game);
             }
