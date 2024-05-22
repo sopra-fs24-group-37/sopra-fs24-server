@@ -31,7 +31,6 @@ public class RoundService {
     private RoundStatsRepository roundStatsRepository;
     @Autowired
     private GameService gameService;
-    @Autowired
     private ApiKeyConfig apiKeyConfig;
 
     private static final double EARTH_RADIUS = 6371; // in kilometers
