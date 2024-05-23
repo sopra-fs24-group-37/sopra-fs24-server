@@ -24,7 +24,11 @@ configurations {
 }
 
 repositories {
+    maven { url = uri("https://nexus.geomatys.com/repository/geotoolkit/") }
     mavenCentral()
+    maven {
+        url "https://repo.osgeo.org/repository/release/"
+    }
 }
 
 springBoot {
@@ -54,6 +58,9 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 
     implementation 'org.springframework:spring-messaging:5.3.15'
+
+    implementation 'org.geotools:gt-shapefile:23.0'
+    implementation 'org.geotools:gt-geojson:23.0'
 }
 
 bootJar {
