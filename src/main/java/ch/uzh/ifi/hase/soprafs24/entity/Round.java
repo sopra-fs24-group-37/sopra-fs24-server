@@ -54,33 +54,6 @@ public class Round implements Serializable {
 
     public void addExistingRoundStats(RoundStats roundStats) {this.roundStats.add(roundStats);}
 
-    public void addNewRoundStats(Game game, GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
-        RoundStats roundStats = new RoundStats(game, gamePlayer, pointsInc, latitude, longitude);
-        this.roundStats.add(roundStats);
-    }
-
-    public void updateRoundStats(GamePlayer gamePlayer, int pointsInc, double latitude, double longitude) {
-        // Iterate over the set of RoundStats
-        for (RoundStats roundStats : this.roundStats) {
-            // Check if the current RoundStats object matches the gamePlayerId
-            if (roundStats.getGamePlayer() == gamePlayer) {
-                roundStats.setPointsInc(pointsInc);
-                roundStats.setGuess(latitude,longitude);
-            }
-        }
-    }
-
-    public void clearRoundStats(GamePlayer gamePlayer) {
-        // Iterate over the set of RoundStats
-        for (RoundStats roundStats : this.roundStats) {
-            // Check if the current RoundStats object matches the gamePlayerId
-            if (roundStats.getGamePlayer() == gamePlayer) {
-                roundStats.setPointsInc(0);
-                roundStats.setGuess(0,0);
-            }
-        }
-    }
-
     public Set<RoundStats> getRoundStats() {
         return roundStats;
     }

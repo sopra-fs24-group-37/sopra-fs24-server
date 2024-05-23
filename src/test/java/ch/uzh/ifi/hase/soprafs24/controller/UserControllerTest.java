@@ -1,23 +1,22 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import static org.mockito.Mockito.*;
 
-import ch.uzh.ifi.hase.soprafs24.service.UserService;
-import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
-
-import java.util.List;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs24.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserControllerTest {
 
@@ -29,109 +28,111 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
-
-    // @Test
-    // public void getAllUsersReturnsNotEmptyList() {
-    //     User user = new User();
-    //     user.setUserId(1L);
-    //     user.setUsername("testUser");
-    //     user.setToken("token123");
-    //     user.setPassword("password");
-    //     user.setStatus(UserStatus.ONLINE);
-    //     user.setGamesPlayed(5);
-    //     user.setGamesWon(2);
-    //     user.setTotalScores(100);
-
-    //     List<User> users = List.of(user);
-    //     when(userService.getUsers()).thenReturn(users);
-    //     when(DTOMapper.INSTANCE.convertEntityToUserGetDTO(any())).thenCallRealMethod();
-
-    //     List<UserGetDTO> results = userController.getAllUsers();
-    //     assertFalse(results.isEmpty(), "Expected non-empty list of users");
-    //     assertEquals(1, results.size(), "Expected list size of 1");
-    // }
 
     @Test
-    public void getAllUsersReturnsEmptyList() {
-        when(userService.getUsers()).thenReturn(new ArrayList<>());
-        List<UserGetDTO> results = userController.getAllUsers();
-        assertTrue(results.isEmpty(), "Expected empty list of users");
-    }
+    public void getAllUsers_success() {
+        // Arrange
+        List<User> users = new ArrayList<>();
+        when(userService.getUsers()).thenReturn(users);
 
-    // @Test
-    // public void getUserByIdFound() {
-    //     User user = new User();
-    //     user.setUserId(1L);
-    //     user.setUsername("testUser");
-    //     user.setToken("token123");
-    //     user.setPassword("password");
-    //     user.setStatus(UserStatus.ONLINE);
-    //     user.setGamesPlayed(0);
-    //     user.setGamesWon(0);
-    //     user.setTotalScores(0);
-    
-    //     when(userService.findUserbyId(1L)).thenReturn(user);
-    //     when(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user)).thenCallRealMethod();
-    
-    //     UserGetDTO result = userController.getUserById(1L);
-    //     assertNotNull(result, "User should be found");
-    //     assertEquals("testUser", result.getUsername(), "Expected username to match");
-    // }
+        // Act
+        List<UserGetDTO> userGetDTOs = userController.getAllUsers();
+
+        // Assert
+        assertNotNull(userGetDTOs);
+        assertEquals(0, userGetDTOs.size());
+    }
 
     @Test
-    public void getUserByIdNotFound() {
-        when(userService.findUserbyId(1L)).thenReturn(null);
-        UserGetDTO result = userController.getUserById(1L);
-        assertNull(result, "User should not be found");
+    public void getUserById_success() {
+        // Arrange
+        Long userId = 1L;
+        User user = new User();
+        when(userService.findUserbyId(userId)).thenReturn(user);
+
+        // Act
+        UserGetDTO userGetDTO = userController.getUserById(userId);
+
+        // Assert
+        assertNotNull(userGetDTO);
+        // Add assertions for DTO content if needed
     }
 
-    // @Test
-    // public void createUserSuccessful() {
-    //     UserPostDTO userPostDTO = new UserPostDTO();
-    //     userPostDTO.setUsername("newUser");
-    //     userPostDTO.setPassword("newPassword");
+    @Test
+    public void deleteUser_success() {
+        // Arrange
+        Long userId = 1L;
 
-    //     User newUser = new User();
-    //     newUser.setUsername(userPostDTO.getUsername());
-    //     newUser.setPassword(userPostDTO.getPassword());
+        // Act
+        ResponseEntity<?> response = userController.deleteUser(userId);
 
-    //     when(userService.createUser(any())).thenReturn(newUser);
-    //     when(DTOMapper.INSTANCE.convertEntityToUserGetDTO(newUser)).thenCallRealMethod();
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User Deleted", response.getBody());
+        verify(userService, times(1)).deleteUserById(userId);
+    }
 
-    //     ResponseEntity<?> response = userController.createUser(userPostDTO);
-    //     assertEquals(HttpStatus.CREATED, response.getStatusCode(), "Expected HTTP status 201");
-    // }
+    @Test
+    public void createUser_success() {
+        // Arrange
+        UserPostDTO userPostDTO = new UserPostDTO();
+        User createdUser = new User();
+        when(userService.createUser(any(User.class))).thenReturn(createdUser);
 
-    // @Test
-    // public void createUserFailure() {
-    //     UserPostDTO userPostDTO = new UserPostDTO();
-    //     userPostDTO.setUsername("newUser");
-    //     userPostDTO.setPassword("newPassword");
-    //     userController.createUser(userPostDTO);
+        // Act
+        ResponseEntity<?> response = userController.createUser(userPostDTO);
 
-    //     when(userService.createUser(any())).thenReturn(null);
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        // Add assertions for body content if needed
+    }
 
-    //     ResponseEntity<?> response = userController.createUser(userPostDTO);
-    //     assertEquals(HttpStatus.CONFLICT, response.getStatusCode(), "Username is already taken!");
-    // }
+    @Test
+    public void checkUser_success() {
+        // Arrange
+        UserPostDTO userPostDTO = new UserPostDTO();
+        User user = new User();
+        when(userService.loginUser(any(User.class))).thenReturn(user);
 
-    // @Test
-    // public void checkUserLoginSuccess() {
-    //     UserPostDTO userPostDTO = new UserPostDTO();
-    //     userPostDTO.setUsername("existUser");
-    //     userPostDTO.setPassword("existPassword");
+        // Act
+        ResponseEntity<?> response = userController.checkUser(userPostDTO);
 
-    //     User existUser = new User();
-    //     existUser.setUsername(userPostDTO.getUsername());
-    //     existUser.setPassword(userPostDTO.getPassword());
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        // Add assertions for body content if needed
+    }
 
-    //     when(userService.loginUser(any())).thenReturn(existUser);
-    //     when(DTOMapper.INSTANCE.convertEntityToUserGetDTO(existUser)).thenCallRealMethod();
+    @Test
+    public void logoutUser_success() {
+        // Arrange
+        Long userId = 1L;
 
-    //     UserGetDTO result = userController.checkUser(userPostDTO);
-    //     assertNotNull(result, "Login should succeed");
-    // }
+        // Act
+        ResponseEntity<Void> response = userController.logoutUser(userId);
 
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(userService, times(1)).setUserOffline(userId);
+    }
+
+    @Test
+    public void updateUser_success() {
+        // Arrange
+        Long userId = 1L;
+        UserPutDTO userPutDTO = new UserPutDTO();
+        User user = new User();
+        when(userService.findUserbyId(userId)).thenReturn(user);
+        when(userService.updateUser(any(User.class))).thenReturn(user);
+
+        // Act
+        UserGetDTO userGetDTO = userController.updateUser(userId, userPutDTO);
+
+        // Assert
+        assertNotNull(userGetDTO);
+        // Add assertions for DTO content if needed
+    }
 }
