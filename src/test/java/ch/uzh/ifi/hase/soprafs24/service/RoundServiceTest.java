@@ -1,31 +1,29 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
-import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.entity.Round;
-import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
+import ch.uzh.ifi.hase.soprafs24.config.ApiKeyConfig;
+import ch.uzh.ifi.hase.soprafs24.entity.*;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,7 +36,6 @@ public class RoundServiceTest {
     private RoundStatsRepository roundStatsRepository;
     @Mock
     private GameService gameService;
-
     @InjectMocks
     private RoundService roundService;
 
@@ -52,7 +49,9 @@ public class RoundServiceTest {
         // Arrange
         UUID gameId = UUID.randomUUID();
         Game game = new Game();
+        User mockuser = new User();
         game.setGameId(gameId);
+        game.addNewPlayer(mockuser);
         when(gameService.getGame(gameId)).thenReturn(game);
 
         // Act
@@ -130,5 +129,83 @@ public class RoundServiceTest {
 
         // Act and Assert
         assertThrows(IllegalArgumentException.class, () -> roundService.updatePlayerGuess(gameId, userId, 1, 47.399591, 8.514325));
+    }
+
+    /*
+    @Test
+    public void getRandomPicture_success() throws Exception {
+        // Arrange
+        RoundService roundServiceSpy = spy(roundService);
+        UUID gameId = UUID.randomUUID();
+        Game game = new Game();
+        game.setGameId(gameId);
+        game.setGuessTime(30);
+        Round round = new Round();
+        JSONObject jsonResponse = new JSONObject("{ \"location\": { \"position\": { \"latitude\": 47.399591, \"longitude\": 8.514325 } }, \"urls\": { \"regular\": \"some_url\" }, \"user\": { \"name\": \"user_name\", \"username\": \"user_username\" } }");
+
+        when(gameService.getGame(gameId)).thenReturn(game);
+        PowerMockito.when(roundService, "fetchPictureFromApi").thenThrow(new IOException());
+        when(roundRepository.save(any(Round.class))).thenReturn(round);
+
+        // Act
+        String result = roundServiceSpy.getRandomPicture(round, game);
+
+        // Assert
+        verify(roundRepository, times(1)).save(round);
+        assertTrue(result.contains("some_url"));
+        assertTrue(result.contains("user_name"));
+        assertTrue(result.contains("user_username"));
+    }
+
+    @Test
+    public void getRandomPicture_failure() throws Exception {
+        // Arrange
+        RoundService roundServiceSpy = spy(roundService);
+        UUID gameId = UUID.randomUUID();
+        Game game = new Game();
+        game.setGameId(gameId);
+        game.setGuessTime(30);
+        Round round = new Round();
+
+        when(gameService.getGame(gameId)).thenReturn(game);
+
+        // Act
+        String result = roundServiceSpy.getRandomPicture(round, game);
+
+        // Assert
+        verify(roundRepository, times(1)).save(round);
+        assertTrue(result.contains("fallback response"));
+    }
+*/
+    @Test
+    public void calculateEndTime_success() {
+        // Arrange
+        Game game = new Game();
+        game.setGuessTime(30);
+
+        // Act
+        LocalTime result = roundService.calculateEndTime(game);
+
+        // Assert
+        LocalTime expectedEndTime = ZonedDateTime.now(ZoneId.of("Europe/Zurich")).toLocalTime().plusSeconds(31);
+        assertEquals(expectedEndTime.getHour(), result.getHour());
+        assertEquals(expectedEndTime.getMinute(), result.getMinute());
+        assertEquals(expectedEndTime.getSecond(), result.getSecond(), 1); // allow some tolerance for test execution delay
+    }
+
+    @Test
+    public void calculateDistance_success() {
+        // Arrange
+        double lat1 = 47.399591;
+        double lon1 = 8.514325;
+        double lat2 = 46.94809;
+        double lon2 = 7.44744;
+
+        // Act
+        double result = roundService.calculateDistance(lat1, lon1, lat2, lon2);
+
+        // Assert
+        double expectedDistance = 94.48; // approximate value in kilometers
+        assertEquals(expectedDistance, result, 1.0); // allow 1 km tolerance
     }
 }

@@ -119,7 +119,7 @@ public class RoundService {
         return new JSONObject(response.body());
     }
 
-    private LocalTime calculateEndTime(Game game) {
+    public LocalTime calculateEndTime(Game game) {
         int guessTime = game.getGuessTime() + 1;
 
         // Get the current time in Zurich
