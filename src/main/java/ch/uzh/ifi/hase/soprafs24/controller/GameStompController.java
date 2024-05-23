@@ -66,7 +66,7 @@ public class GameStompController {
             doUpdate = true;
         }
 
-        // Set gamePassword if required, and make it a a 6-digit integer
+        // Reset password if it has already been set but it is not required anymore
         else if (setGamePassword == false && game.getPassword() != null && game.getPassword() != 0) {
             game.setPassword(null);
             doUpdate = true;

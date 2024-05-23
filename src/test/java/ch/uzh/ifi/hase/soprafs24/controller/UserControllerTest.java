@@ -32,7 +32,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getAllUsers_success() {
+    public void getAllUsers_successEmpty() {
         // Arrange
         List<User> users = new ArrayList<>();
         when(userService.getUsers()).thenReturn(users);
@@ -43,6 +43,30 @@ public class UserControllerTest {
         // Assert
         assertNotNull(userGetDTOs);
         assertEquals(0, userGetDTOs.size());
+    }
+
+    @Test
+    public void getAllUsers_success() {
+        // Arrange
+        Long userId = 1L;
+        User user = new User();
+        when(userService.findUserbyId(userId)).thenReturn(user);
+
+        Long userId2 = 2L;
+        User user2 = new User();
+        when(userService.findUserbyId(userId2)).thenReturn(user2);
+
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        users.add(user2);
+        when(userService.getUsers()).thenReturn(users);
+
+        // Act
+        List<UserGetDTO> userGetDTOs = userController.getAllUsers();
+
+        // Assert
+        assertNotNull(userGetDTOs);
+        assertEquals(2, userGetDTOs.size());
     }
 
     @Test
