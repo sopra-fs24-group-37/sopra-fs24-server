@@ -2,6 +2,9 @@ package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.config.ApiKeyConfig;
 import ch.uzh.ifi.hase.soprafs24.entity.*;
+import ch.uzh.ifi.hase.soprafs24.entity.Game;
+import ch.uzh.ifi.hase.soprafs24.entity.Round;
+import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import org.json.JSONObject;
@@ -157,7 +160,7 @@ public class RoundService {
     //     }
     // }
 
-    private JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
+    public JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
         String apiUrl = "https://api.unsplash.com/photos/random";
         String query = "Switzerland+landscape+cityscape";
         String clientId = apiKeyConfig.getCurrentApiKey(); // Replace with your Unsplash access key
@@ -171,7 +174,7 @@ public class RoundService {
         return new JSONObject(response.body());
     }
 
-    private LocalTime calculateEndTime(Game game) {
+    public LocalTime calculateEndTime(Game game) {
         int guessTime = game.getGuessTime() + 1;
 
         // Get the current time in Zurich
@@ -182,7 +185,7 @@ public class RoundService {
         return generationTime.plusSeconds(guessTime);
     }
 
-    private JSONObject generateFallbackResponse(LocalTime endTime, Round round) {
+    public JSONObject generateFallbackResponse(LocalTime endTime, Round round) {
         double latitude = 47.399591;
         double longitude = 8.514325;
 
@@ -202,7 +205,7 @@ public class RoundService {
         return fallbackResponse;
     }
 
-    private JSONObject generateResponse(JSONObject jsonResponse, double latitude, double longitude, LocalTime endTime) {
+    public JSONObject generateResponse(JSONObject jsonResponse, double latitude, double longitude, LocalTime endTime) {
         JSONObject trimmedResponse = new JSONObject();
         trimmedResponse.put("regular_url", jsonResponse.getJSONObject("urls").getString("regular"));
         trimmedResponse.put("latitude", latitude);
