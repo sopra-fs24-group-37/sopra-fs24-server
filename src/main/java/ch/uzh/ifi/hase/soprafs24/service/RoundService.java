@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.geotools.geojson.geom.GeometryJSON;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 @Service
 public class RoundService {
@@ -83,6 +91,8 @@ public class RoundService {
 
             // Check location data of api call
             JSONObject location = jsonResponse.optJSONObject("location");
+
+            System.out.println("------- location: --------" + location);
             
             if (location == null || 
                 !location.has("position") || 
@@ -90,13 +100,21 @@ public class RoundService {
                 !location.getJSONObject("position").has("latitude") || 
                 !location.getJSONObject("position").has("longitude") || 
                 location.getJSONObject("position").isNull("latitude") || 
-                location.getJSONObject("position").isNull("longitude")) {
+                location.getJSONObject("position").isNull("longitude") || 
+                location.getJSONObject("position").getDouble("latitude") == 0|| 
+                location.getJSONObject("position").getDouble("longitude") == 0) {
                 System.out.println("Image does not have valid location data. Retrying...");
                 return getRandomPicture(round, game);
             }
 
             double latitude = location.getJSONObject("position").getDouble("latitude");
             double longitude = location.getJSONObject("position").getDouble("longitude");
+
+            // Check that the location is within Switzerland
+            // if (!isPointWithinSwissBoundary(latitude, longitude)) {
+            //     System.out.println("Location is not within the specified boundary. Retrying...");
+            //     return getRandomPicture(round, game);
+            // }
 
             // Set objects with data
             round.setLatitude(latitude);
@@ -113,6 +131,31 @@ public class RoundService {
             return generateFallbackResponse(endTime,round).toString();
         }
     }
+
+    // private boolean isPointWithinSwissBoundary(double latitude, double longitude) throws IOException {
+    //     try {
+    //         System.out.println("Checking if location is within Switzerland...");
+    //         // Load the GeoJSON file from the repository
+    //         Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("src/main/resources/swissboundary.geojson"));
+    //         System.out.println("----- reader -----" + reader);
+    //         GeometryJSON gjson = new GeometryJSON();
+    //         Geometry boundary = gjson.read(reader);
+
+    //         System.out.println("----- Swiss boundary: -----" + reader);
+
+    //         // Create a point
+    //         org.locationtech.jts.geom.Point point = new GeometryFactory().createPoint(new Coordinate(longitude, latitude));
+    //         System.out.println("----- point created: -----" + point);
+
+    //         // Check if the point is within the boundary
+    //         return boundary.contains(point);
+
+    //     } catch (Exception e) {
+    //         System.err.println("An error occurred. Returning True...");
+    //         System.err.println("Error details: " + e + "\nError message: " + e.getMessage());
+    //         return true;
+    //     }
+    // }
 
     private JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
         String apiUrl = "https://api.unsplash.com/photos/random";
