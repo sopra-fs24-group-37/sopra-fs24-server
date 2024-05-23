@@ -10,9 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GameSettingsPostDTO;
-
-
-import java.util.Set;
 import java.util.UUID;
 
 

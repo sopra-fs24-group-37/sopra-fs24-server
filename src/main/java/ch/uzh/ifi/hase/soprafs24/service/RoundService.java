@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +23,12 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.geotools.geojson.geom.GeometryJSON;
-import java.io.InputStreamReader;
-import java.io.Reader;
+// import org.locationtech.jts.geom.Geometry;
+// import org.locationtech.jts.geom.Coordinate;
+// import org.locationtech.jts.geom.GeometryFactory;
+// import org.geotools.geojson.geom.GeometryJSON;
+// import java.io.InputStreamReader;
+// import java.io.Reader;
 
 @Service
 public class RoundService {
@@ -53,7 +52,6 @@ public class RoundService {
         Round newRound = new Round();
         newRound.setGameId(gameId);
         newRound.setCheckIn(0);
-        int i = 0;
 
         // Iterate through gamePlayer set and create RoundStats instances
         for (GamePlayer gamePlayer : game.getPlayers()) {

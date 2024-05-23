@@ -3,23 +3,17 @@ package ch.uzh.ifi.hase.soprafs24.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
-import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
-import ch.uzh.ifi.hase.soprafs24.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.GamePlayerRepository;
-import ch.uzh.ifi.hase.soprafs24.repository.UserRepository;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Transactional  // This will ensure that each test is rolled back after execution
 public class GameServiceIntegrationTest {
@@ -29,12 +23,6 @@ public class GameServiceIntegrationTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private GameRepository gameRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
