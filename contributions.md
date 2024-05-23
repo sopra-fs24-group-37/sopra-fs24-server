@@ -27,9 +27,9 @@ Please note that due to my inexperience with git in the first weeks of this proj
 
 ## Andri Spescha
 
-- [Handle unsuccessful log-in (Err)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/32)
-- [Handle user authentication](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/27)
-- [Create a back-end API endpoint for user authentication](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/26)
+-   [Handle unsuccessful log-in (Err)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/32)
+-   [Handle user authentication](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/27)
+-   [Create a back-end API endpoint for user authentication](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/26)
 
 # Week 2 (Apr 03 – Apr 09)
 
@@ -77,7 +77,6 @@ Please note that due to my inexperience with git in the first weeks of this proj
 -   [Implement list of logged-in users](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/30)
 -   [Handle creation of a new game](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/39)
 
-
 # Week 4 (Apr 17 – Apr 23)
 
 ## Diana Hidvegi
@@ -107,7 +106,6 @@ Please note that due to my inexperience with git in the first weeks of this proj
 -   [Fetch roundinfo from back-end (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/b8f882deed09d279ccf0a454a91cc333a7b65eff)
 -   [Add WebSocket support and allow client to establish connection (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/ba1ad0f555cc5d5a9f353a6acc6311454dda0c50)
 
-
 # Week 5 (Apr 24 – Apr 30)
 
 ## Diana Hidvegi
@@ -135,17 +133,16 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [Verify guess from players with actual location from map API (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/8f8387d9be321a6801e2c33c8e565b5be14287c4)
 -   [Implement back-end logic for receiving guess from user (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/8f8387d9be321a6801e2c33c8e565b5be14287c4)
 
-
 # Week 6 (May 01 – May 07)
 
 ## Diana Hidvegi
 
 -   Implement back-end logic to handle changes in game parameters
-    - [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
-    - [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/134/commits)
+    -   [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
+    -   [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/134/commits)
 -   Implement back-end logic for setting a password
-    - [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
-    - [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/143/commits)
+    -   [Commit Link 1](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/115/commits)
+    -   [Commit Link 2](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/143/commits)
 
 ## Manuel Widmer
 
@@ -166,7 +163,6 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [Add websocket support for fetching all games in the lobby (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/60117d8ac0a8058035e16fa762b337610920af66)
 -   [Change the packet being sent each round](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/110)
 
-
 # Week 7 (May 08 – May 14)
 
 ## Diana Hidvegi
@@ -181,6 +177,13 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [Implement GameService support for "Canton Hint" Power Up](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/132/commits)
 
 -   Add Missing Test Cases for GameService and GameController (Partially done but moved to Week 8 due to higher priority tasks for the newly added feature after M3 Feedback)
+
+## Gian-Luca Führer
+
+-   [implemented functionality to change game parameters](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/25)
+-   [display changed parameters in real time to all users](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/24)
+-   [timer works with a set endTime now instead of countdown](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/79)
+-   [checkbox for private Game added](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/26)
 
 ## Andri Spescha
 
@@ -198,6 +201,7 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 # Week 8 (May 15 – May 21)
 
 ## Diana Hidvegi
+
 -   [Add Missing Test Cases for GameService and GameController](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/157/commits)
 -   [Integrate "Double Score" Power Up Functionality into RoundInfo](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/144/commits)
 -   [Integrate "Canoton Hint" and "Triple Hint" Power up tracking into Rounds](https://github.com/sopra-fs24-group-37/sopra-fs24-server/pull/145/commits)
@@ -211,8 +215,16 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [implemented display of individual scores resulsts](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/38)
 -   [implemented import and display of other players' guesses](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/42)
 -   [made power-ups available only once per game](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/81)
--	[updated content and formatting of games rules](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/e1aa52cf45f63d20be2fc940530ffd2075740e40)
--	[added info texts to buttons](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/22c1fb525855da3f5cbcf98b45a958380b28725d)
+-   [updated content and formatting of games rules](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/e1aa52cf45f63d20be2fc940530ffd2075740e40)
+-   [added info texts to buttons](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/22c1fb525855da3f5cbcf98b45a958380b28725d)
+
+## Gian-Luca Führer
+
+-   [implemented edit username functionality](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/86)
+-   [implement display to enter password for private games](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/17)
+-   [cleanup of game if host leaves before starting it, forcing users to leave, deleting the empty game](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/85)
+-   [update UI to fit style of game](https://github.com/sopra-fs24-group-37/sopra-fs24-client/issues/87)
+-   [adjust frontend now that timer logic happens in backend](https://github.com/sopra-fs24-group-37/sopra-fs24-client/commit/6f32afb5441dccb01edf814df41b71cead5fd139)
 
 ## Andri Spescha
 
@@ -221,4 +233,3 @@ Note: In this week, I invested a lot of time in coming up with a more robust imp
 -   [Use parameters for the game when creating new round](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/141)
 -   [Writing Tests](https://github.com/sopra-fs24-group-37/sopra-fs24-server/issues/158)
 -   [Rotate the Api Keys (commit)](https://github.com/sopra-fs24-group-37/sopra-fs24-server/commit/df4e34c7513e88c404f57c7697d4207f2b15cbea)
-
