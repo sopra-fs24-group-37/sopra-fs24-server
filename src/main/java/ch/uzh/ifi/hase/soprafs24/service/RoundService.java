@@ -2,6 +2,9 @@ package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.config.ApiKeyConfig;
 import ch.uzh.ifi.hase.soprafs24.entity.*;
+import ch.uzh.ifi.hase.soprafs24.entity.Game;
+import ch.uzh.ifi.hase.soprafs24.entity.Round;
+import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import org.json.JSONObject;
@@ -22,6 +25,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
+
+// import org.locationtech.jts.geom.Geometry;
+// import org.locationtech.jts.geom.Coordinate;
+// import org.locationtech.jts.geom.GeometryFactory;
+// import org.geotools.geojson.geom.GeometryJSON;
+// import java.io.InputStreamReader;
+// import java.io.Reader;
 
 @Service
 public class RoundService {
@@ -45,7 +55,6 @@ public class RoundService {
         Round newRound = new Round();
         newRound.setGameId(gameId);
         newRound.setCheckIn(0);
-        int i = 0;
 
         // Iterate through gamePlayer set and create RoundStats instances
         for (GamePlayer gamePlayer : game.getPlayers()) {
@@ -83,11 +92,32 @@ public class RoundService {
 
             // Check location data of api call
             JSONObject location = jsonResponse.optJSONObject("location");
-            if (location == null) {
+
+            System.out.println("------- location: --------" + location);
+            
+            if (location == null || 
+                !location.has("position") || 
+                location.isNull("position") ||
+                !location.getJSONObject("position").has("latitude") || 
+                !location.getJSONObject("position").has("longitude") || 
+                location.getJSONObject("position").isNull("latitude") || 
+                location.getJSONObject("position").isNull("longitude") || 
+                location.getJSONObject("position").getDouble("latitude") == 0|| 
+                location.getJSONObject("position").getDouble("longitude") == 0 ||
+                (location.getJSONObject("position").getDouble("latitude") == 46.818188 && 
+                location.getJSONObject("position").getDouble("longitude") == 8.227512)) {
+                System.out.println("Image does not have valid location data. Retrying...");
                 return getRandomPicture(round, game);
             }
+
             double latitude = location.getJSONObject("position").getDouble("latitude");
             double longitude = location.getJSONObject("position").getDouble("longitude");
+
+            // Check that the location is within Switzerland
+            // if (!isPointWithinSwissBoundary(latitude, longitude)) {
+            //     System.out.println("Location is not within the specified boundary. Retrying...");
+            //     return getRandomPicture(round, game);
+            // }
 
             // Set objects with data
             round.setLatitude(latitude);
@@ -105,7 +135,32 @@ public class RoundService {
         }
     }
 
-    private JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
+    // private boolean isPointWithinSwissBoundary(double latitude, double longitude) throws IOException {
+    //     try {
+    //         System.out.println("Checking if location is within Switzerland...");
+    //         // Load the GeoJSON file from the repository
+    //         Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("src/main/resources/swissboundary.geojson"));
+    //         System.out.println("----- reader -----" + reader);
+    //         GeometryJSON gjson = new GeometryJSON();
+    //         Geometry boundary = gjson.read(reader);
+
+    //         System.out.println("----- Swiss boundary: -----" + reader);
+
+    //         // Create a point
+    //         org.locationtech.jts.geom.Point point = new GeometryFactory().createPoint(new Coordinate(longitude, latitude));
+    //         System.out.println("----- point created: -----" + point);
+
+    //         // Check if the point is within the boundary
+    //         return boundary.contains(point);
+
+    //     } catch (Exception e) {
+    //         System.err.println("An error occurred. Returning True...");
+    //         System.err.println("Error details: " + e + "\nError message: " + e.getMessage());
+    //         return true;
+    //     }
+    // }
+
+    public JSONObject fetchPictureFromApi() throws URISyntaxException, IOException, InterruptedException {
         String apiUrl = "https://api.unsplash.com/photos/random";
         String query = "Switzerland+landscape+cityscape";
         String clientId = apiKeyConfig.getCurrentApiKey(); // Replace with your Unsplash access key
@@ -130,7 +185,7 @@ public class RoundService {
         return generationTime.plusSeconds(guessTime);
     }
 
-    private JSONObject generateFallbackResponse(LocalTime endTime, Round round) {
+    public JSONObject generateFallbackResponse(LocalTime endTime, Round round) {
         double latitude = 47.399591;
         double longitude = 8.514325;
 
@@ -150,7 +205,7 @@ public class RoundService {
         return fallbackResponse;
     }
 
-    private JSONObject generateResponse(JSONObject jsonResponse, double latitude, double longitude, LocalTime endTime) {
+    public JSONObject generateResponse(JSONObject jsonResponse, double latitude, double longitude, LocalTime endTime) {
         JSONObject trimmedResponse = new JSONObject();
         trimmedResponse.put("regular_url", jsonResponse.getJSONObject("urls").getString("regular"));
         trimmedResponse.put("latitude", latitude);

@@ -4,9 +4,7 @@ import ch.uzh.ifi.hase.soprafs24.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
 import ch.uzh.ifi.hase.soprafs24.entity.Round;
-import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
-import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.stomp.GuessPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.*;
 

@@ -100,7 +100,7 @@ public class GameService {
                 User user = player.getUser();
 
                 // Update User's Total Scores after last game round finished
-                user.setTotalScores(player.getScore());
+                user.setTotalScores(user.getTotalScores() + player.getScore());
 
                 // Update User's Total Wins after last game round finished
                 Game gameLeaderboard = calculateLeaderboard(gameId);
