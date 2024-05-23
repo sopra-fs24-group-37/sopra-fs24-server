@@ -26,6 +26,45 @@ The following technologies were used for backend development:
 
 ## High Level Components <a id="high-level-components"></a>
 
+SwissQuiz consists of several key components that work together to provide a seamless user experience for managing games and rounds. Below is a brief summary of each main component, their roles, and how they are correlated.
+
+### 1. User Component
+The User component is responsible for managing user-related operations, including user registration, user login, and profile management. It includes classes such as `UserService`, which handles business logic mainly to support the API endpoints in the `UserController`, and `UserRepository`, which interacts with the database.
+
+- **Main Class:** [`UserService`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/UserService.java)
+- **Key Functions:** `createUser`, `loginUser`, `updateUser`
+- **Related Files:** [`UserRepository.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/repository/UserRepository.java), [`UserController.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/UserController.java)
+
+### 2. Game Component
+The Game component manages the lifecycle of games, including creation, updating, and termination of games. It ensures the proper setup and management of game states and rules.
+
+- **Main Class:** [`GameService`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
+- **Key Functions:** `createGame`,`startGame`, `endGame`, `joinGame`
+- **Related Files:** [`GameController.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/GameController.java), [`GameRepository.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/repository/GameRepository.java)
+
+### 3. GamePlayer Component
+The GamePlayer component handles the association between users and games. It tracks the participation of users in different games and maintains their progress and states within each game. While it does not have an extensive list of service functions, it's role is essential to separate the tracking of the same user across multiple games.
+
+- **Main Class:** [`GamePlayerEntity`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/entity/GamePlayer.java)
+- **Key Functions:** `setPlayerId`, `setScore`
+- **Related Files:** [`GamePlayerService.java`]((https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GamePlayerService.java)), [`GamePlayerRepository.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/repository/GamePlayerRepository.java)
+
+### 4. Round Component
+The Round component is responsible for managing the individual rounds within a game. This includes creating new rounds, updating round data, and handling round-specific logic such as scoring based on the guessed locations for each user and location tracking of the fetched image.
+
+- **Main Class:** [`RoundService`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/RoundService.java)
+- **Key Functions:** `createRound`, `updatePlayerGuess`, `fetchPictureFromApi`
+- **Related Files:** [`RoundStompController.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/RoundStompController.java), [`RoundStatsRepository.java`](https://github.com/sopra-fs24-group-37/sopra-fs24-server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/repository/RoundStatsRepository.java)
+
+### Correlation Between Components
+These components are closely interlinked to ensure the smooth functioning of the application:
+
+- **User Component**: Provides users who participate in games managed by the Game Component.
+- **Game Component**: Oversees the overall game structure and utilizes the GamePlayer Component to manage user participation.
+- **GamePlayer Component**: Acts as the bridge between users and games, ensuring users are correctly associated with their respective games.
+- **Round Component**: Operates within the context of a game, managing the detailed progression and actions for each game player and within each game round.
+
+
 ## Launch & Development <a id="launch--development"></a>
 ### Getting started with Spring Boot
 -   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
@@ -114,6 +153,31 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 Have a look here: https://www.baeldung.com/spring-boot-testing
 
 ## Roadmap <a id="roadmap"></a>
+
+# Roadmap
+
+Our team has thought of 2 engaging and "informative" features that new developers who want to contribute to this project could add:
+
+### 1. Heatmap for Players Familiarity of Switzerland
+Add a heatmap feature to analyze and display which areas of Switzerland are the least familiar to players. This will help identify regions where players struggled to guess correctly the most, providing valuable insights and potentially educating users around new places to discover in Switzerland.
+
+- **Key Components to Modify:**
+  - `RoundService` to collect and analyze location data from rounds.
+  - `GameService` to aggregate player performance data.
+  - A new `HeatmapController` to generate and display the heatmap.
+  - Frontend components to visualize the heatmap.
+
+### 2. Like Images and Recommend Trips
+Develop a feature that allows players to like images and receive trip recommendations for those corresponding locations. This feature would enhance player engagement by connecting the game with real-world travel interests and encourage exploring Switzerland.
+
+- **Key Components to Modify:**
+  - `UserService` to track liked locations.
+  - `RoundService` to integrate the liking functionality.
+  - A new `RecommendationService` to generate trip suggestions.
+  - Frontend components for liking images and displaying recommended trips.
+
+These features will enhance the user experience and provide more gamified functionalities that can make the application more engaging and educative.
+
 
 ## Authors <a id="authors"></a>
 
