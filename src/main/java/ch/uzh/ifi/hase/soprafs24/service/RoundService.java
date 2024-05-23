@@ -102,7 +102,9 @@ public class RoundService {
                 location.getJSONObject("position").isNull("latitude") || 
                 location.getJSONObject("position").isNull("longitude") || 
                 location.getJSONObject("position").getDouble("latitude") == 0|| 
-                location.getJSONObject("position").getDouble("longitude") == 0) {
+                location.getJSONObject("position").getDouble("longitude") == 0 ||
+                (location.getJSONObject("position").getDouble("latitude") == 46.818188 && 
+                location.getJSONObject("position").getDouble("longitude") == 8.227512)) {
                 System.out.println("Image does not have valid location data. Retrying...");
                 return getRandomPicture(round, game);
             }
