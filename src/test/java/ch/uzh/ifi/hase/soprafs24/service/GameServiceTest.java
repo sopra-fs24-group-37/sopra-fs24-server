@@ -41,15 +41,17 @@ public class GameServiceTest {
     private GameService gameService;
 
     private UUID gameId;
+    private Long userId;
     private User gameMaster;
     private Game game;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        userId = 1L;
         gameId = UUID.randomUUID();
         gameMaster = new User();
-        gameMaster.setUserId(1L);
+        gameMaster.setUserId(userId);
         gameMaster.setUsername("testUser");
         gameMaster.setToken("token123");
         gameMaster.setPassword("password");
@@ -349,4 +351,277 @@ public class GameServiceTest {
         when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class, () -> gameService.leaveGame(gameId, 2L));
     }
+
+    @Test
+    public void findGamebyIdGameExists() {
+        // Arrange
+        Game mockGame = new Game();
+        mockGame.setGameId(gameId);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(mockGame));
+
+        // Act
+        Game foundGame = gameService.findGamebyId(gameId);
+
+        // Assert
+        assertEquals(mockGame, foundGame);
+        verify(gameRepository).findById(gameId);
+    }
+
+    @Test
+    public void findGamebyIdGameNotFound() {
+        // Arrange
+        UUID gameId = UUID.randomUUID();
+        when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        ResponseStatusException exception = assertThrows(
+            ResponseStatusException.class,
+            () -> gameService.findGamebyId(gameId),
+            "Game with user ID " + gameId + " was not found!"
+        );
+
+        // Check correct status code
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        verify(gameRepository).findById(gameId);
+    }
+
+    @Test
+    public void updateGameSuccess() {
+        // Arrange
+        when(gameRepository.saveAndFlush(game)).thenReturn(game);
+    
+        // Act
+        gameService.updateGame(game);
+    
+        // Assert
+        verify(gameRepository).saveAndFlush(game);
+    }
+    
+    @Test
+    public void updateGameHandlesException() {
+        // Arrange
+        doThrow(new RuntimeException("Database error")).when(gameRepository).saveAndFlush(game);
+    
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> gameService.updateGame(game));
+    }
+
+    @Test
+    public void deleteGameByIdGameExists() {
+        // Arrange
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+    
+        // Act
+        gameService.deleteGameById(gameId);
+    
+        // Assert
+        verify(gameRepository).deleteById(gameId);
+    }
+    
+    @Test
+    public void deleteGameByIdGameNotFound() {
+        // Arrange
+        when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+    
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> gameService.deleteGameById(gameId));
+    }
+
+    @Test
+    public void useCantonHintPowerUpSuccess() {
+        // Arrange
+        Long userId = 1L;
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setCantonHint(true);
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
+    
+        // Act
+        Boolean result = gameService.useCantonHintPowerUp(gameId, userId);
+    
+        // Assert
+        assertTrue(result);
+        verify(gamePlayerRepository).save(gamePlayer);
+    }
+    
+    @Test
+    public void useCantonHintPowerUpFail() {
+        // Arrange
+        Long userId = 1L;
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setCantonHint(false);
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
+    
+        // Act
+        Boolean result = gameService.useCantonHintPowerUp(gameId, userId);
+    
+        // Assert
+        assertFalse(result);
+    }
+    
+    @Test
+    public void useCantonHintPowerUpNotFound() {
+        // Arrange
+        Long userId = 1L;
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.empty());
+    
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> gameService.useCantonHintPowerUp(gameId, userId));
+    }
+    
+    @Test
+    public void useMultipleCantonHintPowerUpSuccess() {
+        // Arrange
+        Long userId = 1L;
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setMultipleCantonHint(true);
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
+    
+        // Act
+        Boolean result = gameService.useMultipleCantonHintPowerUp(gameId, userId);
+    
+        // Assert
+        assertTrue(result);
+        verify(gamePlayerRepository).save(gamePlayer);
+    }
+    
+    @Test
+    public void useMultipleCantonHintPowerUpFail() {
+        // Arrange
+        Long userId = 1L;
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setMultipleCantonHint(false);
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.of(gamePlayer));
+    
+        // Act
+        Boolean result = gameService.useMultipleCantonHintPowerUp(gameId, userId);
+    
+        // Assert
+        assertFalse(result);
+    }
+    
+    @Test
+    public void useMultipleCantonHintPowerUpNotFound() {
+        // Arrange
+        Long userId = 1L;
+        when(gamePlayerRepository.findByGame_GameIdAndUser_UserId(gameId, userId)).thenReturn(Optional.empty());
+    
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> gameService.useMultipleCantonHintPowerUp(gameId, userId));
+    }
+    
+    @Test
+    public void endGameSuccess() {
+        // Arrange
+        Game game = new Game();
+        game.setGameStatus(GameStatus.STARTED);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+    
+        // Act
+        Game endedGame = gameService.endGame(gameId);
+    
+        // Assert
+        assertEquals(GameStatus.ENDED, endedGame.getGameStatus());
+        verify(gameRepository).save(endedGame);
+    }
+    
+    @Test
+    public void endGameAlreadyEnded() {
+        // Arrange
+        Game game = new Game();
+        game.setGameStatus(GameStatus.ENDED);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+    
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> gameService.endGame(gameId));
+    }
+
+    @Test
+    public void joinGameSuccessfullyNoPassword() {
+        // Arrange
+        UUID gameId = UUID.randomUUID();
+        Long userId = 1L;
+        Game game = mock(Game.class); // Mock the Game object
+        when(game.getGameStatus()).thenReturn(GameStatus.WAITING); // Mock necessary properties
+        when(game.getPassword()).thenReturn(null); // Explicitly handling password check
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+        
+        User user = new User();
+        user.setUserId(userId);
+        when(userService.findUserbyId(userId)).thenReturn(user);
+    
+        // Act
+        Game joinedGame = gameService.joinGame(gameId, userId, null);
+    
+        // Assert
+        verify(gameRepository).save(game);
+        assertNotNull(joinedGame);
+    }
+    
+    
+    @Test
+    public void joinGameSuccessfullyWithPassword() {
+        // Arrange
+        Game game = new Game();
+        game.setGameStatus(GameStatus.WAITING);
+        game.setPassword(1234);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+        User user = new User();
+        user.setUserId(userId);
+        when(userService.findUserbyId(userId)).thenReturn(user);
+    
+        // Act
+        Game joinedGame = gameService.joinGame(gameId, userId, 1234);
+    
+        // Assert
+        verify(gameRepository).save(game);
+        assertEquals(game, joinedGame);
+    }
+    
+    @Test
+    public void joinGameGameNotFound() {
+        // Arrange
+        when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+    
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> gameService.joinGame(gameId, userId, null));
+    }
+    
+    @Test
+    public void joinGameWrongPassword() {
+        // Arrange
+        Game game = new Game();
+        game.setPassword(1234);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+    
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> gameService.joinGame(gameId, userId, 1111));
+    }
+    
+    @Test
+    public void joinGameNoPasswordExpectedButProvided() {
+        // Arrange
+        Game game = new Game();
+        game.setPassword(null);
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+    
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> gameService.joinGame(gameId, userId, 1234));
+    }
+    
+    @Test
+    public void joinGameUserAlreadyInGame() {
+        // Arrange
+        Game game = new Game();
+        User user = new User();
+        user.setUserId(userId);
+        GamePlayer gamePlayer = new GamePlayer();
+        gamePlayer.setUser(user);
+        game.setPlayers(Collections.singleton(gamePlayer));
+        when(gameRepository.findById(gameId)).thenReturn(Optional.of(game));
+        when(userService.findUserbyId(userId)).thenReturn(user);
+    
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> gameService.joinGame(gameId, userId, null));
+    }
+    
 }

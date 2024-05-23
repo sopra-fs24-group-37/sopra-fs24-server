@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
@@ -117,4 +118,91 @@ public class UserServiceTest {
 
         assertThrows(ResponseStatusException.class, () -> userService.loginUser(loginAttempt), "Should throw an exception for wrong credentials");
     }
+
+    @Test
+    public void deleteUserByIdUserExists() {
+        // Arrange
+        Long userId = 1L;
+        User existingUser = new User();
+        existingUser.setUserId(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+
+        // Act
+        userService.deleteUserById(userId);
+
+        // Assert
+        verify(userRepository).findById(userId);
+        verify(userRepository).deleteById(userId);
+    }
+
+    @Test
+    public void deleteUserByIdUserNotFound() {
+        // Arrange
+        Long userId = 999L; // Assuming 999 is an ID that does not exist
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> userService.deleteUserById(userId),
+            "User with user id " + userId + " was not found!");
+
+        verify(userRepository, never()).deleteById(any()); // Ensure deleteById is never called
+    }
+
+    @Test
+    public void testSetUserOfflineUserExists() {
+        // Arrange
+        Long userId = 1L;
+        User mockUser = new User();
+        mockUser.setUserId(userId);
+        mockUser.setStatus(UserStatus.ONLINE);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+
+        // Act
+        userService.setUserOffline(userId);
+
+        // Assert
+        verify(userRepository).findById(userId);
+        assertEquals(UserStatus.OFFLINE, mockUser.getStatus());
+        verify(userRepository).save(mockUser);
+    }
+
+    @Test
+    public void testSetUserOfflineUserNotFound() {
+        // Arrange
+        Long userId = 999L; // Assuming 999 is an ID that does not exist
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> userService.setUserOffline(userId));
+    }
+
+    @Test
+    public void testUpdateUserUserExists() {
+        // Arrange
+        User existingUser = new User();
+        existingUser.setUserId(1L);
+        existingUser.setUsername("Existing User");
+        when(userRepository.findById(existingUser.getUserId())).thenReturn(Optional.of(existingUser));
+
+        // Act
+        User returnedUser = userService.updateUser(existingUser);
+
+        // Assert
+        verify(userRepository).findById(existingUser.getUserId());
+        verify(userRepository).save(existingUser);
+        assertEquals(existingUser, returnedUser);
+    }
+
+    @Test
+    public void testUpdateUserUserNotFound() {
+        // Arrange
+        User newUser = new User();
+        newUser.setUserId(2L);
+        newUser.setUsername("New User");
+        when(userRepository.findById(newUser.getUserId())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> userService.updateUser(newUser));
+    }
+
 }
