@@ -106,6 +106,29 @@ public class GameStompControllerTest {
     }
 
     @Test
+    public void testSetLobbyInformation_ResetPassword() {
+        // Mocking
+        Game mockGame = new Game();
+        mockGame.setGameId(gameId);
+        mockGame.setPassword(123456);
+        when(gameService.getGame(gameId)).thenReturn(mockGame);
+
+        GameSettingsPostDTO settings = new GameSettingsPostDTO();
+        settings.setNumRounds(3);
+        settings.setGuessTime(20);
+        settings.setSetGamePassword(false);
+
+        when(gameService.getGame(gameId)).thenReturn(mockGame);
+
+        // Execution
+        gameStompController.setLobbyInformation(settings, gameId);
+
+        verify(gameService).updateGame(any(Game.class));
+        verify(webSocketService).sendMessageToSubscribers(eq("/topic/games/" + gameId), any(GameGetDTO.class));
+        assertEquals(mockGame.getPassword(), null);
+    }
+
+    @Test
     public void testSetLobbyInformationInvalidValues() {
         GameSettingsPostDTO settings = new GameSettingsPostDTO();
         settings.setNumRounds(1);  // Invalid numRounds
