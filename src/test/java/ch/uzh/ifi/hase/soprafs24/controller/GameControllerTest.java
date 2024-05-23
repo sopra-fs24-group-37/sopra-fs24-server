@@ -1,37 +1,28 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import ch.uzh.ifi.hase.soprafs24.service.RoundService;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
-
 import ch.uzh.ifi.hase.soprafs24.entity.Game;
 import ch.uzh.ifi.hase.soprafs24.entity.GamePlayer;
-import ch.uzh.ifi.hase.soprafs24.entity.User;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.GamePlayerDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.service.RoundService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
-@ExtendWith(MockitoExtension.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
 public class GameControllerTest {
 
     @Mock
@@ -40,210 +31,167 @@ public class GameControllerTest {
     @Mock
     private RoundService roundService;
 
-    @Mock
-    private GamePostDTO gamePostDTO;
-
-
     @InjectMocks
     private GameController gameController;
 
-    
-    private UUID gameId;
     private Game game;
-    private GameGetDTO gameGetDTO;
-    private Long userId;
-    private User user;
-    private List<Game> games;
+    private UUID gameId;
 
     @BeforeEach
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         gameId = UUID.randomUUID();
-        userId = 1L;
-
         game = new Game();
         game.setGameId(gameId);
-
-        gameGetDTO = new GameGetDTO();
-        gameGetDTO.setGameId(gameId);
-
-        gamePostDTO = new GamePostDTO();
-        gamePostDTO.setGameMaster(userId);
-
-        user = new User();
-        user.setUserId(userId);
-
-        games = Arrays.asList(game);
-    }
-
-    // @Test
-    // public void testGetAllGames() {
-    //     when(gameService.getGames()).thenReturn(games);
-    //     when(DTOMapper.INSTANCE.convertEntityToGameGetDTO(any(Game.class))).thenReturn(gameGetDTO);
-
-    //     List<GameGetDTO> result = gameController.getAllGames();
-    //     assertEquals(1, result.size());
-    //     assertEquals(gameId, result.get(0).getGameId());
-    // }
-
-    @Test
-    public void testGetAllGames_NoGames() {
-        when(gameService.getGames()).thenReturn(Collections.emptyList());
-
-        List<GameGetDTO> result = gameController.getAllGames();
-        assertTrue(result.isEmpty());
-    }
-
-    // @Test
-    // public void testGetGameById() {
-    //     when(gameService.getGame(gameId)).thenReturn(game);
-    //     when(DTOMapper.INSTANCE.convertEntityToGameGetDTO(any(Game.class))).thenReturn(gameGetDTO);
-
-    //     GameGetDTO result = gameController.getGameById(gameId);
-    //     assertEquals(gameId, result.getGameId());
-    // }
-
-    @Test
-    public void testGetGameById_NotFound() {
-        when(gameService.getGame(gameId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        assertThrows(ResponseStatusException.class, () -> gameController.getGameById(gameId));
     }
 
     @Test
-    public void testDeleteGame() {
-        doNothing().when(gameService).deleteGameById(gameId);
+    public void getAllGames_success() {
+        // Arrange
+        Game game1 = new Game();
+        Game game2 = new Game();
+        List<Game> games = Arrays.asList(game1, game2);
 
-        ResponseEntity<?> response = gameController.deleteGame(gameId);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Game Deleted", response.getBody());
+        when(gameService.getGames()).thenReturn(games);
+
+        // Act
+        List<GameGetDTO> gameGetDTOs = gameController.getAllGames();
+
+        // Assert
+        assertNotNull(gameGetDTOs);
+        assertEquals(2, gameGetDTOs.size());
+        verify(gameService, times(1)).getGames();
     }
 
     @Test
-    public void testDeleteGame_NotFound() {
-        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(gameService).deleteGameById(gameId);
+    public void getGameById_success() {
+        // Arrange
+        when(gameService.getGame(gameId)).thenReturn(game);
 
-        assertThrows(ResponseStatusException.class, () -> gameController.deleteGame(gameId));
-    }
+        // Act
+        GameGetDTO gameGetDTO = gameController.getGameById(gameId);
 
-    // @Test
-    // public void testCreateGame() {
-    //     // Setup
-    //     Long gameMasterId = 1L;
-    //     when(gamePostDTO.getGameMaster()).thenReturn(gameMasterId); // Ensure GamePostDTO returns a predictable ID
-    //     when(gameService.createGame(gameMasterId)).thenReturn(game); // Return a real Game object configured for testing
-        
-    //     // Configure the game object for predictable DTO mapping
-    //     game.setGameId(UUID.randomUUID()); // Set a random UUID for the game
-    //     game.setGameMaster(gameMasterId);  // Set the game master as expected
-    //     // Assume game has other properties set as needed for mapping
-
-    //     // Execution
-    //     ResponseEntity<GameGetDTO> response = gameController.createGame(gamePostDTO);
-
-    //     // Verification
-    //     assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    //     assertNotNull(response.getBody());
-    //     assertEquals(game.getGameId(), response.getBody().getGameId()); // Directly compare expected game ID with DTO
-    //     verify(gameService).createGame(gameMasterId); // Verify service was called with correct ID
-    // }
-    
-    @Test
-    public void testCreateGame_Failure() {
-        when(gameService.createGame(anyLong())).thenThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST));
-    
-        assertThrows(ResponseStatusException.class, () -> gameController.createGame(gamePostDTO));
-    }
-
-    // @Test
-    // public void testStartGame() {
-    //     when(gameService.startGame(gameId)).thenReturn(game);
-    //     when(DTOMapper.INSTANCE.convertEntityToGameGetDTO(any(Game.class))).thenReturn(gameGetDTO);
-
-    //     ResponseEntity<GameGetDTO> response = gameController.startGame(gameId);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertEquals(gameId, response.getBody().getGameId());
-    // }
-
-    @Test
-    public void testStartGame_NotFound() {
-        when(gameService.startGame(gameId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        assertThrows(ResponseStatusException.class, () -> gameController.startGame(gameId));
-    }
-
-    // @Test
-    // public void testEndGame() {
-    //     when(gameService.endGame(gameId)).thenReturn(game);
-    //     when(DTOMapper.INSTANCE.convertEntityToGameGetDTO(any(Game.class))).thenReturn(gameGetDTO);
-
-    //     ResponseEntity<GameGetDTO> response = gameController.endGame(gameId);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertEquals(gameId, response.getBody().getGameId());
-    // }
-
-    @Test
-    public void testEndGame_NotFound() {
-        when(gameService.endGame(gameId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        assertThrows(ResponseStatusException.class, () -> gameController.endGame(gameId));
+        // Assert
+        assertNotNull(gameGetDTO);
+        assertEquals(gameId, gameGetDTO.getGameId());
+        verify(gameService, times(1)).getGame(gameId);
     }
 
     @Test
-    public void testJoinGame() {
-        when(gameService.joinGame(eq(gameId), eq(userId), any())).thenReturn(game); // Ensure all arguments use matchers
-    
-        ResponseEntity<Game> response = gameController.joinGame(gameId, userId, null);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(gameId, response.getBody().getGameId());
-    }
-    
-    @Test
-    public void testJoinGame_NotFound() {
-        when(gameService.joinGame(eq(gameId), eq(userId), any()))
-                .thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
-    
-        assertThrows(ResponseStatusException.class, () -> gameController.joinGame(gameId, userId, null));
-    }
+    public void deleteGame_success() {
+        // Act
+        ResponseEntity<?> responseEntity = gameController.deleteGame(gameId);
 
-    // @Test
-    // public void testLeaveGame() {
-    //     when(gameService.leaveGame(gameId, userId)).thenReturn(game);
-
-    //     ResponseEntity<Game> response = gameController.leaveGame(gameId, userId);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertEquals(gameId, response.getBody().getGameId());
-    // }
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(gameService, times(1)).deleteGameById(gameId);
+    }
 
     @Test
-    public void testLeaveGame_NotFound() {
-        when(gameService.leaveGame(gameId, userId)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public void createGame_success() {
+        // Arrange
+        GamePostDTO gamePostDTO = new GamePostDTO();
+        gamePostDTO.setGameMaster(1L);
 
-        assertThrows(ResponseStatusException.class, () -> gameController.leaveGame(gameId, userId));
+        when(gameService.createGame(1L)).thenReturn(game);
+
+        // Act
+        ResponseEntity<GameGetDTO> responseEntity = gameController.createGame(gamePostDTO);
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(gameId, responseEntity.getBody().getGameId());
+        verify(gameService, times(1)).createGame(1L);
     }
 
-    // @Test
-    // public void testGetLeaderboard() {
-    //     GamePlayer player1 = new GamePlayer();
-    //     player1.setScore(100);
-    //     GamePlayer player2 = new GamePlayer();
-    //     player2.setScore(200);
-    //     game.setPlayers(new LinkedHashSet<>(Arrays.asList(player1, player2)));
+    @Test
+    public void startGame_success() {
+        // Arrange
+        when(gameService.startGame(gameId)).thenReturn(game);
 
-    //     when(gameService.calculateLeaderboard(gameId)).thenReturn(game);
-    //     when(DTOMapper.INSTANCE.convertEntityToLeaderboardDTO(any(Game.class))).thenReturn(new LeaderboardDTO());
+        // Act
+        ResponseEntity<GameGetDTO> responseEntity = gameController.startGame(gameId);
 
-    //     ResponseEntity<LeaderboardDTO> response = gameController.getLeaderboard(gameId);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertNotNull(response.getBody().getWinners());
-    // }
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(gameId, responseEntity.getBody().getGameId());
+        verify(gameService, times(1)).startGame(gameId);
+        verify(roundService, times(1)).createRound(gameId);
+    }
 
-    // @Test
-    // public void testGetLeaderboard_Empty() {
-    //     when(gameService.calculateLeaderboard(gameId)).thenReturn(game);
-    //     when(DTOMapper.INSTANCE.convertEntityToLeaderboardDTO(any(Game.class))).thenReturn(new LeaderboardDTO());
+    @Test
+    public void endGame_success() {
+        // Arrange
+        when(gameService.endGame(gameId)).thenReturn(game);
 
-    //     ResponseEntity<LeaderboardDTO> response = gameController.getLeaderboard(gameId);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertTrue(response.getBody().getWinners().isEmpty());
-    // }
+        // Act
+        ResponseEntity<GameGetDTO> responseEntity = gameController.endGame(gameId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(gameId, responseEntity.getBody().getGameId());
+        verify(gameService, times(1)).endGame(gameId);
+    }
+
+    @Test
+    public void joinGame_success() {
+        // Arrange
+        Long userId = 1L;
+        Integer gamePassword = 1234;
+        when(gameService.joinGame(gameId, userId, gamePassword)).thenReturn(game);
+
+        // Act
+        ResponseEntity<Game> responseEntity = gameController.joinGame(gameId, userId, gamePassword);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(gameId, responseEntity.getBody().getGameId());
+        verify(gameService, times(1)).joinGame(gameId, userId, gamePassword);
+    }
+
+    @Test
+    public void leaveGame_success() {
+        // Arrange
+        Long userId = 1L;
+        game.setPlayers(new HashSet<>(Arrays.asList(new GamePlayer())));
+        when(gameService.leaveGame(gameId, userId)).thenReturn(game);
+
+        // Act
+        ResponseEntity<Game> responseEntity = gameController.leaveGame(gameId, userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(gameId, responseEntity.getBody().getGameId());
+        verify(gameService, times(1)).leaveGame(gameId, userId);
+    }
+
+    @Test
+    public void leaveGame_deleteWhenEmpty() {
+        // Arrange
+        Long userId = 1L;
+        when(gameService.leaveGame(gameId, userId)).thenReturn(game);
+
+        // Act
+        ResponseEntity<Game> responseEntity = gameController.leaveGame(gameId, userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(gameService, times(1)).leaveGame(gameId, userId);
+        verify(gameService, times(1)).deleteGameById(gameId);
+    }
+
+    @Test
+    public void getLeaderboard_success() {
+        // Arrange
+        game.setPlayers(new HashSet<>(Arrays.asList(new GamePlayer(), new GamePlayer())));
+        when(gameService.calculateLeaderboard(gameId)).thenReturn(game);
+
+        // Act
+        ResponseEntity<LeaderboardDTO> responseEntity = gameController.getLeaderboard(gameId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody().getWinners());
+        verify(gameService, times(1)).calculateLeaderboard(gameId);
+    }
 }
