@@ -1,8 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
-import ch.uzh.ifi.hase.soprafs24.entity.Game;
-import ch.uzh.ifi.hase.soprafs24.entity.Round;
-import ch.uzh.ifi.hase.soprafs24.entity.RoundStats;
+import ch.uzh.ifi.hase.soprafs24.config.ApiKeyConfig;
+import ch.uzh.ifi.hase.soprafs24.entity.*;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.RoundStatsRepository;
 import ch.uzh.ifi.hase.soprafs24.config.ApiKeyConfig;
@@ -11,12 +10,26 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
+
+import org.json.JSONObject;
 import org.junit.Rule;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+
+import java.io.IOException;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import org.opengis.temporal.Clock;
 import org.opengis.temporal.Instant;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,6 +42,7 @@ import java.util.concurrent.CompletableFuture;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
 import java.util.Optional;
 import java.util.UUID;
 import java.time.LocalTime;
@@ -68,7 +82,9 @@ public class RoundServiceTest {
         // Arrange
         UUID gameId = UUID.randomUUID();
         Game game = new Game();
+        User mockuser = new User();
         game.setGameId(gameId);
+        game.addNewPlayer(mockuser);
         when(gameService.getGame(gameId)).thenReturn(game);
 
         // Act
@@ -169,9 +185,26 @@ public class RoundServiceTest {
         // Act and Assert
         assertThrows(IllegalArgumentException.class, () -> roundService.updatePlayerGuess(gameId, userId, 1, 47.399591, 8.514325));
     }
-    
+
     @Test
-    public void calculateDistance_success() {
+    public void calculateEndTime_success() {
+        // Arrange
+        Game game = new Game();
+        game.setGuessTime(30);
+
+        // Act
+        LocalTime result = roundService.calculateEndTime(game);
+
+        // Assert
+        LocalTime expectedEndTime = ZonedDateTime.now(ZoneId.of("Europe/Zurich")).toLocalTime().plusSeconds(31);
+        assertEquals(expectedEndTime.getHour(), result.getHour());
+        assertEquals(expectedEndTime.getMinute(), result.getMinute());
+        assertEquals(expectedEndTime.getSecond(), result.getSecond(), 1); // allow some tolerance for test execution delay
+    }
+  
+  
+    @Test
+    public void calculateDistance1_success() {
         // Arrange
         double lat1 = 47.399591;
         double lon1 = 8.514325;
@@ -186,24 +219,22 @@ public class RoundServiceTest {
     }
 
     @Test
-    public void testCalculateEndTime() {
+    public void calculateDistance2_success() {
         // Arrange
-        Game game = new Game(); 
-        game.setGuessTime(5); 
-        
+        double lat1 = 47.399591;
+        double lon1 = 8.514325;
+        double lat2 = 46.94809;
+        double lon2 = 7.44744;
+
         // Act
-        LocalTime result = roundService.calculateEndTime(game);
+        double result = roundService.calculateDistance(lat1, lon1, lat2, lon2);
 
         // Assert
-        ZoneId zurichZone = ZoneId.of("Europe/Zurich");
-        ZonedDateTime zurichTime = ZonedDateTime.now(zurichZone);
-        LocalTime expectedTime = zurichTime.toLocalTime().plusSeconds(6); // guessTime + 1
-        long secondsBetween = ChronoUnit.SECONDS.between(expectedTime, result);
-
-        // Assert that the difference is small to accommodate execution time delays
-        assertTrue(Math.abs(secondsBetween) < 1);
+        double expectedDistance = 94.48; // approximate value in kilometers
+        assertEquals(expectedDistance, result, 1.0); // allow 1 km tolerance
     }
-    
+
+  
     @Test
     public void generateFallbackResponse_success() {
         // Arrange

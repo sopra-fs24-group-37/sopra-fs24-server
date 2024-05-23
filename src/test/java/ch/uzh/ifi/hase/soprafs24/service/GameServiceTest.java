@@ -236,6 +236,38 @@ public class GameServiceTest {
         assertThrows(ResponseStatusException.class, () -> gameService.startGame(gameId));
     }
 
+
+    @Test
+    public void EndGame_Success() {
+        // Arrange
+        when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.of(game));
+
+        // Act
+        Game endedGame = gameService.endGame(gameId);
+
+        // Assert
+        assertNotNull(endedGame);
+        assertEquals(GameStatus.ENDED, endedGame.getGameStatus());
+        verify(gameRepository, times(1)).save(game);
+    }
+
+    @Test
+    public void EndGame_AlreadyEnded() {
+        // Arrange
+        game.setGameStatus(GameStatus.ENDED);
+        when(gameRepository.findById(gameId)).thenReturn(java.util.Optional.of(game));
+
+        // Act & Assert
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            gameService.endGame(gameId);
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
+        assertEquals("Game already ended!", exception.getReason());
+        verify(gameRepository, never()).save(game);
+    }
+
+
     @Test
     public void useDoubleScorePowerUp_available_success() {
         // Test case setup
